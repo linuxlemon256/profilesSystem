@@ -1,499 +1,62 @@
+<!-- index.html —— 分离后的完整 HTML（无内联样式/脚本） -->
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8">
-<title>主页</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    min-height: 100vh;            /* 至少一屏, 内容超出就能下滑 */
-    background: #000;             /* 黑背景 */
-    font-family: "Microsoft YaHei", sans-serif;
-    color: #fff;
-    overflow-x: hidden;           /* 禁止横向滚动(右侧导航超宽时) */
-    overflow-y: auto;             /* 允许纵向滚动(看底部备案页脚) */
-  }
-
-  /* ===== 舞台: 撑满一屏, 场景在其中居中(替代原来 body 的居中) ===== */
-  .stage {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* ===== 场景容器 ===== */
-  .scene { position: relative; width: 600px; height: 400px; }
-
-  /* ===== 白色中空正三角形 ===== */
-  .tri {
-    position: absolute;
-    left: 200px; top: 80px;       /* 三角形区域: 顶角(300,91) 底边(206,254)-(394,254) */
-    cursor: pointer;              /* 鼠标变手型 */
-    transform-origin: 100px 120px;/* 旋转轴心 = 三角形重心(元素局部坐标) */
-    transition: filter 0.3s, transform 1.2s ease;  /* 光晕0.3s, 旋转1.2s */
-    animation: fadeIn 1s ease 0.3s both;  /* 页面加载: 0.3秒后淡入(只用opacity,不碰transform) */
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; filter: blur(4px); }  /* 起始: 不可见+模糊 */
-    to   { opacity: 1; filter: blur(0); }    /* 结束: 清晰 */
-  }
-  .tri:hover { filter: drop-shadow(0 0 14px rgba(255,255,255,0.8)); } /* 悬停发光 */
-  .scene.active .tri {
-    transform: rotate(180deg);    /* 点击后绕重心转180度 */
-    animation: pulseGlow 2s ease 1.2s infinite;  /* 转完开始呼吸发光(只动filter,不影响旋转) */
-  }
-  @keyframes pulseGlow {
-    0%, 100% { filter: drop-shadow(0 0 6px rgba(255,255,255,0.4)); }   /* 暗 */
-    50%      { filter: drop-shadow(0 0 22px rgba(255,255,255,0.9)); }  /* 亮 */
-  }
-
-  /* ===== 三角形的倒影: 沿横线(重心)对称的镜像, 上滑后才出现 ===== */
-  .reflect-layer {
-    position: absolute;
-    left: 0px; top: 50px;       /* 和三角形同位置; JS 视差移动的是这一层 */
-    pointer-events: none;         /* 不挡点击 */
-  }
-  .tri-reflect {
-    transform: scaleY(-1);            /* 垂直镜像 = 与横线对称 */
-    transform-origin: 100px 120px;    /* 轴心: 三角形重心(正好在横线上) */
-    opacity: 0;                       /* 初始无倒影, 上滑后才出现 */
-    filter: blur(1px);                /* 模糊一点更像水影 */
-    animation: none;                  /* 关掉 .tri 自带的淡入动画(会盖掉透明度控制) */
-    transition: opacity 0.6s ease, transform 1.2s ease;  /* 出现平滑 + 和原三角同步旋转 */
-    /* 遮罩: 贴近横线的地方实, 越往下越淡 = 倒影自然消失 */
-    mask-image: linear-gradient(to bottom, transparent 58%, rgba(0,0,0,0.9) 78%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 58%, rgba(0,0,0,0.9) 78%, transparent 100%);
-  }
-  .scene.scrolled .tri-reflect { opacity: 0.5; }  /* 上滑后倒影出现(更明显) */
-  .scene.active .tri-reflect {
-    transform: rotate(180deg) scaleY(-1);  /* 原三角旋转时, 倒影同步转 */
-  }
-
-  /* ===== 贯穿左右中心线: 加载时从中间向两边画出 ===== */
-  .line {
-    position: fixed;              /* 固定在视口, 不受场景宽度限制 */
-    left: 0; right: 0;            /* 撑满整个窗口 */
-    top: calc(50vh - 1px);        /* 和三角形重心重合 */
-    height: 2px;
-    background: #fff;
-    box-shadow: 0 0 8px rgba(255,255,255,0.6);
-    transform-origin: center;     /* 缩放轴心: 从中心向两边展开 */
-    animation: draw 1.2s ease both;  /* 加载时画线 */
-  }
-  @keyframes draw {
-    from { transform: scaleX(0); }  /* 起始: 缩成一点 */
-    to   { transform: scaleX(1); }  /* 结束: 全长 */
-  }
-
-  /* ===== 网名: 点击后从线上升起, 模糊→清晰 ===== */
-  .name {
-    position: absolute;
-    left: 0px; top: 200px;
-    transform: translate(-50%, 0);
-    font-size: 28px;
-    letter-spacing: 6px;
-    opacity: 0;                   /* 初始不可见 */
-    filter: blur(6px);            /* 初始模糊, 升起时变清晰 */
-    transition: all 1.2s ease;    /* 和旋转同拍 */
-  }
-  .scene.active .name {
-    opacity: 1;
-    filter: blur(0);
-    transform: translate(-50%, -80px) scale(1.2);  /* 升起+放大 */
-  }
-
-  /* ===== 倒影: 镜像 + 半透明 + 渐变淡出 + 微模糊 ===== */
-  .reflect-wrap {
-    position: absolute;
-    left: 100px; top: 200px;
-    opacity: 0;
-    transition: all 1.2s ease 0.2s;
-  }
-  .reflect-wrap .reflect-text {
-    transform: scaleY(-1);        /* 垂直镜像 */
-    filter: blur(2px);            /* 倒影模糊一点更像水影 */
-    /* 遮罩: 靠近线的地方实, 往远处渐变成透明 = 倒影自然消失 */
-    mask-image: linear-gradient(to top, rgba(0,0,0,0.9), transparent 90%);
-    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.9), transparent 90%);
-  }
-  .scene.active .reflect-wrap {
-    opacity: 0.35;
-    transform: translateY(60px);  /* 向线下方展开 */
-  }
-
-  /* ===== 导航栏: 逐项升出 + hover 下滑线 ===== */
-  .nav { position: absolute; left: 430px; top: 215px; }
-  .nav a {
-    display: block;
-    position: relative;           /* 给::after 的下划线做定位基准 */
-    margin: 12px 0;
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;         /* 隐藏时禁止点击(光看不见不够, 还能被点到) */
-    transition: all 0.9s ease;
-  }
-  /* hover: 下划线从左边滑出(伪元素, 宽度从0涨到100%) */
-  .nav a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
-  }
-  .nav a:hover::after { width: 100%; }  /* 滑到全长 */
-  .scene.active .nav a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;         /* 展开后恢复可点 */
-  }
-  /* 逐项延迟: 依次晚0.15秒 */
-  .scene.active .nav a:nth-child(1) { transition-delay: 0s; }
-  .scene.active .nav a:nth-child(2) { transition-delay: 0.15s; }
-  .scene.active .nav a:nth-child(3) { transition-delay: 0.3s; }
-  .scene.active .nav a:nth-child(4) { transition-delay: 0.45s; }
-  .scene.active .nav a:nth-child(5) { transition-delay: 0.60s; }
-/* ===== 第二套导航: 点首页触发, 在线上方 ===== */
-  .nav_1 { position: absolute; left: 530px; top: 120px; pointer-events: none; }
-  .nav_1 a {
-    display: block;
-    position: relative;           /* 给::after 的下划线做定位基准 */
-    margin: 12px 0;
-    color: #fff;
-    white-space: nowrap;
-    text-decoration: none;
-    font-size: 50px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;         /* 隐藏时禁止点击 */
-    transition: all 0.9s ease;
-  }
-  /* hover: 下划线从左边滑出(伪元素, 宽度从0涨到100%) */
-  .nav_1 a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
-  }
-  .nav_1 a:hover::after { width: 100%; }  /* 滑到全长 */
-  .scene.active_1 .nav_1 a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;         /* 展开后恢复可点 */
-  }
-  /* 逐项延迟: 依次晚0.15秒 */
-  .scene.active_1 .nav_1 a:nth-child(1) { transition-delay: 0s; }
-
-  .nav_2 { position: absolute; left: 530px; top: 120px; width: 400px; pointer-events: none; }
-  .nav_2 a {
-    display: block;
-    position: relative;           /* 给::after 的下划线做定位基准 */
-    margin: 12px 0;
-    color: #fff;
-    text-decoration: none;
-    font-size: 30px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;         /* 隐藏时禁止点击 */
-    transition: all 0.9s ease;
-  }
-  /* hover: 下划线从左边滑出(伪元素, 宽度从0涨到100%) */
-  .nav_2 a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
-  }
-  .nav_2 a:hover::after { width: 100%; }  /* 滑到全长 */
-  .scene.active_2 .nav_2 a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;         /* 展开后恢复可点 */
-  }
-  /* 逐项延迟: 依次晚0.15秒 */
-  .scene.active_2 .nav_2 a:nth-child(1) { transition-delay: 0s; }
-
-  .nav_3 { position: absolute; left: 530px; top: 200px; width: 400px; pointer-events: none; }
-  .nav_3 a {
-    display: block;
-    position: relative;           /* 给::after 的下划线做定位基准 */
-    margin: 12px 0;
-    color: #fff;
-    text-decoration: none;
-    font-size: 30px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;         /* 隐藏时禁止点击 */
-    transition: all 0.9s ease;
-  }
-  /* hover: 下划线从左边滑出(伪元素, 宽度从0涨到100%) */
-  .nav_3 a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
-  }
-  .nav_3 a:hover::after { width: 100%; }  /* 滑到全长 */
-  .scene.active_3 .nav_3 a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;         /* 展开后恢复可点 */
-  }
-  /* 逐项延迟: 依次晚0.15秒 */
-  .scene.active_3 .nav_3 a:nth-child(1) { transition-delay: 0s; }
-  .scene.active_3 .nav_3 a:nth-child(2) { transition-delay: 0.15s; }
-
-  .nav_4 { position: absolute; left: 530px; top: 200px; width: 400px; pointer-events: none; }
-  .nav_4 a {
-    display: block;
-    position: relative;           /* 给::after 的下划线做定位基准 */
-    margin: 12px 0;
-    color: #fff;
-    text-decoration: none;
-    font-size: 30px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;         /* 隐藏时禁止点击 */
-    transition: all 0.9s ease;
-  }
-  /* hover: 下划线从左边滑出(伪元素, 宽度从0涨到100%) */
-  .nav_4 a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
-  }
-  .nav_4 a:hover::after { width: 100%; }  /* 滑到全长 */
-  .scene.active_4 .nav_4 a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;         /* 展开后恢复可点 */
-  }
-  /* 逐项延迟: 依次晚0.15秒 */
-  .scene.active_4 .nav_4 a:nth-child(1) { transition-delay: 0s; }
-  .scene.active_4 .nav_4 a:nth-child(2) { transition-delay: 0.15s; }
-
-  .nav_5 { position: absolute; left: 530px; top: 200px; width: 400px; pointer-events: none; }
-  .nav_5 a {
-    display: block;
-    position: relative;           /* 给::after 的下划线做定位基准 */
-    margin: 12px 0;
-    color: #fff;
-    text-decoration: none;
-    font-size: 30px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;         /* 隐藏时禁止点击 */
-    transition: all 0.9s ease;
-  }
-  /* hover: 下划线从左边滑出(伪元素, 宽度从0涨到100%) */
-  .nav_5 a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
-  }
-  .nav_5 a:hover::after { width: 100%; }  /* 滑到全长 */
-  .scene.active_5 .nav_5 a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;         /* 展开后恢复可点 */
-  }
-  /* 逐项延迟: 依次晚0.15秒 */
-  .scene.active_5 .nav_5 a:nth-child(1) { transition-delay: 0s; }
-
-  /* ===== 右侧文字倒影: 每行文字正下方一条镜像, 往远处渐变消失 ===== */
-  .nav_1 a, .nav_2 a, .nav_3 a, .nav_4 a, .nav_5 a {
-    -webkit-box-reflect: below 2px linear-gradient(rgba(0,0,0,0.6), transparent 75%);
-    /* below 2px = 在元素下方2px处生成镜像; 渐变: 靠近文字实, 越远越透明 */
-    /* 注意: box-reflect 是 WebKit 属性, Chrome/Edge 支持, Firefox 不支持 */
-  }
-  /* ===== 底部提示文字: 灰色, 展开后消失 ===== */
-  .hint {
-    position: fixed;
-    left: 50%; bottom: 30px;
-    transform: translateX(-50%);
-    font-size: 12px;
-    letter-spacing: 3px;
-    color: #555;
-    transition: opacity 0.6s ease;
-  }
-  .scene.active ~ .hint,
-  .scene.active_1 ~ .hint,
-  .scene.active_2 ~ .hint,
-  .scene.active_3 ~ .hint,
-  .scene.active_4 ~ .hint,
-  .scene.active_5 ~ .hint { opacity: 0; }  /* 任一导航展开后淡出 */
-  .hint.hide { opacity: 0; }               /* 向下滚动时隐藏(JS 加类) */
-
-  /* ===== 底部备案页脚: 下滑一小段可见, 灰色小字 ===== */
-  .footer {
-    padding: 20px 0 40px;         /* 上下留白 */
-    text-align: center;
-    font-size: 12px;
-    color: #555;                  /* 灰色, 和提示文字一致 */
-    line-height: 1.8;
-  }
-  .footer a { color: #555; text-decoration: none; }  /* 备案号链接默认灰色 */
-  .footer a:hover { color: #aaa; }                    /* 悬停亮一点 */
-
-  /* ===== 小屏适配: 场景整体缩小 ===== */
-  @media (max-width: 700px) {
-    .scene { transform: scale(0.7); }
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>主页</title>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
 <div class="stage">
-<div class="scene" id="scene">
-  <!-- 正三角形: 底边188, 高 = 188×0.866 = 162.8; stroke-width=线粗 -->
-  <svg class="tri" width="200" height="174" viewBox="0 0 200 174">
-    <polygon points="100,11.2 194,174 6,174" fill="none" stroke="#fff" stroke-width="10"/>
-  </svg>
-  <!-- 三角形的倒影: 同形状同位置的镜像, CSS 负责沿横线翻转, 外层负责视差下沉 -->
-  <div class="reflect-layer">
-    <svg class="tri tri-reflect" width="200" height="174" viewBox="0 0 200 174">
+  <div class="scene" id="scene">
+    <svg class="tri" width="200" height="174" viewBox="0 0 200 174">
       <polygon points="100,11.2 194,174 6,174" fill="none" stroke="#fff" stroke-width="10"/>
     </svg>
+    <div class="reflect-layer">
+      <svg class="tri tri-reflect" width="200" height="174" viewBox="0 0 200 174">
+        <polygon points="100,11.2 194,174 6,174" fill="none" stroke="#fff" stroke-width="10"/>
+      </svg>
+    </div>
+    <div class="line"></div>
+    <div class="name">linuxlemon256</div>
+    <div class="reflect-wrap"><div class="reflect-text">linuxlemon256</div></div>
+    <nav class="nav">
+      <a href="#" id="index">首页</a>
+      <a href="#" id="about">关于</a>
+      <a href="#" id="blog">博客</a>
+      <a href="#" id="prom">项目</a>
+      <a href="#" id="connect">联系</a>
+    </nav>
+    <nav class="nav_1">
+      <a>您就在此处</a>
+    </nav>
+    <nav class="nav_2">
+      <a style="top: 10px;font-size: 40px" href="https://www.zust.edu.cn/" target="_blank">来自 浙江科技大学</a>
+      <a style="top: 18px" href="#">数据科学与大数据技术 专业</a>
+      <a style="top: 9px">方向:AI后端开发</a>
+      <a style="font-size: 10px">技术栈:<br>Java / Spring Boot / Python / MySQL / Redis / RabbitMQ / Nacos / Gateway / HTML-CSS-JS</a>
+    </nav>
+    <nav class="nav_3">
+      <a>商城全栈项目</a>
+      <a>其他</a>
+    </nav>
+    <nav class="nav_4">
+      <a>邮箱:</a>
+      <a style="font-size: 20px">297761464@qq.com</a>
+    </nav>
+    <nav class="nav_5">
+      <a href="https://github.com/linuxlemon256" target="_blank">GitHub</a>
+    </nav>
   </div>
-  <div class="line"></div>
-  <div class="name">linuxlemon256</div>
-  <div class="reflect-wrap"><div class="reflect-text">linuxlemon256</div></div>
-  <nav class="nav">
-    <a href="#" id="index">首页</a>
-    <a href="#" id="about">关于</a>
-    <a href="#" id="blog">博客</a>
-    <a href="#" id="prom">项目</a>
-    <a href="#" id="connect">联系</a>
-  </nav>
-  <nav class="nav_1">
-    <a>您就在此处</a>
-  </nav>
-  <nav class="nav_2">
-    <a style="top: 10px;font-size: 40px" href="https://www.zust.edu.cn/" target="_blank">来自 浙江科技大学</a>
-    <a style="top: 18px" href="#">数据科学与大数据技术 专业</a>
-    <a style="top: 9px">方向:AI后端开发</a>
-    <a style="font-size: 10px">技术栈:<br>Java / Spring Boot / Python / MySQL / Redis / RabbitMQ / Nacos / Gateway / HTML-CSS-JS</a>
-  </nav>
-  <nav class="nav_3">
-    <a>商城全栈项目</a>
-    <a>其他</a>
-  </nav>
-  <nav class="nav_4">
-    <a>邮箱:</a>
-    <a style="font-size: 20px">297761464@qq.com</a>
-  </nav>
-  <nav class="nav_5">
-    <a href="https://github.com/linuxlemon256" target="_blank">GitHub</a>
-  </nav>
 </div>
-</div>
+
 <footer class="footer">
-  <!-- ↓ 模板, 自己填: 年份/网站名/备案号 -->
   <p>© 2026 linuxlemon256 · 个人主页</p>
   <p>ICP备案号：<a href="https://beian.miit.gov.cn/" target="_blank">浙ICP备2026071752号</a></p>
   <p>公安备案：<a href="https://beian.mps.gov.cn/#/query/webSearch?code=浙公网安备33032702001199号" target="_blank">浙公网安备33032702001199号</a></p>
 </footer>
 <div class="hint">点击三角形</div>
-<script>
-  // 点击三角形 → 加/删 active 类(展开/收起)
-  const scene = document.getElementById('scene');
-  const index = document.getElementById('index');
-  const about = document.getElementById('about');
-  const prom = document.getElementById('prom');
-  const connect = document.getElementById('connect');
-  const blog = document.getElementById('blog');
-  document.querySelector('.tri').addEventListener('click', () => {
-    scene.classList.toggle('active');
-    // 收起全部副导航(remove 对不存在的类没影响, 不需要 flag 记录状态)
-    scene.classList.remove('active_1');
-    scene.classList.remove('active_2');
-    scene.classList.remove('active_3');
-    scene.classList.remove('active_4');
-    scene.classList.remove('active_5');
-  });
-  // 点击首页 → 第二套导航展开/收起(和其他副导航互斥)
-  index.addEventListener('click', (e) => {
-    e.preventDefault();                  // 阻止 href="#" 默认跳转(会跳回页面顶部)
-    scene.classList.toggle('active_1');  // 类还是加在 scene 上, CSS 的 .scene.active_1 .nav_1 a 才匹配
-    scene.classList.remove('active_2');
-    scene.classList.remove('active_3');
-    scene.classList.remove('active_4');
-    scene.classList.remove('active_5');
-  });
-  // 点击关于 → 第三套导航(个人介绍)展开/收起
-  about.addEventListener('click', (e) => {
-    e.preventDefault();
-    scene.classList.toggle('active_2');
-    scene.classList.remove('active_1');
-    scene.classList.remove('active_3');
-    scene.classList.remove('active_4');
-    scene.classList.remove('active_5');
-  });
-  prom.addEventListener('click', (e) => {
-    e.preventDefault();
-    scene.classList.toggle('active_3');
-    scene.classList.remove('active_1');
-    scene.classList.remove('active_2');
-    scene.classList.remove('active_4');
-    scene.classList.remove('active_5');
-  })
-  connect.addEventListener('click', (e) => {
-    e.preventDefault();
-    scene.classList.toggle('active_4');
-    scene.classList.remove('active_1');
-    scene.classList.remove('active_2');
-    scene.classList.remove('active_3');
-    scene.classList.remove('active_5');
-  })
-  // 点击博客 → 第五套导航(GitHub 链接)展开/收起
-  blog.addEventListener('click', (e) => {
-    e.preventDefault();
-    scene.classList.toggle('active_5');
-    scene.classList.remove('active_1');
-    scene.classList.remove('active_2');
-    scene.classList.remove('active_3');
-    scene.classList.remove('active_4');
-  })
-  // 点击场景以外的地方 → 全部收起
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.scene')) {
-      scene.classList.remove('active');
-      scene.classList.remove('active_1');
-      scene.classList.remove('active_2');
-      scene.classList.remove('active_3');
-      scene.classList.remove('active_4');
-      scene.classList.remove('active_5');
-    }
-  });
-  // 滚动事件: 上滑出现倒影(视差下沉), 提示文字隐藏
-  const hint = document.querySelector('.hint');
-  const reflectLayer = document.querySelector('.reflect-layer');
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;                 // 已滚动的距离
-    const scrolled = y > 10;                  // 超过10px算"上滑了"
-    hint.classList.toggle('hide', scrolled);          // 上滑隐藏提示
-    scene.classList.toggle('scrolled', scrolled);     // 上滑给scene加标记 → 倒影出现
-    // 视差: 页面每上移1px, 倒影层额外下沉1.6px → 三角形向上时倒影向下
-    reflectLayer.style.transform = `translateY(${y * 1.6}px)`;
-  });
 
-
-
-</script>
+<script src="index.js" defer></script>
 </body>
 </html>
