@@ -28,3 +28,7 @@ spring:
       enabled: false
     jdbc:
       initialize-schema: always
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

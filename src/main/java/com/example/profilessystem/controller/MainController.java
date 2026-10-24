@@ -1,8 +1,14 @@
 package com.example.profilessystem.controller;
 
-import org.springframework.stereotype.Controller;
+import com.example.profilessystem.result.Result;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class MainController {
+    @GetMapping("/ping")
+    public Result<Void> ping() {
+        return Result.ok();
+    }
 
 }

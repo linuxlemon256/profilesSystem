@@ -5,3 +5,8 @@ spring:
     name: ProfilesSystem
   profiles:
     active: dev
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.profilessystem.entity
+  configuration:
+    map-underscore-to-camel-case: true

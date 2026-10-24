@@ -229,6 +229,7 @@ body {
 }
 .scene.active_3 .nav_3 a:nth-child(1) { transition-delay: 0s; }
 .scene.active_3 .nav_3 a:nth-child(2) { transition-delay: 0.15s; }
+.scene.active_3 .nav_3 a:nth-child(3) { transition-delay: 0.3s; }
 
 .nav_4 { position: absolute; left: 530px; top: 200px; width: 400px; pointer-events: none; }
 .nav_4 a {
