@@ -1,0 +1,7 @@
+server:
+  port: 2560
+spring:
+  application:
+    name: ProfilesSystem
+  profiles:
+    active: dev
