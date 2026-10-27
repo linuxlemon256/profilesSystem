@@ -5,13 +5,19 @@ public class User {
     private String password;
     private String storage;
     private String code;
+    private int isin = 0;
+    private String email;
+    private String reason;
     public User() {
     }
-    public User(String username, String password, String storage, String code) {
+    public User(String username, String password, String storage, String code, int isin,  String email, String reason) {
         this.username = username;
         this.password = password;
         this.storage = storage;
         this.code = code;
+        this.isin = isin;
+        this.email = email;
+        this.reason = reason;
     }
     public String getUsername() {
         return username;
@@ -36,5 +42,23 @@ public class User {
     }
     public void setCode(String code) {
         this.code = code;
+    }
+    public int getIsin() {
+        return isin;
+    }
+    public void setIsin(int isin) {
+        this.isin = isin;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getReason() {
+        return reason;
+    }
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

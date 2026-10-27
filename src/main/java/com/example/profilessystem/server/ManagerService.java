@@ -22,12 +22,12 @@ public class ManagerService {
      * @return manager
      */
     @Transactional
-    public Result<Void> create(Manager manager) {
+    public Manager create(Manager manager) {
         int rows = managerMapper.insert(manager);
         if (rows != 1) {
             throw new IllegalStateException("插入失败");
         }
-        return Result.ok();
+        return manager;
     }
     /**
      * @param name
@@ -52,14 +52,12 @@ public class ManagerService {
     }
     /**
      *
-     * @param id
-     * @param newName
      * @param password
      * update
-     * @return
+     * @return massage
      */
     @Transactional
-    public void update(int id, String newName, String password) {
+    public Manager update(int id, String newName, String password) {
         Manager manager = managerMapper.findById(id);
         if (manager == null) {
             throw new IllegalStateException("未查找到该用户");
@@ -72,5 +70,6 @@ public class ManagerService {
         if (rows != 1) {
             throw new IllegalStateException("更新失败");
         }
+        return manager;
     }
 }
