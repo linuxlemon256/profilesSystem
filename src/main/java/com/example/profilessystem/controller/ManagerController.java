@@ -1,20 +1,27 @@
 package com.example.profilessystem.controller;
 
 import com.example.profilessystem.entity.Manager;
-import com.example.profilessystem.mapper.ManagerMapper;
 import com.example.profilessystem.result.Result;
+import com.example.profilessystem.server.ManagerService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
-public class UserController {
-    private ManagerMapper managerMapper;
-    UserController(ManagerMapper managerMapper) {
-        this.managerMapper = managerMapper;
+@RequestMapping("/api/manager")
+public class ManagerController {
+    private ManagerService managerService;
+
+    ManagerController(ManagerService managerService) {
+        this.managerService = managerService;
     }
-    @PostMapping("/manager/insert")
-    public Result<String> insert(@RequestBody Manager manager) {
-        managerMapper.insert(manager);
-        return Result.ok("insert successfully");
+
+
+    @PostMapping("/insert")
+    public Result<Void> insert(@RequestBody Manager manager) {
+        return Result.ok();
+    }
+
+    @GetMapping("/get/{name}")
+    public Result<Manager> get(@PathVariable("name") String name) {
+        return Result.ok(managerService.getManagerByName(name));
     }
 }

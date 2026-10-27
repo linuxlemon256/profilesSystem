@@ -1,21 +1,17 @@
 package com.example.profilessystem.entity;
 
 public class User {
-    private int id;
     private String username;
     private String password;
+    private String storage;
+    private String code;
     public User() {
     }
-    public User(int id, String username, String password) {
-        this.id = id;
+    public User(String username, String password, String storage, String code) {
         this.username = username;
         this.password = password;
-    }
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
+        this.storage = storage;
+        this.code = code;
     }
     public String getUsername() {
         return username;
@@ -28,5 +24,17 @@ public class User {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+    public String getStorage() {
+        return storage;
+    }
+    public void setStorage(String storage) {
+        this.storage = storage;
+    }
+    public String getCode() {
+        return code;
+    }
+    public void setCode(String code) {
+        this.code = code;
     }
 }

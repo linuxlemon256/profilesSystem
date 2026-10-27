@@ -1,17 +1,10 @@
 package com.example.profilessystem.entity;
 
 public class Manager {
-    private int id;
     private String username;
     private String password;
     private int level;
 
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
     public String getUsername() {
         return username;
     }
@@ -30,8 +23,7 @@ public class Manager {
     public void setLevel(int level) {
         this.level = level;
     }
-    public Manager(int id, String username, String password, int level) {
-        this.id = id;
+    public Manager(String username, String password, int level) {
         this.username = username;
         this.password = password;
         this.level = level;

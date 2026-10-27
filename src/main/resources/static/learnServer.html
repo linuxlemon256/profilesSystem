@@ -30,7 +30,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 全栈 + Agent 大厂学习路线 · 进度路线图</title>
+<title>AI 全栈 + Agent 学习路线 · 进度路线图</title>
 <!-- [ANCHOR:STYLE] 样式区开始 -->
 <style>
 :root{
@@ -150,7 +150,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 0 40px}
   <div class="hero-inner">
     <div>
       <h1>🚀 AI 全栈 + Agent 大厂学习路线</h1>
-      <div class="sub">Java 后端工程 · Python AI 工程 · LLM 应用 · RAG · Agent · 大厂求职 —— 勾选小点自动计算进度，数据保存在本浏览器（localStorage）。配套教学手册：同目录 <b>AI全栈Agent大厂学习路线-大模型教学手册.md</b>；配套笔记库：<b>AI全栈学习库</b>（198 篇 + 11 篇小抄 + 2 个可运行示例项目）。</div>
+      <div class="sub">Java 后端工程 · Python AI 工程 · LLM 应用 · RAG · Agent · 大厂求职 —— 勾选小点自动计算进度，数据保存在浏览器（localStorage）。</div>
     </div>
     <div class="ring-wrap">
       <div class="ring">
@@ -171,7 +171,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 0 40px}
       <button class="btn" onclick="expandAll(false)">全部收起</button>
       <button class="btn" onclick="exportJSON()">导出进度(JSON)</button>
       <button class="btn" onclick="document.getElementById('ai-handover').scrollIntoView({behavior:'smooth'})">前往 AI 交接区 ↓</button>
-      <button class="btn" onclick="window.open('AI全栈学习库/00-总索引/HOME.md','_blank')">打开笔记库总索引</button>
+      <button class="btn" onclick="window.location.href=('login.html')">登录</button>
       <button class="btn danger" onclick="resetAll()">清空所有进度</button>
     </div>
   </div>
@@ -195,7 +195,6 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 0 40px}
   <div class="hero-inner" style="padding:0;max-width:1180px">
     <h2>🤝 AI 交接区（Handover Zone）</h2>
     <div class="desc">
-      与教学手册 <b>AI全栈Agent大厂学习路线-大模型教学手册.md</b>、笔记库 <b>AI全栈学习库</b> 配套使用（每个模块卡片里有「📚 配套笔记」链接，总入口：<b>00-总索引/HOME.md</b>）：<br>
       ① <b>生成快照 → 复制</b>：把下方进度快照 + 你的请求一起粘贴给任何大模型（本地 7B 或云端）开始教学；<br>
       ② <b>保存 AI 回复</b>：把 AI 生成的教学交接摘要 / 学习报告粘贴进「AI 交接记录」并保存，下次会话先贴给 AI，实现跨模型、跨会话无缝交接；<br>
       ③ <b>迁移/备份</b>：JSON 区用于设备间迁移全部进度（勾选 + 备注 + 交接记录）。
@@ -232,7 +231,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 0 40px}
 </section>
 <!-- [ANCHOR:HANDOVER] AI 交接区结束 -->
 
-<footer>AI 全栈 + Agent 大厂学习路线 v1.3 · 更新于 2026-10-25 · 与《大模型教学手册》v1.3 配套 · 笔记库 198 篇 / 11 篇小抄 / 2 个示例项目 · 进度数据仅存于本机浏览器</footer>
+<footer>AI 全栈 + Agent 学习路线 v1.3 · 更新于 2026-10-25 · 与《大模型教学手册》v1.3 配套 · 笔记库 198 篇 / 11 篇小抄 / 2 个示例项目 · 进度数据仅存于本机浏览器</footer>
 <div id="toast"></div>
 
 <!-- [ANCHOR:DATA] 知识点主数据开始（AI 修改知识点请改此处；修改后需同步 MD 手册并更新 version） -->
@@ -393,73 +392,7 @@ const ROADMAP = {
 };
 
 // 每个模块对应的笔记入口（相对路径，浏览器可直接打开）
-const MODULE_NOTES = {
-  m01: [
-    {label: "MOC-Java", href: "AI全栈学习库/00-总索引/MOC-Java.md"},
-    {label: "L01 Java 教程", href: "AI全栈学习库/06-语言教程/L01-Java语言教程.md"}
-  ],
-  m02: [
-    {label: "MOC-Java", href: "AI全栈学习库/00-总索引/MOC-Java.md"},
-    {label: "J29 线程基础", href: "AI全栈学习库/01-Java/3-并发编程/J29-线程基础与生命周期.md"},
-    {label: "J41 JVM 内存", href: "AI全栈学习库/01-Java/4-JVM虚拟机/J41-JVM内存结构.md"}
-  ],
-  m03: [
-    {label: "L04 Spring Boot 教程", href: "AI全栈学习库/06-语言教程/L04-SpringBoot教程.md"},
-    {label: "S10 Spring Boot 小抄", href: "AI全栈学习库/08-小抄/S10-SpringBoot小抄.md"},
-    {label: "MOC-Java", href: "AI全栈学习库/00-总索引/MOC-Java.md"}
-  ],
-  m04: [
-    {label: "MOC-Java", href: "AI全栈学习库/00-总索引/MOC-Java.md"},
-    {label: "J87 RabbitMQ", href: "AI全栈学习库/01-Java/6-存储与中间件/J87-RabbitMQ核心与SpringAMQP.md"},
-    {label: "J88 中间件选型", href: "AI全栈学习库/01-Java/6-存储与中间件/J88-中间件全景与选型.md"}
-  ],
-  m05: [
-    {label: "MOC-Java", href: "AI全栈学习库/00-总索引/MOC-Java.md"},
-    {label: "J89 Nginx", href: "AI全栈学习库/01-Java/6-存储与中间件/J89-Nginx与反向代理.md"}
-  ],
-  m06: [
-    {label: "MOC-Linux", href: "AI全栈学习库/00-总索引/MOC-Linux.md"},
-    {label: "J86 Socket", href: "AI全栈学习库/01-Java/1-基础语法/J86-Socket与网络编程.md"}
-  ],
-  m07: [
-    {label: "L05 FastAPI 教程", href: "AI全栈学习库/06-语言教程/L05-FastAPI教程.md"},
-    {label: "S11 FastAPI 小抄", href: "AI全栈学习库/08-小抄/S11-FastAPI小抄.md"},
-    {label: "MOC-Python", href: "AI全栈学习库/00-总索引/MOC-Python.md"}
-  ],
-  m08: [
-    {label: "MOC-Python", href: "AI全栈学习库/00-总索引/MOC-Python.md"},
-    {label: "MOC-AI", href: "AI全栈学习库/00-总索引/MOC-AI.md"}
-  ],
-  m09: [
-    {label: "MOC-AI", href: "AI全栈学习库/00-总索引/MOC-AI.md"},
-    {label: "A14 LoRA 实战", href: "AI全栈学习库/05-AI与框架生态/A14-微调LoRA实战.md"}
-  ],
-  m10: [
-    {label: "MOC-AI", href: "AI全栈学习库/00-总索引/MOC-AI.md"},
-    {label: "A01 Prompt 工程", href: "AI全栈学习库/05-AI与框架生态/A01-Prompt工程.md"}
-  ],
-  m11: [
-    {label: "MOC-AI", href: "AI全栈学习库/00-总索引/MOC-AI.md"},
-    {label: "A04 RAG 管线", href: "AI全栈学习库/05-AI与框架生态/A04-RAG管线.md"}
-  ],
-  m12: [
-    {label: "MOC-AI", href: "AI全栈学习库/00-总索引/MOC-AI.md"},
-    {label: "A07 ReAct", href: "AI全栈学习库/05-AI与框架生态/A07-Agent原理与ReAct.md"},
-    {label: "A09 MCP", href: "AI全栈学习库/05-AI与框架生态/A09-MCP协议.md"}
-  ],
-  m13: [
-    {label: "MOC-AI", href: "AI全栈学习库/00-总索引/MOC-AI.md"},
-    {label: "A12 Langfuse", href: "AI全栈学习库/05-AI与框架生态/A12-Langfuse可观测.md"}
-  ],
-  m14: [
-    {label: "示例项目", href: "projects/README.md"},
-    {label: "MOC-Language", href: "AI全栈学习库/00-总索引/MOC-Language.md"}
-  ],
-  m15: [
-    {label: "MOC-CheatSheet", href: "AI全栈学习库/00-总索引/MOC-CheatSheet.md"},
-    {label: "MOC-Java", href: "AI全栈学习库/00-总索引/MOC-Java.md"}
-  ]
-};
+
 </script>
 <!-- [ANCHOR:DATA] 知识点主数据结束 -->
 
