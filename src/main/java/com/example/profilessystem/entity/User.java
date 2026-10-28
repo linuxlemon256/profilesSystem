@@ -1,5 +1,7 @@
 package com.example.profilessystem.entity;
 
+import java.time.LocalDateTime;
+
 public class User {
     private String username;
     private String password;
@@ -8,6 +10,7 @@ public class User {
     private int isin = 0;
     private String email;
     private String reason;
+    private LocalDateTime createdAt;
     public User() {
     }
     public User(String username, String password, String storage, String code, int isin,  String email, String reason) {
@@ -60,5 +63,11 @@ public class User {
     }
     public void setReason(String reason) {
         this.reason = reason;
+    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

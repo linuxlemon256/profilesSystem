@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface ManagerMapper {
+    @Select("select count(*) from manager")
+    int count();
     @Select("select managername, password, level from manager where managername=#{name}")
     Manager findByName(String name);
     @Select("SELECT managername, password, level FROM manager WHERE id=#{id}")

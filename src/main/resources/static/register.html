@@ -276,7 +276,8 @@
             >申请原因<textarea
               id="applyReason"
               name="reason"
-              placeholder="请简要说明你的使用场景或申请原因"
+              placeholder="请简要说明你的使用场景或申请原因（不超过 255 字）"
+              maxlength="255"
               required
             ></textarea></label
           ><label for="applyContact"
@@ -287,6 +288,7 @@
               id="applyContact"
               name="contact"
               type="text"
+              required
               placeholder="例如：name@example.com" /></label
           ><button class="apply-btn" type="submit">提交申请</button>
         </form>
@@ -323,16 +325,31 @@
       const applyError = document.getElementById("applyError");
       const applyBtn = applyForm.querySelector(".apply-btn");
 
+      const EMAIL_PATTERN = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
       applyForm.addEventListener("submit", async function (event) {
         event.preventDefault();
         applyError.classList.remove("show");
-        applyBtn.disabled = true;
 
         const payload = {
           username: document.getElementById("applyName").value.trim(),
           reason: document.getElementById("applyReason").value.trim(),
           email: document.getElementById("applyContact").value.trim()
         };
+
+        // 邮箱必填：先查空，再查格式，后端也会再校验一次
+        if (!payload.email) {
+          applyError.textContent = "请填写邮箱";
+          applyError.classList.add("show");
+          return;
+        }
+        if (!EMAIL_PATTERN.test(payload.email)) {
+          applyError.textContent = "邮箱格式不正确，例如 name@example.com";
+          applyError.classList.add("show");
+          return;
+        }
+
+        applyBtn.disabled = true;
 
         try {
           const response = await fetch("/api/user/register", {

@@ -58,6 +58,20 @@
         color: #cbd5f5;
         font-size: 13px;
       }
+      .logout {
+        border: 1px solid #ffffff33;
+        background: transparent;
+        color: #cbd5f5;
+        padding: 7px 12px;
+        border-radius: 9px;
+        cursor: pointer;
+        font: inherit;
+        font-size: 12px;
+      }
+      .logout:hover {
+        background: #ffffff1a;
+        color: #fff;
+      }
       .avatar {
         width: 34px;
         height: 34px;
@@ -224,6 +238,16 @@
       .reason {
         max-width: 270px;
         line-height: 1.55;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        cursor: pointer;
+      }
+      .reason.expanded {
+        -webkit-line-clamp: unset;
+        overflow: visible;
       }
       .badge {
         display: inline-flex;
@@ -243,6 +267,12 @@
       .rejected {
         background: #fef2f2;
         color: #b91c1c;
+      }
+      .invite-code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        white-space: nowrap;
       }
       .actions {
         display: flex;
@@ -327,7 +357,10 @@
       <div class="brand">
         <span class="mark">P</span><span>ProfilesSystem · 管理面板</span>
       </div>
-      <div class="admin"><span>管理员</span><span class="avatar">A</span></div>
+      <div class="admin">
+        <span>管理员</span><span class="avatar">A</span>
+        <button class="logout" id="logout">退出</button>
+      </div>
     </header>
     <main class="layout">
       <section class="heading">
@@ -340,14 +373,14 @@
       </section>
       <section class="stats">
         <div class="stat">
-          <span>待处理申请</span><b id="pendingCount">3</b><em>需要及时审核</em>
+          <span>待处理申请</span><b id="pendingCount">0</b><em>需要及时审核</em>
         </div>
-        <div class="stat"><span>今日新增</span><b>8</b><em>较昨日 +2</em></div>
+        <div class="stat"><span>账户总数</span><b id="totalCount">0</b><em>待审 + 已通过 + 已拒绝</em></div>
         <div class="stat">
-          <span>已通过</span><b id="approvedCount">24</b><em>持续增长中</em>
+          <span>已通过</span><b id="approvedCount">0</b><em>持续增长中</em>
         </div>
         <div class="stat">
-          <span>已拒绝</span><b id="rejectedCount">5</b><em>本月累计</em>
+          <span>已拒绝</span><b id="rejectedCount">0</b><em>累计</em>
         </div>
       </section>
       <section class="panel">
@@ -372,6 +405,7 @@
                 <th>联系方式</th>
                 <th>提交时间</th>
                 <th>状态</th>
+                <th>邀请码</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -383,105 +417,206 @@
     </main>
     <div class="toast" id="toast"></div>
     <script>
-      const applications = [
-        {
-          id: 1,
-          name: "skywalker",
-          reason: "希望学习大模型应用开发与 RAG 实践。",
-          contact: "skywalker@example.com",
-          time: "今天 09:42",
-          status: "pending",
-        },
-        {
-          id: 2,
-          name: "chen-data",
-          reason: "参与课程项目，需要访问教学手册。",
-          contact: "QQ 2846****",
-          time: "今天 08:17",
-          status: "pending",
-        },
-        {
-          id: 3,
-          name: "mori",
-          reason: "申请云端资料存储空间。",
-          contact: "未填写",
-          time: "昨天 16:30",
-          status: "pending",
-        },
-        {
-          id: 4,
-          name: "nova-lab",
-          reason: "团队内部学习使用。",
-          contact: "nova@example.com",
-          time: "10月26日",
-          status: "approved",
-        },
-        {
-          id: 5,
-          name: "bytecat",
-          reason: "跟进 Agent 开发路线。",
-          contact: "GitHub / bytecat",
-          time: "10月25日",
-          status: "rejected",
-        },
-      ];
       const labels = {
         pending: "待审核",
         approved: "已通过",
         rejected: "已拒绝",
       };
+
+      let applications = [];
+
       const rows = document.getElementById("rows");
+
+      // 后端统一返回 Result：code 为 200 时取 data，否则抛出 message
+      async function request(url, options) {
+        const response = await fetch(url, options);
+        const result = await response.json();
+        if (result.code === 401) {
+          location.href = "/managerLogin.html";
+          throw new Error("请先登录");
+        }
+        if (result.code !== 200) {
+          throw new Error(result.message || "请求失败");
+        }
+        return result.data;
+      }
+
+      function formatTime(value) {
+        if (!value) return "—";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "—";
+        const pad = (n) => String(n).padStart(2, "0");
+        const hhmm = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+        const now = new Date();
+        const yesterday = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() - 1,
+        );
+        if (date.toDateString() === now.toDateString()) return `今天 ${hhmm}`;
+        if (date.toDateString() === yesterday.toDateString())
+          return `昨天 ${hhmm}`;
+        return `${pad(date.getMonth() + 1)}月${pad(date.getDate())}日`;
+      }
+
+      function toApplication(user, status) {
+        return {
+          name: user.username,
+          reason: user.reason || "未填写",
+          contact: user.email || "未填写",
+          time: formatTime(user.createdAt),
+          code: user.code || "",
+          status: status,
+        };
+      }
+
+      async function loadApplications() {
+        try {
+          const [pending, approved, rejected] = await Promise.all([
+            request("/api/user/get/uncommit"),
+            request("/api/user/get/commit"),
+            request("/api/user/get/rejected"),
+          ]);
+          applications = [
+            ...(pending || []).map((u) => toApplication(u, "pending")),
+            ...(approved || []).map((u) => toApplication(u, "approved")),
+            ...(rejected || []).map((u) => toApplication(u, "rejected")),
+          ];
+          render();
+          return true;
+        } catch (error) {
+          console.error(error);
+          showToast("加载失败：" + error.message);
+          return false;
+        }
+      }
+
+      // 用户名、邮箱、原因都来自注册表单，渲染前必须转义，避免 XSS
+      function escapeHtml(value) {
+        const map = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        };
+        return String(value ?? "").replace(/[&<>"']/g, (c) => map[c]);
+      }
+
       function render() {
-        const q = document.getElementById("search").value.trim().toLowerCase(),
-          f = document.getElementById("status").value;
+        const q = document.getElementById("search").value.trim().toLowerCase();
+        const f = document.getElementById("status").value;
         const list = applications.filter(
           (x) =>
             (f === "all" || x.status === f) &&
             (!q ||
-              [x.name, x.contact, x.reason]
+              [x.name, x.contact, x.reason, x.code]
                 .join(" ")
                 .toLowerCase()
                 .includes(q)),
         );
+
         rows.innerHTML = list
-          .map(
-            (x) =>
-              `<tr><td><div class="user"><span class="user-dot">${x.name[0].toUpperCase()}</span><div><strong>${x.name}</strong><small>#APP-${String(x.id).padStart(4, "0")}</small></div></div></td><td><div class="reason">${x.reason}</div></td><td>${x.contact}</td><td>${x.time}</td><td><span class="badge ${x.status}">${labels[x.status]}</span></td><td><div class="actions">${x.status === "pending" ? `<button class="approve" onclick="setStatus(${x.id},'approved')">通过</button><button class="reject" onclick="setStatus(${x.id},'rejected')">拒绝</button>` : ""}<button class="view" onclick="showToast('详情接口可在此接入')">查看</button></div></td></tr>`,
-          )
+          .map((x) => {
+            const initial = escapeHtml(
+              (x.name || "").slice(0, 1).toUpperCase(),
+            );
+            const name = escapeHtml(x.name);
+            const actions =
+              x.status === "pending"
+                ? `<button class="approve" data-action="approve" data-name="${name}">通过</button><button class="reject" data-action="reject" data-name="${name}">拒绝</button>`
+                : "";
+            return `<tr><td><div class="user"><span class="user-dot">${initial}</span><div><strong>${name}</strong></div></div></td><td><div class="reason" title="${escapeHtml(
+              x.reason,
+            )}">${escapeHtml(x.reason)}</div></td><td>${escapeHtml(x.contact)}</td><td>${escapeHtml(
+              x.time,
+            )}</td><td><span class="badge ${x.status}">${
+              labels[x.status]
+            }</span></td><td class="invite-code">${
+              x.status === "approved" ? escapeHtml(x.code || "—") : "—"
+            }</td><td><div class="actions">${actions}<button class="view" data-action="view" data-name="${name}">查看</button></div></td></tr>`;
+          })
           .join("");
+
         document.getElementById("empty").style.display = list.length
           ? "none"
           : "block";
         document.getElementById("resultCount").textContent =
           `显示 ${list.length} 条申请`;
-        document.getElementById("pendingCount").textContent =
-          applications.filter((x) => x.status === "pending").length;
+
+        const countBy = (status) =>
+          applications.filter((x) => x.status === status).length;
+        document.getElementById("pendingCount").textContent = countBy("pending");
         document.getElementById("approvedCount").textContent =
-          24 + applications.filter((x) => x.status === "approved").length - 1;
+          countBy("approved");
         document.getElementById("rejectedCount").textContent =
-          5 + applications.filter((x) => x.status === "rejected").length - 1;
+          countBy("rejected");
+        document.getElementById("totalCount").textContent = applications.length;
       }
-      function setStatus(id, status) {
-        const x = applications.find((x) => x.id === id);
-        if (x) {
-          x.status = status;
-          render();
-          showToast(status === "approved" ? "申请已通过" : "申请已拒绝");
+
+      async function setStatus(name, status) {
+        const url =
+          status === "approved"
+            ? `/api/user/approve/${encodeURIComponent(name)}`
+            : `/api/user/reject/${encodeURIComponent(name)}`;
+        try {
+          const code = await request(url, { method: "POST" });
+          if (status === "approved") {
+            showToast(code ? `申请已通过，邀请码：${code}` : "申请已通过");
+          } else {
+            showToast("申请已拒绝");
+          }
+          await loadApplications();
+        } catch (error) {
+          console.error(error);
+          showToast("操作失败：" + error.message);
         }
       }
+
       function showToast(msg) {
         const t = document.getElementById("toast");
         t.textContent = msg;
         t.classList.add("show");
         setTimeout(() => t.classList.remove("show"), 2200);
       }
+
+      // 事件委托绑定按钮，避免把用户名拼进 onclick
+      rows.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) {
+          // 点击申请原因可在「3 行省略」和「展开全文」之间切换
+          const reason = event.target.closest(".reason");
+          if (reason) reason.classList.toggle("expanded");
+          return;
+        }
+        const name = button.dataset.name;
+        const action = button.dataset.action;
+        if (action === "view") {
+          const item = applications.find((x) => x.name === name);
+          showToast(item ? `${item.name} · ${item.contact}` : "未找到该申请");
+          return;
+        }
+        setStatus(name, action === "approve" ? "approved" : "rejected");
+      });
+
       document.getElementById("search").addEventListener("input", render);
       document.getElementById("status").addEventListener("change", render);
-      document.getElementById("refresh").addEventListener("click", () => {
-        render();
-        showToast("列表已刷新");
+      document.getElementById("logout").addEventListener("click", async () => {
+        try {
+          await fetch("/api/manager/logout", { method: "POST" });
+        } catch (error) {
+          console.error(error);
+        }
+        location.href = "/managerLogin.html";
       });
-      render();
+
+      document.getElementById("refresh").addEventListener("click", async () => {
+        if (await loadApplications()) {
+          showToast("列表已刷新");
+        }
+      });
+
+      loadApplications();
     </script>
   </body>
 </html>

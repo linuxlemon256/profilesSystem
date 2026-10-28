@@ -150,7 +150,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 0 40px}
   <div class="hero-inner">
     <div>
       <h1>🚀 AI 全栈 + Agent 大厂学习路线</h1>
-      <div class="sub">Java 后端工程 · Python AI 工程 · LLM 应用 · RAG · Agent · 大厂求职 —— 勾选小点自动计算进度，数据保存在浏览器（localStorage）。</div>
+      <div class="sub">Java 后端工程 · Python AI 工程 · LLM 应用 · RAG · Agent · 大厂求职 —— 勾选小点自动计算进度，进度自动同步到云端（同时保留在浏览器本地）。</div>
     </div>
     <div class="ring-wrap">
       <div class="ring">
@@ -171,7 +171,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 0 40px}
       <button class="btn" onclick="expandAll(false)">全部收起</button>
       <button class="btn" onclick="exportJSON()">导出进度(JSON)</button>
       <button class="btn" onclick="document.getElementById('ai-handover').scrollIntoView({behavior:'smooth'})">前往 AI 交接区 ↓</button>
-      <button class="btn" onclick="window.location.href=('login.html')">登录</button>
+      <button class="btn" onclick="logout()">退出登录</button>
       <button class="btn danger" onclick="resetAll()">清空所有进度</button>
     </div>
   </div>
@@ -415,6 +415,7 @@ function saveState(){
   const logEl = document.getElementById('handover-log');
   if(logEl) state.handoverLog = logEl.value;
   try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){ alert("保存失败："+e.message); }
+  scheduleCloudSync();
 }
 function isChecked(mid, si, pi){ return !!(state.checks[mid] && state.checks[mid].includes(si+":"+pi)); }
 function toggleCheck(mid, si, pi, on){
@@ -610,17 +611,85 @@ function resetAll(){
   localStorage.removeItem(LS_KEY); state = { checks:{}, notes:{}, handoverLog:"", updatedAt:null };
   renderNav(); renderModules(); refreshAllProgress();
   document.getElementById('handover-log').value = "";
+  pushProgress();
   toast("已全部清空");
 }
 function refreshAllProgress(){ ROADMAP.modules.forEach(m=>refreshProgress(m.id)); }
+
+/* ============ 云端同步 ============ */
+let syncTimer = null;
+
+async function fetchCloudProgress(){
+  try{
+    const response = await fetch("/api/progress");
+    if(response.status === 401){ location.href = "login.html"; return false; }
+    const result = await response.json();
+    if(result.code === 401){ location.href = "login.html"; return false; }
+    if(result.code !== 200){ console.warn("读取云端进度失败", result.message); return false; }
+    return result.data || null;
+  }catch(e){ console.warn("读取云端进度失败", e); return false; }
+}
+
+async function pushProgress(){
+  clearTimeout(syncTimer);
+  const logEl = document.getElementById('handover-log');
+  if(logEl) state.handoverLog = logEl.value;
+  state.updatedAt = new Date().toISOString();
+  try{
+    const response = await fetch("/api/progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: JSON.stringify(state) })
+    });
+    if(response.status === 401){ location.href = "login.html"; return; }
+    const result = await response.json();
+    if(result.code !== 200){ console.warn("云端保存失败", result.message); toast("云端保存失败：" + result.message); }
+  }catch(e){ console.warn("云端保存失败", e); }
+}
+
+function scheduleCloudSync(){
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(pushProgress, 800);
+}
+
+async function initCloudProgress(){
+  const remote = await fetchCloudProgress();
+  if(remote === false) return;
+  if(remote){
+    try{
+      const p = JSON.parse(remote);
+      state.checks = p.checks || {};
+      state.notes = p.notes || {};
+      state.handoverLog = typeof p.handoverLog === "string" ? p.handoverLog : "";
+      try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){ console.warn("本地缓存写入失败", e); }
+      renderNav(); renderModules(); refreshAllProgress();
+      const logEl = document.getElementById('handover-log');
+      if(logEl) logEl.value = state.handoverLog || "";
+    }catch(e){ console.warn("云端进度解析失败", e); }
+  }else{
+    // 云端还没有记录：把本地已有进度上传一次
+    await pushProgress();
+  }
+}
 
 /* ============ 启动 ============ */
 loadState();
 renderNav();
 renderModules();
 refreshAllProgress();
+initCloudProgress();
 </script>
 <!-- [ANCHOR:LOGIC] 渲染与进度逻辑结束 -->
+<script>
+  async function logout() {
+    try {
+      await fetch("/api/user/logout", { method: "POST" });
+    } catch (error) {
+      console.error(error);
+    }
+    location.href = "login.html";
+  }
+</script>
 </body>
 </html>
 

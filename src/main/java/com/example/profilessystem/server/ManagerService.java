@@ -1,8 +1,10 @@
 package com.example.profilessystem.server;
 
 import com.example.profilessystem.entity.Manager;
+import com.example.profilessystem.entity.ManagerLoginBody;
 import com.example.profilessystem.mapper.ManagerMapper;
 import com.example.profilessystem.result.Result;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ManagerService {
 
     private final ManagerMapper managerMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public ManagerService(ManagerMapper managerMapper) {
+    public ManagerService(ManagerMapper managerMapper, PasswordEncoder passwordEncoder) {
         this.managerMapper = managerMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -23,11 +27,26 @@ public class ManagerService {
      */
     @Transactional
     public Result<String> create(Manager manager) {
+        manager.setPassword(passwordEncoder.encode(manager.getPassword()));
         int rows = managerMapper.insert(manager);
         if (rows != 1) {
             return Result.fail("插入失败");
         }
         return Result.ok(null);
+    }
+    /** 管理员登录：账号 + 密码，密码用 BCrypt 校验。 */
+    @Transactional
+    public Result<String> login(ManagerLoginBody loginBody) {
+        String name = loginBody.getManagername() == null ? "" : loginBody.getManagername().trim();
+        String password = loginBody.getPassword() == null ? "" : loginBody.getPassword();
+        if (name.isEmpty() || password.isEmpty()) {
+            return Result.fail("请填写账号和密码");
+        }
+        Manager manager = managerMapper.findByName(name);
+        if (manager == null || !passwordEncoder.matches(password, manager.getPassword())) {
+            return Result.fail("账号或密码错误");
+        }
+        return Result.ok(manager.getName());
     }
     /**
      * @param name
@@ -62,8 +81,7 @@ public class ManagerService {
         if (manager == null) {
             return Result.fail("未查找到该用户");
         }
-        String turePassword = manager.getPassword();
-        if (!turePassword.equals(password)) {
+        if (!passwordEncoder.matches(password, manager.getPassword())) {
             return Result.fail("密码错误");
         }
         int rows = managerMapper.updateNameById(id,newName);

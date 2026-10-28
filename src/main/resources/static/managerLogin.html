@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>管理员登录 · ProfilesSystem</title>
+    <style>
+      :root {
+        font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: #eef2ff;
+        background: #090d1d;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 15% 15%, #3947a8 0, transparent 32%),
+          radial-gradient(circle at 90% 85%, #0e7490 0, transparent 30%),
+          #090d1d;
+      }
+      .orb {
+        position: fixed;
+        width: 360px;
+        height: 360px;
+        border: 1px solid #ffffff18;
+        border-radius: 50%;
+        filter: blur(0.2px);
+        right: -100px;
+        top: -130px;
+      }
+      .orb:after {
+        content: "";
+        display: block;
+        width: 160px;
+        height: 160px;
+        border: 1px solid #ffffff14;
+        border-radius: 50%;
+        margin: 100px;
+      }
+      .shell {
+        width: min(940px, 92vw);
+        min-height: 570px;
+        display: grid;
+        grid-template-columns: 1fr 1.05fr;
+        overflow: hidden;
+        border: 1px solid #ffffff1c;
+        border-radius: 28px;
+        background: #ffffff0b;
+        box-shadow: 0 28px 90px #0008;
+        backdrop-filter: blur(22px);
+      }
+      .aside {
+        padding: 58px 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: linear-gradient(145deg, #ffffff16, #ffffff03);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+      .mark {
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #9ca9ff, #62e4d5);
+        color: #111a3b;
+        font-weight: 900;
+      }
+      .aside h1 {
+        margin: 0;
+        font-size: clamp(32px, 4vw, 48px);
+        line-height: 1.12;
+        letter-spacing: -0.04em;
+      }
+      .aside p {
+        max-width: 300px;
+        color: #b8c1e0;
+        line-height: 1.8;
+      }
+      .quote {
+        font-size: 13px;
+        color: #8792ba;
+      }
+      .card {
+        padding: 58px 10%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #090d1db8;
+      }
+      .eyebrow {
+        margin: 0 0 12px;
+        color: #7eebdc;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 32px;
+      }
+      .sub {
+        margin: 0 0 34px;
+        color: #9da7c8;
+      }
+      .field {
+        margin: 17px 0;
+      }
+      .field label {
+        display: block;
+        margin-bottom: 9px;
+        color: #cbd3ef;
+        font-size: 13px;
+      }
+      .field input {
+        width: 100%;
+        padding: 15px 16px;
+        border: 1px solid #ffffff20;
+        border-radius: 12px;
+        outline: none;
+        background: #ffffff0b;
+        color: #fff;
+        font-size: 15px;
+        transition: 0.2s;
+      }
+      .field input:focus {
+        border-color: #7eebdc;
+        box-shadow: 0 0 0 4px #7eebdc18;
+      }
+      .action {
+        width: 100%;
+        margin-top: 10px;
+        padding: 15px;
+        border: 0;
+        border-radius: 12px;
+        background: linear-gradient(100deg, #9ca9ff, #62e4d5);
+        color: #111a3b;
+        font-weight: 800;
+        font-size: 15px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px #62e4d544;
+      }
+      .error {
+        display: none;
+        margin: 10px 0 0;
+        color: #ff9db0;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .error.show {
+        display: block;
+      }
+      .links {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 24px;
+        font-size: 13px;
+      }
+      .links a {
+        color: #b8c1e0;
+        text-decoration: none;
+      }
+      .links a:hover {
+        color: #7eebdc;
+      }
+      .hint {
+        margin-top: 22px;
+        color: #7782a7;
+        font-size: 12px;
+      }
+      @media (max-width: 700px) {
+        body {
+          overflow: auto;
+          padding: 20px;
+        }
+        .shell {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+        .aside {
+          padding: 34px 28px;
+          gap: 30px;
+        }
+        .aside h1 {
+          font-size: 34px;
+        }
+        .card {
+          padding: 36px 28px 42px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="orb"></div>
+    <main class="shell">
+      <section class="aside">
+        <div class="brand">
+          <span class="mark">P</span><span>ProfilesSystem</span>
+        </div>
+        <div>
+          <h1>管理后台，<br />从这里进入。</h1>
+          <p>
+            审核账户申请、管理成员状态与系统访问权限，仅限管理员使用。
+          </p>
+        </div>
+        <div class="quote">Administrator only · Authorized access</div>
+      </section>
+      <section class="card">
+        <p class="eyebrow">Administrator access</p>
+        <h2>管理员登录</h2>
+        <p class="sub">使用管理员账号和密码登录</p>
+        <form
+          onsubmit="
+            login();
+            return false;
+          "
+        >
+          <div class="field">
+            <label for="theManager">管理员账号</label
+            ><input
+              id="theManager"
+              name="managername"
+              type="text"
+              placeholder="请输入管理员账号"
+              autocomplete="username"
+              required
+            />
+          </div>
+          <div class="field">
+            <label for="thePassword">密码</label
+            ><input
+              id="thePassword"
+              name="password"
+              type="password"
+              placeholder="请输入密码"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+          <div class="error" id="loginError"></div>
+          <button class="action" id="submitLogin" type="submit">登录</button>
+        </form>
+        <div class="links">
+          <a href="login.html">用户登录</a
+          ><a href="index.html">返回首页</a>
+        </div>
+        <div class="hint">仅限管理员访问，请使用管理员账号登录。</div>
+      </section>
+    </main>
+    <script>
+      async function login() {
+        const manager = document.getElementById("theManager").value.trim();
+        const password = document.getElementById("thePassword").value;
+        const errorBox = document.getElementById("loginError");
+        const button = document.getElementById("submitLogin");
+
+        errorBox.classList.remove("show");
+        if (!manager || !password) {
+          errorBox.textContent = "请填写账号和密码";
+          errorBox.classList.add("show");
+          return;
+        }
+
+        button.disabled = true;
+        try {
+          const response = await fetch("/api/manager/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ managername: manager, password: password }),
+          });
+          const result = await response.json();
+
+          if (result.code === 200) {
+            location.href = "managerPanel.html";
+          } else {
+            errorBox.textContent = result.message || "登录失败，请稍后重试";
+            errorBox.classList.add("show");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          errorBox.textContent = "网络异常，请稍后重试";
+          errorBox.classList.add("show");
+        } finally {
+          button.disabled = false;
+        }
+      }
+    </script>
+  </body>
+</html>

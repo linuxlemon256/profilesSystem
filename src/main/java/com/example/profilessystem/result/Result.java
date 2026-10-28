@@ -14,6 +14,7 @@ import java.time.temporal.ChronoUnit;
 public class Result<T> {
 
     public static final int CODE_SUCCESS = 200;
+    public static final int CODE_UNAUTHORIZED = 401;
     public static final int CODE_BAD_REQUEST = 400;
     public static final int CODE_ERROR = 500;
 
