@@ -1,12 +1,12 @@
 package com.example.profilessystem.controller;
 
+import com.example.profilessystem.entity.RegisterBody;
 import com.example.profilessystem.entity.User;
 import com.example.profilessystem.result.Result;
 import com.example.profilessystem.server.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,22 +21,26 @@ public class UserController {
 
     @GetMapping("/get/{name}")
     public Result<User> getUser(@PathVariable String name) {
-        return Result.ok(userService.findByName(name));
+        return userService.findByName(name);
     }
     @GetMapping("/get/all")
     public Result<List<User>> getAll() {
-        return Result.ok(userService.findAll());
+        return userService.findAll();
     }
     @GetMapping("/get/uncommit")
     public Result<List<User>> getUncommit() {
-        return Result.ok(userService.findAllUncommit());
+        return userService.findAllUncommit();
     }
     @GetMapping("/get/commit")
     public Result<List<User>> getCommit() {
-        return Result.ok(userService.findAllCommit());
+        return userService.findAllCommit();
     }
     @PostMapping("/insert")
-    public Result<User> insertUser(@RequestBody User user) {
-        return Result.ok(userService.create(user));
+    public Result<String> insertUser(@RequestBody User user) {
+        return userService.create(user);
+    }
+    @PostMapping("/register")
+    public Result<String> addUser(@RequestBody RegisterBody registerBody) {
+        return userService.register(registerBody);
     }
 }

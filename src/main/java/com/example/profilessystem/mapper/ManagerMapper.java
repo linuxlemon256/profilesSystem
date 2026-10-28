@@ -14,7 +14,7 @@ public interface ManagerMapper {
     @Delete("DELETE FROM manager WHERE managername=#{name};")
     int deleteByName(String name);
     @Update("UPDATE manager SET managername=#{newManagerName} WHERE managername=#{oldManagerName}")
-    int updateManagerNameById(String oldManagerName, String newManagerName);
+    int updateNameByName(String oldManagerName, String newManagerName);
     @Update("UPDATE manager SET managername=#{newManagerName} WHERE id=#{id}")
     int updateNameById(int id, String newManagerName);
 }

@@ -1,15 +1,15 @@
 package com.example.profilessystem.entity;
 
 public class Manager {
-    private String username;
+    private String managername;
     private String password;
     private int level;
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return managername;
     }
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String username) {
+        this.managername = username;
     }
     public String getPassword() {
         return password;
@@ -24,7 +24,7 @@ public class Manager {
         this.level = level;
     }
     public Manager(String username, String password, int level) {
-        this.username = username;
+        this.managername = username;
         this.password = password;
         this.level = level;
     }

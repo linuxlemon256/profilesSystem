@@ -17,12 +17,12 @@ public class ManagerController {
 
 
     @PostMapping("/insert/")
-    public Result<Manager> insert(@RequestBody Manager manager) {
-        return Result.ok(managerService.create(manager));
+    public Result<String> insert(@RequestBody Manager manager) {
+        return managerService.create(manager);
     }
 
     @GetMapping("/get/{name}")
     public Result<Manager> get(@PathVariable String name) {
-        return Result.ok(managerService.getManagerByName(name));
+        return managerService.getManagerByName(name);
     }
 }
