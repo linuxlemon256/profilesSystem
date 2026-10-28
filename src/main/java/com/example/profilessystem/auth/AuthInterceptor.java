@@ -71,8 +71,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private boolean requiresUser(String path) {
-        return path.equals("/learnServer.html")
-                || path.startsWith("/api/user/")
+        // 学习路线页面公开；云端存储（进度同步）仍需登录
+        return path.startsWith("/api/user/")
                 || path.startsWith("/api/progress");
     }
 

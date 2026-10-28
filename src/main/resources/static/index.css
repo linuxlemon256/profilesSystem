@@ -290,8 +290,11 @@ body {
 }
 .scene.active_5 .nav_5 a:nth-child(1) { transition-delay: 0s; }
 
-.nav_1 a, .nav_2 a, .nav_3 a, .nav_4 a, .nav_5 a {
-    -webkit-box-reflect: below 2px linear-gradient(rgba(0,0,0,0.6), transparent 75%);
+/* 倒影只在桌面布局生效（窄屏下改为纵向排列，不需要倒影） */
+@media (min-width: 901px) {
+    .nav_1 a, .nav_2 a, .nav_3 a, .nav_4 a, .nav_5 a {
+        -webkit-box-reflect: below 2px linear-gradient(rgba(0,0,0,0.6), transparent 75%);
+    }
 }
 
 .hint {
@@ -321,6 +324,109 @@ body {
 .footer a { color: #b8c1e0; text-decoration: none; }
 .footer a:hover { color: #7eebdc; }
 
-@media (max-width: 700px) {
+/* ---------- 中等宽度：整体缩放，保证右侧面板不被裁切 ---------- */
+@media (min-width: 1121px) and (max-width: 1280px) {
+    .scene { transform: scale(0.85); }
+}
+@media (min-width: 901px) and (max-width: 1120px) {
     .scene { transform: scale(0.7); }
+}
+
+/* ---------- 窄屏（手机 / 小屏平板）：改为纵向布局 ---------- */
+@media (max-width: 900px) {
+    .stage {
+        height: auto;
+        min-height: 100vh;
+        align-items: flex-start;
+        padding: 52px 18px 70px;
+    }
+    .scene {
+        width: 100%;
+        height: auto;
+        display: block;
+        text-align: center;
+    }
+
+    /* 三角形进入文档流，居中 */
+    .tri {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: 150px;
+        height: 130px;
+        /* 绕自身中心翻转，避免激活后压到下面的名字 */
+        transform-origin: 50% 50%;
+        display: block;
+        margin: 4px auto 0;
+    }
+    .reflect-layer,
+    .reflect-wrap,
+    .line { display: none; }
+
+    /* 站点名 */
+    .name {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        margin-top: 12px;
+        font-size: 22px;
+        letter-spacing: 3px;
+        opacity: 1;
+        filter: none;
+        text-align: center;
+    }
+    .scene.active .name { transform: none; }
+
+    /* 主菜单：点击三角形后纵向下拉 */
+    .nav {
+        position: relative;
+        left: auto;
+        top: auto;
+        display: none;
+        margin-top: 14px;
+    }
+    .scene.active .nav { display: block; }
+    .nav a {
+        margin: 0;
+        padding: 6px 14px;
+        font-size: 17px;
+    }
+
+    /* 各内容面板：激活时进入文档流，避免绝对定位被裁切 */
+    .nav_1, .nav_2, .nav_3, .nav_4, .nav_5 {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: auto;
+        max-width: 560px;
+        display: none;
+        margin: 18px auto 0;
+        text-align: center;
+    }
+    .scene.active_1 .nav_1,
+    .scene.active_2 .nav_2,
+    .scene.active_3 .nav_3,
+    .scene.active_4 .nav_4,
+    .scene.active_5 .nav_5 { display: block; }
+
+    .nav_1 a,
+    .nav_2 a,
+    .nav_3 a,
+    .nav_4 a,
+    .nav_5 a {
+        margin: 10px 0;
+        padding: 0 8px;
+        font-size: 19px !important;
+        white-space: normal;
+        /* 抵消元素上的内联 top 偏移 */
+        top: auto !important;
+    }
+    .nav_1 a { font-size: 24px !important; }
+    .nav_2 a[style*="font-size: 10px"] { font-size: 13px !important; line-height: 1.6; }
+    .nav_4 a[style*="font-size: 20px"] { font-size: 17px !important; }
+
+    .hint { bottom: 16px; font-size: 11px; letter-spacing: 2px; }
+    .stage:has(.scene.active) ~ .hint { opacity: 0; }
+    .footer { padding: 16px 16px 40px; }
 }

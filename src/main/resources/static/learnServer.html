@@ -50,6 +50,8 @@ a{color:var(--primary)}
 .hero-inner{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:24px}
 .hero h1{font-size:24px;letter-spacing:.5px}
 .hero .sub{opacity:.85;font-size:13.5px;margin-top:4px;max-width:640px}
+.cloud-notice{display:inline-block;margin-top:12px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);font-size:12.5px}
+.cloud-notice a{color:#fff;text-decoration:underline;font-weight:600}
 .ring-wrap{display:flex;align-items:center;gap:14px;margin-left:auto}
 .ring{width:104px;height:104px;position:relative;flex:none}
 .ring svg{transform:rotate(-90deg)}
@@ -149,8 +151,11 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 0 40px}
 <header class="hero">
   <div class="hero-inner">
     <div>
-      <h1>🚀 AI 全栈 + Agent 大厂学习路线</h1>
-      <div class="sub">Java 后端工程 · Python AI 工程 · LLM 应用 · RAG · Agent · 大厂求职 —— 勾选小点自动计算进度，进度自动同步到云端（同时保留在浏览器本地）。</div>
+      <h1>🚀 AI 全栈 + Agent 学习路线</h1>
+      <div class="sub">Java 后端工程 · Python AI 工程 · LLM 应用 · RAG · Agent · 求职 —— 勾选小点自动计算进度，进度自动同步到云端（同时保留在浏览器本地）。</div>
+      <div class="cloud-notice" id="cloudNotice" hidden>
+        游客模式：进度只保存在本机浏览器，<a href="login.html">登录</a>后可云端同步。
+      </div>
     </div>
     <div class="ring-wrap">
       <div class="ring">
@@ -171,7 +176,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 0 40px}
       <button class="btn" onclick="expandAll(false)">全部收起</button>
       <button class="btn" onclick="exportJSON()">导出进度(JSON)</button>
       <button class="btn" onclick="document.getElementById('ai-handover').scrollIntoView({behavior:'smooth'})">前往 AI 交接区 ↓</button>
-      <button class="btn" onclick="logout()">退出登录</button>
+      <button class="btn" id="authBtn" data-action="login" onclick="authAction()">登录</button>
       <button class="btn danger" onclick="resetAll()">清空所有进度</button>
     </div>
   </div>
@@ -231,7 +236,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 0 40px}
 </section>
 <!-- [ANCHOR:HANDOVER] AI 交接区结束 -->
 
-<footer>AI 全栈 + Agent 学习路线 v1.3 · 更新于 2026-10-25 · 与《大模型教学手册》v1.3 配套 · 笔记库 198 篇 / 11 篇小抄 / 2 个示例项目 · 进度数据仅存于本机浏览器</footer>
+<footer>AI 全栈 + Agent 学习路线 v1.3 · 更新于 2026-10-25 · 与《大模型教学手册》v1.3 配套 · 笔记库 198 篇 / 11 篇小抄 / 2 个示例项目 · 进度默认存于本机浏览器，登录后自动同步云端</footer>
 <div id="toast"></div>
 
 <!-- [ANCHOR:DATA] 知识点主数据开始（AI 修改知识点请改此处；修改后需同步 MD 手册并更新 version） -->
@@ -378,7 +383,7 @@ const ROADMAP = {
         {t:"P4 · 多智能体协作平台（Java+Python 旗舰）", p:["里程碑①：单 Agent 基座（ReAct+沙箱+重试）","里程碑②：多 Agent 深度研究流水线（LangGraph）","里程碑③：记忆系统（窗口压缩+pgvector 长期）","里程碑④：MCP 双向互操作（Java Server↔Python Host）⭐","里程碑⑤：安全治理（白名单/费用熔断/人审）","验收：20 题集可用率≥80%、trace 100% 覆盖"]},
         {t:"项目方法论（贯穿）", p:["Git 规范与 PR 自审 ⭐","README+架构图+压测/评测报告三件套 ⭐","每项目 2 篇技术博客与开源沉淀 ⭐","STAR 简历转换与深挖防御三问预演 ⭐⭐"]}
       ]},
-    { id:"m15", stage:"s5", no:"M15", title:"大厂面试冲刺", weeks:"4-6 周", weight:5,
+    { id:"m15", stage:"s5", no:"M15", title:"面试冲刺", weeks:"4-6 周", weight:5,
       brief:"最后冲刺：算法刷题体系、Java/AI 双八股清单、系统设计白板训练、简历包装与模拟面试复盘闭环。",
       sections:[
         {t:"1. 算法与手撕 ⭐⭐⭐", p:["刷题体系：LeetCode Hot 100 按类型推进","每题四件套：思路/复杂度/边界/变体，25 分钟节奏 ⭐","高频手撕：LRU/快排/生产者消费者/交替打印/单例 ⭐⭐","面试表达：先确认→给思路→边写边说→自测用例 ⭐"]},
@@ -618,19 +623,46 @@ function refreshAllProgress(){ ROADMAP.modules.forEach(m=>refreshProgress(m.id))
 
 /* ============ 云端同步 ============ */
 let syncTimer = null;
+let cloudGuest = false;
+
+function enterGuestMode(){
+  cloudGuest = true;
+  const notice = document.getElementById('cloudNotice');
+  if(notice) notice.hidden = false;
+  setAuthState(false);
+}
+
+// 根据会话状态切换右上角按钮：游客=登录，已登录=退出登录
+function setAuthState(loggedIn){
+  const btn = document.getElementById('authBtn');
+  if(!btn) return;
+  btn.dataset.action = loggedIn ? "logout" : "login";
+  btn.textContent = loggedIn ? "退出登录" : "登录";
+}
+
+async function authAction(){
+  const btn = document.getElementById('authBtn');
+  if(btn && btn.dataset.action === "logout"){
+    try{
+      await fetch("/api/user/logout", { method: "POST" });
+    }catch(e){ console.warn("退出登录失败", e); }
+  }
+  location.href = "login.html";
+}
 
 async function fetchCloudProgress(){
   try{
     const response = await fetch("/api/progress");
-    if(response.status === 401){ location.href = "login.html"; return false; }
+    if(response.status === 401){ enterGuestMode(); return "guest"; }
     const result = await response.json();
-    if(result.code === 401){ location.href = "login.html"; return false; }
+    if(result.code === 401){ enterGuestMode(); return "guest"; }
     if(result.code !== 200){ console.warn("读取云端进度失败", result.message); return false; }
     return result.data || null;
   }catch(e){ console.warn("读取云端进度失败", e); return false; }
 }
 
 async function pushProgress(){
+  if(cloudGuest) return;
   clearTimeout(syncTimer);
   const logEl = document.getElementById('handover-log');
   if(logEl) state.handoverLog = logEl.value;
@@ -641,8 +673,9 @@ async function pushProgress(){
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ data: JSON.stringify(state) })
     });
-    if(response.status === 401){ location.href = "login.html"; return; }
+    if(response.status === 401){ enterGuestMode(); toast("登录状态已失效，进度仅保存在本机"); return; }
     const result = await response.json();
+    if(result.code === 401){ enterGuestMode(); toast("登录状态已失效，进度仅保存在本机"); return; }
     if(result.code !== 200){ console.warn("云端保存失败", result.message); toast("云端保存失败：" + result.message); }
   }catch(e){ console.warn("云端保存失败", e); }
 }
@@ -654,7 +687,8 @@ function scheduleCloudSync(){
 
 async function initCloudProgress(){
   const remote = await fetchCloudProgress();
-  if(remote === false) return;
+  if(remote === "guest" || remote === false) return;
+  setAuthState(true);
   if(remote){
     try{
       const p = JSON.parse(remote);
@@ -672,6 +706,10 @@ async function initCloudProgress(){
   }
 }
 
+window.addEventListener("pageshow", (event) => {
+  if(event.persisted) location.reload();
+});
+
 /* ============ 启动 ============ */
 loadState();
 renderNav();
@@ -680,16 +718,6 @@ refreshAllProgress();
 initCloudProgress();
 </script>
 <!-- [ANCHOR:LOGIC] 渲染与进度逻辑结束 -->
-<script>
-  async function logout() {
-    try {
-      await fetch("/api/user/logout", { method: "POST" });
-    } catch (error) {
-      console.error(error);
-    }
-    location.href = "login.html";
-  }
-</script>
 </body>
 </html>
 
