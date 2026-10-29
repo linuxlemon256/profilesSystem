@@ -64,6 +64,16 @@ public class UserController {
         session.invalidate();
         return Result.ok();
     }
+
+    /** 当前登录用户的账户资料，供账户主页使用。 */
+    @GetMapping("/me")
+    public Result<User> me(HttpSession session) {
+        Object username = session.getAttribute(SessionKeys.USER);
+        if (username == null) {
+            return Result.fail(Result.CODE_UNAUTHORIZED, "请先登录");
+        }
+        return userService.findByName(username.toString());
+    }
     @PostMapping("/approve/{name}")
     public Result<String> approve(@PathVariable String name) {
         return userService.update(name);
