@@ -1,6 +1,7 @@
 package com.example.profilessystem.auth;
 
 import com.example.profilessystem.mapper.ManagerMapper;
+import com.example.profilessystem.mapper.UserMapper;
 import com.example.profilessystem.result.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,9 +20,11 @@ import java.io.IOException;
 public class AuthInterceptor implements HandlerInterceptor {
 
     private final ManagerMapper managerMapper;
+    private final UserMapper userMapper;
 
-    public AuthInterceptor(ManagerMapper managerMapper) {
+    public AuthInterceptor(ManagerMapper managerMapper, UserMapper userMapper) {
         this.managerMapper = managerMapper;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -45,6 +48,16 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (requiresUser(path) && sessionValue(request, SessionKeys.USER) == null) {
             return reject(request, response, "/login.html");
         }
+        if (requiresAssociatedLevel(path)) {
+            String username = sessionValue(request, SessionKeys.USER);
+            if (username == null) {
+                return reject(request, response, "/login.html");
+            }
+            var user = userMapper.findByName(username);
+            if (user == null || user.getLevel() < 1) {
+                return rejectForbidden(request, response, "/learnIndex.html?denied=level");
+            }
+        }
         return true;
     }
 
@@ -61,7 +74,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (path.startsWith("/api/manager/") || path.equals("/managerPanel.html")) {
             return true;
         }
-        return path.equals("/api/user/get/all")
+        return path.startsWith("/api/recovery/admin/")
+                || path.equals("/api/user/get/all")
                 || path.equals("/api/user/get/uncommit")
                 || path.equals("/api/user/get/commit")
                 || path.equals("/api/user/get/rejected")
@@ -76,6 +90,10 @@ public class AuthInterceptor implements HandlerInterceptor {
                 || path.startsWith("/api/progress");
     }
 
+    private boolean requiresAssociatedLevel(String path) {
+        return path.equals("/LLMindex.html");
+    }
+
     private boolean reject(HttpServletRequest request, HttpServletResponse response, String redirect)
             throws IOException {
         if (request.getRequestURI().endsWith(".html")) {
@@ -86,6 +104,19 @@ public class AuthInterceptor implements HandlerInterceptor {
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(
                 "{\"code\":" + Result.CODE_UNAUTHORIZED + ",\"message\":\"请先登录\"}");
+        return false;
+    }
+
+    private boolean rejectForbidden(HttpServletRequest request, HttpServletResponse response, String redirect)
+            throws IOException {
+        if (request.getRequestURI().endsWith(".html")) {
+            response.sendRedirect(redirect);
+            return false;
+        }
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(
+                "{\"code\":403,\"message\":\"当前等级无权访问\"}");
         return false;
     }
 }

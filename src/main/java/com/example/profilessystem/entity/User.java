@@ -8,9 +8,14 @@ public class User {
     private String storage;
     private String code;
     private int isin = 0;
+    private int level = 0;
     private String email;
     private String reason;
     private LocalDateTime createdAt;
+    private String recoveryType;
+    private String recoveryReason;
+    private int recoveryStatus = 0;
+    private LocalDateTime recoveryCreatedAt;
     public User() {
     }
     public User(String username, String password, String storage, String code, int isin,  String email, String reason) {
@@ -52,6 +57,12 @@ public class User {
     public void setIsin(int isin) {
         this.isin = isin;
     }
+    public int getLevel() {
+        return level;
+    }
+    public void setLevel(int level) {
+        this.level = level;
+    }
     public String getEmail() {
         return email;
     }
@@ -70,4 +81,12 @@ public class User {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+    public String getRecoveryType() { return recoveryType; }
+    public void setRecoveryType(String recoveryType) { this.recoveryType = recoveryType; }
+    public String getRecoveryReason() { return recoveryReason; }
+    public void setRecoveryReason(String recoveryReason) { this.recoveryReason = recoveryReason; }
+    public int getRecoveryStatus() { return recoveryStatus; }
+    public void setRecoveryStatus(int recoveryStatus) { this.recoveryStatus = recoveryStatus; }
+    public LocalDateTime getRecoveryCreatedAt() { return recoveryCreatedAt; }
+    public void setRecoveryCreatedAt(LocalDateTime recoveryCreatedAt) { this.recoveryCreatedAt = recoveryCreatedAt; }
 }

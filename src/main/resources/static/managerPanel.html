@@ -418,6 +418,13 @@
           <div class="empty" id="empty">没有找到符合条件的申请</div>
         </div>
       </section>
+      <section class="panel" style="margin-top: 22px">
+        <div class="toolbar"><strong>邀请码重置申请</strong><span class="count" id="recoveryCount"></span></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>账户</th><th>邮箱</th><th>申请说明</th><th>提交时间</th><th>操作</th></tr></thead><tbody id="recoveryRows"></tbody></table>
+          <div class="empty" id="recoveryEmpty">暂无邀请码重置申请</div>
+        </div>
+      </section>
     </main>
     <div class="toast" id="toast"></div>
     <script>
@@ -430,6 +437,7 @@
       let applications = [];
 
       const rows = document.getElementById("rows");
+      const recoveryRows = document.getElementById("recoveryRows");
 
       // 后端统一返回 Result：code 为 200 时取 data，否则抛出 message
       async function request(url, options) {
@@ -494,6 +502,26 @@
           return false;
         }
       }
+
+      async function loadRecoveryRequests() {
+        try {
+          const requests = await request("/api/recovery/admin/pending");
+          recoveryRows.innerHTML = (requests || []).map((item) => `<tr><td>${escapeHtml(item.username)}</td><td>${escapeHtml(item.email)}</td><td>${escapeHtml(item.recoveryReason || "未填写")}</td><td>${escapeHtml(formatTime(item.recoveryCreatedAt))}</td><td><div class="actions"><button class="approve" data-recovery="approve" data-id="${encodeURIComponent(item.username)}">通过</button><button class="reject" data-recovery="reject" data-id="${encodeURIComponent(item.username)}">拒绝</button></div></td></tr>`).join("");
+          document.getElementById("recoveryEmpty").style.display = requests && requests.length ? "none" : "block";
+          document.getElementById("recoveryCount").textContent = `${(requests || []).length} 条待处理`;
+        } catch (error) { showToast("加载找回申请失败：" + error.message); }
+      }
+
+      recoveryRows.addEventListener("click", async (event) => {
+        const button = event.target.closest("button[data-recovery]");
+        if (!button) return;
+        const action = button.dataset.recovery;
+        try {
+          const result = await request(`/api/recovery/admin/${button.dataset.id}/${action}`, { method: "POST" });
+          showToast(action === "approve" ? `已通过，新的邀请码：${result}` : "申请已拒绝");
+          loadRecoveryRequests();
+        } catch (error) { showToast("操作失败：" + error.message); }
+      });
 
       // 用户名、邮箱、原因都来自注册表单，渲染前必须转义，避免 XSS
       function escapeHtml(value) {
@@ -616,11 +644,13 @@
 
       document.getElementById("refresh").addEventListener("click", async () => {
         if (await loadApplications()) {
+          await loadRecoveryRequests();
           showToast("列表已刷新");
         }
       });
 
       loadApplications();
+      loadRecoveryRequests();
 
     </script>
   </body>

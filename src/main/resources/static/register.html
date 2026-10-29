@@ -95,6 +95,25 @@
         font-size: 13px;
         line-height: 1.6;
       }
+      .mail-reminder {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin: -10px 0 20px;
+        padding: 11px 13px;
+        border: 1px solid #f5c26b44;
+        border-radius: 11px;
+        background: #f5c26b12;
+        color: #f4d79a;
+        font-size: 12px;
+        line-height: 1.65;
+      }
+      .mail-reminder::before {
+        content: "✉";
+        flex: none;
+        color: #f7c873;
+        font-size: 14px;
+      }
       .method-label {
         margin-top: 22px;
         margin-bottom: 10px;
@@ -264,6 +283,9 @@
         <div class="notice">
           登录仅提供云端存储功能和《大模型教学手册》访问权限。内部资源暂不对外开放。
         </div>
+        <div class="mail-reminder" role="note">
+          提交申请后，请留意邮箱回复。如果没有在收件箱看到邮件，也请检查垃圾箱、垃圾邮件或广告邮件分类。
+        </div>
         <div class="method-label">方式一 · 填写申请表单</div>
         <form class="apply-form" id="applyForm">
           <label for="applyName"
@@ -281,6 +303,14 @@
               maxlength="255"
               required
             ></textarea></label
+          ><label for="applyPassword"
+            >登录密码<input
+              id="applyPassword"
+              name="password"
+              type="password"
+              minlength="6"
+              placeholder="请设置至少 6 位的登录密码"
+              required /></label
           ><label for="applyContact"
             >联系方式
             <span style="color: #8792ba; font-size: 12px">（邮箱）</span
@@ -298,7 +328,7 @@
           <strong>1–3 个工作日</strong
           >，我们会通过你留下的联系方式与你联系。<br /><a
             class="back-btn"
-            href="learnServer.html"
+            href="learnIndex.html"
             >返回学习路线</a
           >
         </div>
@@ -334,8 +364,15 @@
         const payload = {
           username: document.getElementById("applyName").value.trim(),
           reason: document.getElementById("applyReason").value.trim(),
+          password: document.getElementById("applyPassword").value,
           email: document.getElementById("applyContact").value.trim(),
         };
+
+        if (payload.password.length < 6) {
+          applyError.textContent = "登录密码至少需要 6 位";
+          applyError.classList.add("show");
+          return;
+        }
 
         // 邮箱必填：先查空，再查格式，后端也会再校验一次
         if (!payload.email) {

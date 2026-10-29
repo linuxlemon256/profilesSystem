@@ -4,6 +4,7 @@ public class RegisterBody {
     private String username;
     private String reason;
     private String email;
+    private String password;
     public RegisterBody(String username, String reason, String email) {
         this.username = username;
         this.reason = reason;
@@ -27,5 +28,11 @@ public class RegisterBody {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

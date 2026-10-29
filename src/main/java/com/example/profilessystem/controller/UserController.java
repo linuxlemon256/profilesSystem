@@ -59,6 +59,20 @@ public class UserController {
         return result;
     }
 
+    @PostMapping("/login/password")
+    public Result<String> loginByPassword(@RequestBody LoginBody loginBody, HttpSession session) {
+        Result<String> result = userService.loginByPassword(loginBody);
+        if (result.getCode() == Result.CODE_SUCCESS) session.setAttribute(SessionKeys.USER, result.getData());
+        return result;
+    }
+
+    @PostMapping("/login/email")
+    public Result<String> loginByEmail(@RequestBody LoginBody loginBody, HttpSession session) {
+        Result<String> result = userService.loginByEmail(loginBody);
+        if (result.getCode() == Result.CODE_SUCCESS) session.setAttribute(SessionKeys.USER, result.getData());
+        return result;
+    }
+
     @PostMapping("/logout")
     public Result<Void> logout(HttpSession session) {
         session.invalidate();
@@ -73,6 +87,20 @@ public class UserController {
             return Result.fail(Result.CODE_UNAUTHORIZED, "请先登录");
         }
         return userService.findByName(username.toString());
+    }
+
+    /** 当前登录用户的数字等级：0 游客，1 关联人员，2 内部人员。 */
+    @GetMapping("/level")
+    public Result<Integer> level(HttpSession session) {
+        Object username = session.getAttribute(SessionKeys.USER);
+        if (username == null) {
+            return Result.fail(Result.CODE_UNAUTHORIZED, "请先登录");
+        }
+        Result<User> userResult = userService.findByName(username.toString());
+        if (userResult.getCode() != Result.CODE_SUCCESS || userResult.getData() == null) {
+            return Result.fail(Result.CODE_UNAUTHORIZED, "账户不存在或已失效");
+        }
+        return Result.ok(userResult.getData().getLevel());
     }
     @PostMapping("/approve/{name}")
     public Result<String> approve(@PathVariable String name) {

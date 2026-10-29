@@ -81,7 +81,7 @@
       }
       .grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px;
         margin-top: 20px;
       }
@@ -102,6 +102,18 @@
         color: #172554;
         font-size: 18px;
       }
+      .level-badge {
+        display: block !important;
+        margin-top: 10px !important;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        color: #6366f1 !important;
+        background: transparent;
+        font-size: 18px !important;
+      }
+      .level-badge.level-internal { color: #7e22ce !important; }
+      .level-badge.level-public { color: #2563eb !important; }
       .account-detail {
         margin-top: 20px;
         padding: 23px;
@@ -161,6 +173,9 @@
           font-size: 30px;
         }
       }
+      @media (min-width: 681px) and (max-width: 900px) {
+        .grid { grid-template-columns: repeat(2, 1fr); }
+      }
 
     </style>
   </head>
@@ -169,7 +184,7 @@
       <div class="brand">
         <span class="mark">P</span><span>ProfilesSystem</span>
       </div>
-      <a href="learnServer.html">返回专业选择</a>
+      <a href="learnIndex.html">返回专业选择</a>
     </header>
     <main class="wrap">
       <section class="hero">
@@ -187,13 +202,16 @@
         <article class="card">
           <span>联系方式</span><strong id="accountEmail">未填写</strong>
         </article>
+        <article class="card">
+          <span>用户等级</span><strong class="level-badge level-public" id="accountLevel">游客</strong>
+        </article>
       </section>
       <section class="account-detail">
         <p><span>申请原因</span><strong id="accountReason">读取中…</strong></p>
         <p><span>加入时间</span><strong id="accountCreatedAt">读取中…</strong></p>
       </section>
       <div class="actions">
-        <a class="btn primary" href="learnServer.html">选择专业方向</a
+        <a class="btn primary" href="learnIndex.html">选择专业方向</a
         ><a class="btn secondary" href="index.html">访问个人主页</a
         ><a class="btn secondary" id="logoutLink" href="login.html">退出登录</a>
       </div>
@@ -210,6 +228,17 @@
 
       function setText(id, value) {
         document.getElementById(id).textContent = value;
+      }
+
+      function levelInfo(level) {
+        const numericLevel = Number(level);
+        if (numericLevel === 2) {
+          return { label: "内部人员", className: "level-internal" };
+        }
+        if (numericLevel === 1) {
+          return { label: "关联人员", className: "level-associated" };
+        }
+        return { label: "游客", className: "level-public" };
       }
 
       async function loadAccount() {
@@ -233,6 +262,10 @@
           setText("welcome", "你好，" + (user.username || "成员"));
           setText("accountStatus", statusText(user.isin));
           setText("accountEmail", user.email || "未填写");
+          const level = levelInfo(user.level);
+          const levelElement = document.getElementById("accountLevel");
+          levelElement.textContent = level.label;
+          levelElement.className = "level-badge " + level.className;
           setText("accountReason", user.reason || "未填写");
           setText(
                   "accountCreatedAt",

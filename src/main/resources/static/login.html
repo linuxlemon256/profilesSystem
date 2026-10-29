@@ -117,6 +117,9 @@
         margin: 0 0 34px;
         color: #9da7c8;
       }
+      .login-methods { display: flex; gap: 7px; margin: 0 0 18px; padding: 4px; border-radius: 11px; background: #ffffff0b; }
+      .method-tab { flex: 1; padding: 9px 6px; border: 0; border-radius: 8px; color: #9da7c8; background: transparent; font: inherit; font-size: 12px; cursor: pointer; }
+      .method-tab.active { color: #111a3b; background: linear-gradient(100deg, #9ca9ff, #62e4d5); font-weight: 800; }
       .field {
         margin: 17px 0;
       }
@@ -228,6 +231,11 @@
         <p class="eyebrow">Member access</p>
         <h2>登录账户</h2>
         <p class="sub">输入你的账户信息以继续</p>
+        <div class="login-methods" role="tablist" aria-label="登录方式">
+          <button class="method-tab active" type="button" data-mode="invite">邀请码</button>
+          <button class="method-tab" type="button" data-mode="account">账户密码</button>
+          <button class="method-tab" type="button" data-mode="email">邮箱密码</button>
+        </div>
         <form id="loginForm" novalidate>
           <div class="field">
             <label for="theProfiles">账户</label
@@ -240,6 +248,9 @@
               autofocus
               required
             />
+          </div>
+          <div class="field" id="emailField" hidden>
+            <label for="theEmail">邮箱</label><input id="theEmail" name="email" type="email" placeholder="请输入注册邮箱" autocomplete="email" />
           </div>
           <div class="field">
             <label for="theInviteCode">邀请码</label
@@ -254,11 +265,15 @@
               required
             />
           </div>
+          <div class="field" id="passwordField" hidden>
+            <label for="thePassword">密码</label><input id="thePassword" name="password" type="password" placeholder="请输入登录密码" autocomplete="current-password" />
+          </div>
           <div class="error" id="loginError" role="status" aria-live="polite"></div>
           <button class="action" id="submitLogin" type="submit">登录</button>
         </form>
         <div class="links">
           <a href="register.html">没有账户？去申请</a
+          ><a href="recovery.html">找回登录信息</a
           ><a href="managerLogin.html">管理员登录</a
           ><a href="learnServer.html">返回首页</a>
         </div>
@@ -269,6 +284,27 @@
       const loginForm = document.getElementById("loginForm");
       const errorBox = document.getElementById("loginError");
       const button = document.getElementById("submitLogin");
+      const requestedRedirect = new URLSearchParams(window.location.search).get("redirect");
+      const tabs = document.querySelectorAll(".method-tab");
+      const emailField = document.getElementById("emailField");
+      const passwordField = document.getElementById("passwordField");
+      const accountField = document.getElementById("theProfiles").closest(".field");
+      const codeField = document.getElementById("theInviteCode").closest(".field");
+      let mode = "invite";
+
+      function setMode(nextMode) {
+        mode = nextMode;
+        tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.mode === mode));
+        accountField.hidden = mode === "email";
+        emailField.hidden = mode !== "email";
+        codeField.hidden = mode !== "invite";
+        passwordField.hidden = mode === "invite";
+        document.getElementById("theProfiles").required = mode !== "email";
+        document.getElementById("theEmail").required = mode === "email";
+        document.getElementById("theInviteCode").required = mode === "invite";
+        document.getElementById("thePassword").required = mode !== "invite";
+      }
+      tabs.forEach((tab) => tab.addEventListener("click", () => setMode(tab.dataset.mode)));
 
       function showError(message) {
         errorBox.textContent = message;
@@ -283,21 +319,33 @@
       async function login() {
         const username = document.getElementById("theProfiles").value.trim();
         const code = document.getElementById("theInviteCode").value.trim();
+        const email = document.getElementById("theEmail").value.trim();
+        const password = document.getElementById("thePassword").value;
 
         clearError();
 
-        if (!username || !code) {
+        if (mode === "invite" && (!username || !code)) {
           showError("请填写账户和邀请码");
+          return;
+        }
+        if (mode === "account" && (!username || !password)) {
+          showError("请填写账户和密码");
+          return;
+        }
+        if (mode === "email" && (!email || !password)) {
+          showError("请填写邮箱和密码");
           return;
         }
 
         button.disabled = true;
         try {
-          const response = await fetch("/api/user/login", {
+          const endpoint = mode === "invite" ? "/api/user/login" : `/api/user/login/${mode}`;
+          const body = mode === "invite" ? { username, code } : mode === "account" ? { username, password } : { email, password };
+          const response = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "same-origin",
-            body: JSON.stringify({ username: username, code: code }),
+            body: JSON.stringify(body),
           });
 
           let result = null;
@@ -314,7 +362,10 @@
           const success = Number(result.code) === 200;
           if (success) {
             const name = result.data || username;
-            window.location.replace("learnServer.html?name=" + encodeURIComponent(name));
+            const destination = requestedRedirect === "LLMindex.html"
+              ? requestedRedirect
+              : "learnIndex.html?name=" + encodeURIComponent(name);
+            window.location.replace(destination);
           } else {
             showError(result.message || "登录失败，请稍后重试");
           }

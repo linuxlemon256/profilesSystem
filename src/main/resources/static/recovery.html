@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>找回登录信息 · ProfilesSystem</title>
+    <style>
+      :root { font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif; color: #eef2ff; background: #090d1d; }
+      * { box-sizing: border-box; }
+      body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 22px; background: radial-gradient(circle at 15% 10%, #3947a8 0, transparent 32%), radial-gradient(circle at 90% 85%, #0e7490 0, transparent 30%), #090d1d; }
+      .shell { width: min(850px, 94vw); display: grid; grid-template-columns: .82fr 1.18fr; overflow: hidden; border: 1px solid #ffffff1c; border-radius: 26px; background: #ffffff0b; box-shadow: 0 28px 90px #0008; backdrop-filter: blur(22px); }
+      .intro { padding: 52px 42px; background: linear-gradient(145deg, #ffffff16, #ffffff03); }
+      .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; }
+      .mark { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 11px; color: #111a3b; background: linear-gradient(135deg, #9ca9ff, #62e4d5); }
+      .intro h1 { margin: 110px 0 15px; font-size: 39px; line-height: 1.12; letter-spacing: -.05em; }
+      .intro p { color: #b8c1e0; line-height: 1.8; }
+      .form { padding: 48px 9%; background: #090d1db8; }
+      .eyebrow { margin: 0 0 10px; color: #7eebdc; font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+      h2 { margin: 0 0 10px; font-size: 29px; }
+      .sub { margin: 0 0 22px; color: #9da7c8; font-size: 13px; line-height: 1.7; }
+      .tabs { display: flex; gap: 6px; margin-bottom: 20px; padding: 4px; border-radius: 11px; background: #ffffff0b; }
+      .tab { flex: 1; padding: 9px 4px; border: 0; border-radius: 8px; color: #9da7c8; background: transparent; font: inherit; font-size: 12px; cursor: pointer; }
+      .tab.active { color: #111a3b; background: linear-gradient(100deg, #9ca9ff, #62e4d5); font-weight: 800; }
+      .panel { display: none; }
+      .panel.active { display: block; }
+      label { display: block; margin: 14px 0; color: #cbd3ef; font-size: 13px; }
+      input, textarea { width: 100%; margin-top: 7px; padding: 13px 14px; border: 1px solid #ffffff20; border-radius: 11px; outline: none; background: #ffffff0b; color: #fff; font: inherit; }
+      textarea { min-height: 76px; resize: vertical; }
+      input:focus, textarea:focus { border-color: #7eebdc; box-shadow: 0 0 0 4px #7eebdc18; }
+      .submit { width: 100%; margin-top: 7px; padding: 14px; border: 0; border-radius: 11px; color: #111a3b; background: linear-gradient(100deg, #9ca9ff, #62e4d5); font-weight: 800; cursor: pointer; }
+      .message { display: none; margin-top: 16px; padding: 12px 14px; border-radius: 11px; color: #c8fff6; background: #7eebdc12; font-size: 13px; line-height: 1.6; }
+      .message.show { display: block; }
+      .message.error { color: #ffd6de; background: #ff8fa312; }
+      .links { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; font-size: 13px; }
+      .links a { color: #b8c1e0; text-decoration: none; }
+      .links a:hover { color: #7eebdc; }
+      @media (max-width: 700px) { .shell { grid-template-columns: 1fr; } .intro { padding: 32px 28px; } .intro h1 { margin: 45px 0 14px; font-size: 33px; } .form { padding: 34px 28px 40px; } .tabs { flex-wrap: wrap; } .tab { min-width: 30%; } }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="intro"><div class="brand"><span class="mark">P</span><span>ProfilesSystem</span></div><h1>找回你的<br />登录方式。</h1><p>根据你还记得的信息选择一种方式。涉及邀请码重置的申请需要管理员审核。</p></section>
+      <section class="form">
+        <p class="eyebrow">Account recovery</p><h2>找回登录信息</h2><p class="sub">请选择需要找回的内容</p>
+        <div class="tabs"><button class="tab active" data-panel="invitePanel" type="button">忘记邀请码</button><button class="tab" data-panel="passwordPanel" type="button">忘记密码</button><button class="tab" data-panel="accountPanel" type="button">忘记账号</button></div>
+        <form class="panel active" id="invitePanel" data-endpoint="/api/recovery/invite">
+          <label>账户名称<input name="username" required placeholder="请输入账户名称" /></label>
+          <label>注册邮箱<input name="email" type="email" required placeholder="请输入注册时使用的邮箱" /></label>
+          <label>申请说明<textarea name="reason" maxlength="255" placeholder="请说明需要重置邀请码的原因"></textarea></label>
+          <button class="submit" type="submit">提交重置申请</button>
+        </form>
+        <form class="panel" id="passwordPanel" data-endpoint="/api/recovery/password">
+          <label>账户名称<input name="username" required placeholder="请输入账户名称" /></label>
+          <label>邀请码<input name="code" required placeholder="请输入当前邀请码" /></label>
+          <label>新密码<input name="password" type="password" minlength="6" required placeholder="请设置至少 6 位的新密码" /></label>
+          <label>确认新密码<input name="confirmPassword" type="password" minlength="6" required placeholder="请再次输入新密码" /></label>
+          <button class="submit" type="submit">重置密码</button>
+        </form>
+        <form class="panel" id="accountPanel" data-endpoint="/api/recovery/account">
+          <label>注册邮箱<input name="email" type="email" required placeholder="请输入注册时使用的邮箱" /></label>
+          <button class="submit" type="submit">查询账户名称</button>
+        </form>
+        <div class="message" id="message" role="status" aria-live="polite"></div>
+        <div class="links"><a href="login.html">返回登录</a><a href="learnServer.html">返回首页</a></div>
+      </section>
+    </main>
+    <script>
+      const tabs = document.querySelectorAll(".tab");
+      const panels = document.querySelectorAll(".panel");
+      const message = document.getElementById("message");
+      tabs.forEach((tab) => tab.addEventListener("click", () => {
+        tabs.forEach((item) => item.classList.toggle("active", item === tab));
+        panels.forEach((panel) => panel.classList.toggle("active", panel.id === tab.dataset.panel));
+        message.className = "message";
+        message.textContent = "";
+      }));
+      panels.forEach((form) => form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        message.className = "message";
+        const payload = Object.fromEntries(new FormData(form).entries());
+        if (form.id === "passwordPanel" && payload.password !== payload.confirmPassword) {
+          message.textContent = "两次输入的新密码不一致";
+          message.className = "message show error";
+          return;
+        }
+        try {
+          const response = await fetch(form.dataset.endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+          const result = await response.json();
+          if (Number(result.code) !== 200) throw new Error(result.message || "操作失败");
+          message.textContent = form.id === "invitePanel" ? "申请已提交，请等待管理员审核。" : form.id === "accountPanel" ? `查询到的账户名称：${result.data}` : "密码已重置，请返回登录。";
+          message.classList.add("show");
+          if (form.id !== "accountPanel") form.reset();
+        } catch (error) { message.textContent = error.message || "网络异常，请稍后重试"; message.classList.add("show", "error"); }
+      }));
+    </script>
+  </body>
+</html>

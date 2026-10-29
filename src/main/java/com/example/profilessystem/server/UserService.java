@@ -6,6 +6,7 @@ import com.example.profilessystem.entity.User;
 import com.example.profilessystem.mapper.UserMapper;
 import com.example.profilessystem.result.Result;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
@@ -25,9 +26,11 @@ public class UserService {
             Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,}$");
 
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    UserService(UserMapper userMapper) {
+    UserService(UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
     @Transactional
     public Result<String> create(User user) {
@@ -62,7 +65,11 @@ public class UserService {
         if (userMapper.findByEmail(email) != null) {
             return Result.fail("邮箱已被注册");
         }
-        User user = new User(registerBody.getUsername(),null,"",null,0,email,registerBody.getReason());
+        String password = registerBody.getPassword() == null ? "" : registerBody.getPassword();
+        if (password.length() < 6) {
+            return Result.fail("密码至少需要 6 位");
+        }
+        User user = new User(registerBody.getUsername(), passwordEncoder.encode(password),"",null,0,email,registerBody.getReason());
         int row = userMapper.insert(user);
         if (row != 1) {
             return Result.fail("插入失败");
@@ -125,6 +132,51 @@ public class UserService {
             return Result.fail("账户尚未通过审核");
         }
         return Result.ok(user.getUsername());
+    }
+
+    /** 账户 + 密码登录。 */
+    @Transactional
+    public Result<String> loginByPassword(LoginBody loginBody) {
+        String username = loginBody.getUsername() == null ? "" : loginBody.getUsername().trim();
+        String password = loginBody.getPassword() == null ? "" : loginBody.getPassword();
+        if (username.isEmpty() || password.isEmpty()) return Result.fail("请填写账户和密码");
+        User user = userMapper.findByName(username);
+        if (user == null || user.getPassword() == null || !passwordEncoder.matches(password, user.getPassword())) {
+            return Result.fail("账户或密码错误");
+        }
+        if (user.getIsin() != 1) return Result.fail("账户尚未通过审核");
+        return Result.ok(user.getUsername());
+    }
+
+    /** 邮箱 + 密码登录。 */
+    @Transactional
+    public Result<String> loginByEmail(LoginBody loginBody) {
+        String email = loginBody.getEmail() == null ? "" : loginBody.getEmail().trim();
+        String password = loginBody.getPassword() == null ? "" : loginBody.getPassword();
+        if (email.isEmpty() || password.isEmpty()) return Result.fail("请填写邮箱和密码");
+        User user = userMapper.findByEmail(email);
+        if (user == null || user.getPassword() == null || !passwordEncoder.matches(password, user.getPassword())) {
+            return Result.fail("邮箱或密码错误");
+        }
+        if (user.getIsin() != 1) return Result.fail("账户尚未通过审核");
+        return Result.ok(user.getUsername());
+    }
+
+    @Transactional
+    public Result<String> resetPassword(String username, String code, String password) {
+        User user = userMapper.findByName(username);
+        if (user == null || user.getCode() == null || !user.getCode().equalsIgnoreCase(code)) {
+            return Result.fail("账户或邀请码错误");
+        }
+        if (password == null || password.length() < 6) return Result.fail("密码至少需要 6 位");
+        return userMapper.updatePassword(username, passwordEncoder.encode(password)) == 1
+                ? Result.ok(null) : Result.fail("密码更新失败");
+    }
+
+    @Transactional
+    public Result<String> findAccountByEmail(String email) {
+        User user = userMapper.findByEmail(email == null ? "" : email.trim());
+        return user == null ? Result.fail("没有找到对应账户") : Result.ok(user.getUsername());
     }
 
     /** 生成不重复的随机邀请码；多次冲突时返回 null。 */
