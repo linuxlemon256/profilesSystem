@@ -263,7 +263,7 @@
         <div class="links">
           <a href="register.html">没有账户？去申请</a
           ><a href="managerLogin.html">管理员登录</a
-          ><a href="index.html">返回首页</a>
+          ><a href="learnServer.html">返回首页</a>
         </div>
         <div class="hint">访问受限资源前，请确认你已获得有效授权。</div>
       </section>
@@ -298,7 +298,7 @@
             } catch (e) {
               console.warn("sessionStorage 不可用", e);
             }
-            location.href = "index.html?name=" + encodeURIComponent(result.data);
+            location.href = "learnServer.html?name=" + encodeURIComponent(result.data);
           } else {
             errorBox.textContent = result.message || "登录失败，请稍后重试";
             errorBox.classList.add("show");
