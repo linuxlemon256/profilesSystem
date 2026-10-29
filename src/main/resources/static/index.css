@@ -1,432 +1,616 @@
 /* styles.css —— 全部样式（原 <style> 内容） */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
-    min-height: 100vh;
-    background: radial-gradient(circle at 15% 10%, #243b8f 0, transparent 36%), radial-gradient(circle at 90% 90%, #155e75 0, transparent 34%), #0b1020;
-    font-family: "Microsoft YaHei", sans-serif;
-    color: #fff;
-    overflow-x: hidden;
-    overflow-y: auto;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 15% 10%, #243b8f 0, transparent 36%),
+    radial-gradient(circle at 90% 90%, #155e75 0, transparent 34%), #0b1020;
+  font-family: "Microsoft YaHei", sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .stage {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.scene { position: relative; width: 600px; height: 400px; }
+.scene {
+  position: relative;
+  width: 600px;
+  height: 400px;
+}
 
 .tri {
-    position: absolute;
-    left: 200px; top: 80px;
-    cursor: pointer;
-    transform-origin: 100px 120px;
-    transition: filter 0.3s, transform 1.2s ease;
-    animation: fadeIn 1s ease 0.3s both;
+  position: absolute;
+  left: 200px;
+  top: 80px;
+  cursor: pointer;
+  transform-origin: 100px 120px;
+  transition:
+    filter 0.3s,
+    transform 1.2s ease;
+  animation: fadeIn 1s ease 0.3s both;
 }
 @keyframes fadeIn {
-    from { opacity: 0; filter: blur(4px); }
-    to   { opacity: 1; filter: blur(0); }
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
 }
-.tri:hover { filter: drop-shadow(0 0 14px rgba(255,255,255,0.8)); }
+.tri:hover {
+  filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.8));
+}
 .scene.active .tri {
-    transform: rotate(180deg);
-    animation: pulseGlow 2s ease 1.2s infinite;
+  transform: rotate(180deg);
+  animation: pulseGlow 2s ease 1.2s infinite;
 }
 @keyframes pulseGlow {
-    0%, 100% { filter: drop-shadow(0 0 6px rgba(255,255,255,0.4)); }
-    50%      { filter: drop-shadow(0 0 22px rgba(255,255,255,0.9)); }
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 22px rgba(255, 255, 255, 0.9));
+  }
 }
 
 .reflect-layer {
-    position: absolute;
-    left: 0px; top: 50px;
-    pointer-events: none;
+  position: absolute;
+  left: 0px;
+  top: 50px;
+  pointer-events: none;
 }
 .tri-reflect {
-    transform: scaleY(-1);
-    transform-origin: 100px 120px;
-    opacity: 0;
-    filter: blur(1px);
-    animation: none;
-    transition: opacity 0.6s ease, transform 1.2s ease;
-    mask-image: linear-gradient(to bottom, transparent 58%, rgba(0,0,0,0.9) 78%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 58%, rgba(0,0,0,0.9) 78%, transparent 100%);
+  transform: scaleY(-1);
+  transform-origin: 100px 120px;
+  opacity: 0;
+  filter: blur(1px);
+  animation: none;
+  transition:
+    opacity 0.6s ease,
+    transform 1.2s ease;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 58%,
+    rgba(0, 0, 0, 0.9) 78%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 58%,
+    rgba(0, 0, 0, 0.9) 78%,
+    transparent 100%
+  );
 }
-.scene.scrolled .tri-reflect { opacity: 0.5; }
+.scene.scrolled .tri-reflect {
+  opacity: 0.5;
+}
 .scene.active .tri-reflect {
-    transform: rotate(180deg) scaleY(-1);
+  transform: rotate(180deg) scaleY(-1);
 }
 
 .line {
-    position: fixed;
-    left: 0; right: 0;
-    top: calc(50vh - 1px);
-    height: 2px;
-    background: #fff;
-    box-shadow: 0 0 8px rgba(255,255,255,0.6);
-    transform-origin: center;
-    animation: draw 1.2s ease both;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: calc(50vh - 33px);
+  height: 2px;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  transform-origin: center;
+  animation: draw 1.2s ease both;
 }
 @keyframes draw {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 .name {
-    position: absolute;
-    left: 0px; top: 200px;
-    transform: translate(-50%, 0);
-    font-size: 28px;
-    letter-spacing: 6px;
-    opacity: 0;
-    filter: blur(6px);
-    transition: all 1.2s ease;
+  position: absolute;
+  left: 0px;
+  top: 200px;
+  transform: translate(-50%, 0);
+  font-size: 28px;
+  letter-spacing: 6px;
+  opacity: 0;
+  filter: blur(6px);
+  transition: all 1.2s ease;
 }
 .scene.active .name {
-    opacity: 1;
-    filter: blur(0);
-    transform: translate(-50%, -80px) scale(1.2);
+  opacity: 1;
+  filter: blur(0);
+  transform: translate(-50%, -80px) scale(1.2);
 }
 
 .reflect-wrap {
-    position: absolute;
-    left: 100px; top: 200px;
-    opacity: 0;
-    transition: all 1.2s ease 0.2s;
+  position: absolute;
+  left: 100px;
+  top: 200px;
+  opacity: 0;
+  transition: all 1.2s ease 0.2s;
 }
 .reflect-wrap .reflect-text {
-    transform: scaleY(-1);
-    filter: blur(2px);
-    mask-image: linear-gradient(to top, rgba(0,0,0,0.9), transparent 90%);
-    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.9), transparent 90%);
+  transform: scaleY(-1);
+  filter: blur(2px);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 90%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9),
+    transparent 90%
+  );
 }
 .scene.active .reflect-wrap {
-    opacity: 0.35;
-    transform: translateY(60px);
+  opacity: 0.35;
+  transform: translateY(60px);
 }
 
-.nav { position: absolute; left: 430px; top: 215px; }
+.nav {
+  position: absolute;
+  left: 430px;
+  top: 215px;
+}
 .nav a {
-    display: block;
-    position: relative;
-    margin: 12px 0;
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;
-    transition: all 0.9s ease;
+  display: block;
+  position: relative;
+  margin: 12px 0;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+  transition: all 0.9s ease;
 }
 .nav a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
 }
-.nav a:hover::after { width: 100%; }
+.nav a:hover::after {
+  width: 100%;
+}
 .scene.active .nav a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
-.scene.active .nav a:nth-child(1) { transition-delay: 0s; }
-.scene.active .nav a:nth-child(2) { transition-delay: 0.15s; }
-.scene.active .nav a:nth-child(3) { transition-delay: 0.3s; }
-.scene.active .nav a:nth-child(4) { transition-delay: 0.45s; }
-.scene.active .nav a:nth-child(5) { transition-delay: 0.60s; }
+.scene.active .nav a:nth-child(1) {
+  transition-delay: 0s;
+}
+.scene.active .nav a:nth-child(2) {
+  transition-delay: 0.15s;
+}
+.scene.active .nav a:nth-child(3) {
+  transition-delay: 0.3s;
+}
+.scene.active .nav a:nth-child(4) {
+  transition-delay: 0.45s;
+}
+.scene.active .nav a:nth-child(5) {
+  transition-delay: 0.6s;
+}
 
-.nav_1 { position: absolute; left: 530px; top: 120px; pointer-events: none; }
+.nav_1 {
+  position: absolute;
+  left: 530px;
+  top: 120px;
+  pointer-events: none;
+}
 .nav_1 a {
-    display: block;
-    position: relative;
-    margin: 12px 0;
-    color: #fff;
-    white-space: nowrap;
-    text-decoration: none;
-    font-size: 50px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;
-    transition: all 0.9s ease;
+  display: block;
+  position: relative;
+  margin: 12px 0;
+  color: #fff;
+  white-space: nowrap;
+  text-decoration: none;
+  font-size: 50px;
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+  transition: all 0.9s ease;
 }
 .nav_1 a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
 }
-.nav_1 a:hover::after { width: 100%; }
+.nav_1 a:hover::after {
+  width: 100%;
+}
 .scene.active_1 .nav_1 a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
-.scene.active_1 .nav_1 a:nth-child(1) { transition-delay: 0s; }
+.scene.active_1 .nav_1 a:nth-child(1) {
+  transition-delay: 0s;
+}
 
-.nav_2 { position: absolute; left: 530px; top: 120px; width: 400px; pointer-events: none; }
+.nav_2 {
+  position: absolute;
+  left: 530px;
+  top: 120px;
+  width: 400px;
+  pointer-events: none;
+}
 .nav_2 a {
-    display: block;
-    position: relative;
-    margin: 12px 0;
-    color: #fff;
-    text-decoration: none;
-    font-size: 30px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;
-    transition: all 0.9s ease;
+  display: block;
+  position: relative;
+  margin: 12px 0;
+  color: #fff;
+  text-decoration: none;
+  font-size: 30px;
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+  transition: all 0.9s ease;
 }
 .nav_2 a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
 }
-.nav_2 a:hover::after { width: 100%; }
+.nav_2 a:hover::after {
+  width: 100%;
+}
 .scene.active_2 .nav_2 a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
-.scene.active_2 .nav_2 a:nth-child(1) { transition-delay: 0s; }
+.scene.active_2 .nav_2 a:nth-child(1) {
+  transition-delay: 0s;
+}
 
-.nav_3 { position: absolute; left: 530px; top: 200px; width: 400px; pointer-events: none; }
+.nav_3 {
+  position: absolute;
+  left: 530px;
+  top: 200px;
+  width: 400px;
+  pointer-events: none;
+}
 .nav_3 a {
-    display: block;
-    position: relative;
-    margin: 12px 0;
-    color: #fff;
-    text-decoration: none;
-    font-size: 30px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;
-    transition: all 0.9s ease;
+  display: block;
+  position: relative;
+  margin: 12px 0;
+  color: #fff;
+  text-decoration: none;
+  font-size: 30px;
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+  transition: all 0.9s ease;
 }
 .nav_3 a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
 }
-.nav_3 a:hover::after { width: 100%; }
+.nav_3 a:hover::after {
+  width: 100%;
+}
 .scene.active_3 .nav_3 a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
-.scene.active_3 .nav_3 a:nth-child(1) { transition-delay: 0s; }
-.scene.active_3 .nav_3 a:nth-child(2) { transition-delay: 0.15s; }
-.scene.active_3 .nav_3 a:nth-child(3) { transition-delay: 0.3s; }
+.scene.active_3 .nav_3 a:nth-child(1) {
+  transition-delay: 0s;
+}
+.scene.active_3 .nav_3 a:nth-child(2) {
+  transition-delay: 0.15s;
+}
+.scene.active_3 .nav_3 a:nth-child(3) {
+  transition-delay: 0.3s;
+}
 
-.nav_4 { position: absolute; left: 530px; top: 200px; width: 400px; pointer-events: none; }
+.nav_4 {
+  position: absolute;
+  left: 530px;
+  top: 200px;
+  width: 400px;
+  pointer-events: none;
+}
 .nav_4 a {
-    display: block;
-    position: relative;
-    margin: 12px 0;
-    color: #fff;
-    text-decoration: none;
-    font-size: 30px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;
-    transition: all 0.9s ease;
+  display: block;
+  position: relative;
+  margin: 12px 0;
+  color: #fff;
+  text-decoration: none;
+  font-size: 30px;
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+  transition: all 0.9s ease;
 }
 .nav_4 a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
 }
-.nav_4 a:hover::after { width: 100%; }
+.nav_4 a:hover::after {
+  width: 100%;
+}
 .scene.active_4 .nav_4 a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
-.scene.active_4 .nav_4 a:nth-child(1) { transition-delay: 0s; }
-.scene.active_4 .nav_4 a:nth-child(2) { transition-delay: 0.15s; }
+.scene.active_4 .nav_4 a:nth-child(1) {
+  transition-delay: 0s;
+}
+.scene.active_4 .nav_4 a:nth-child(2) {
+  transition-delay: 0.15s;
+}
 
-.nav_5 { position: absolute; left: 530px; top: 200px; width: 400px; pointer-events: none; }
+.nav_5 {
+  position: absolute;
+  left: 530px;
+  top: 200px;
+  width: 400px;
+  pointer-events: none;
+}
 .nav_5 a {
-    display: block;
-    position: relative;
-    margin: 12px 0;
-    color: #fff;
-    text-decoration: none;
-    font-size: 30px;
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;
-    transition: all 0.9s ease;
+  display: block;
+  position: relative;
+  margin: 12px 0;
+  color: #fff;
+  text-decoration: none;
+  font-size: 30px;
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+  transition: all 0.9s ease;
 }
 .nav_5 a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -3px;
-    width: 0; height: 1px;
-    background: #fff;
-    transition: width 0.3s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
 }
-.nav_5 a:hover::after { width: 100%; }
+.nav_5 a:hover::after {
+  width: 100%;
+}
 .scene.active_5 .nav_5 a {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
-.scene.active_5 .nav_5 a:nth-child(1) { transition-delay: 0s; }
+.scene.active_5 .nav_5 a:nth-child(1) {
+  transition-delay: 0s;
+}
 
 /* 倒影只在桌面布局生效（窄屏下改为纵向排列，不需要倒影） */
 @media (min-width: 901px) {
-    .nav_1 a, .nav_2 a, .nav_3 a, .nav_4 a, .nav_5 a {
-        -webkit-box-reflect: below 2px linear-gradient(rgba(0,0,0,0.6), transparent 75%);
-    }
+  .nav_1 a,
+  .nav_2 a,
+  .nav_3 a,
+  .nav_4 a,
+  .nav_5 a {
+    -webkit-box-reflect: below 2px
+      linear-gradient(rgba(0, 0, 0, 0.6), transparent 75%);
+  }
 }
 
 .hint {
-    position: fixed;
-    left: 50%; bottom: 30px;
-    transform: translateX(-50%);
-    font-size: 12px;
-    letter-spacing: 3px;
-    color: #555;
-    transition: opacity 0.6s ease;
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #555;
+  transition: opacity 0.6s ease;
 }
 .scene.active ~ .hint,
 .scene.active_1 ~ .hint,
 .scene.active_2 ~ .hint,
 .scene.active_3 ~ .hint,
 .scene.active_4 ~ .hint,
-.scene.active_5 ~ .hint { opacity: 0; }
-.hint.hide { opacity: 0; }
+.scene.active_5 ~ .hint {
+  opacity: 0;
+}
+.hint.hide {
+  opacity: 0;
+}
 
 .footer {
-    padding: 20px 0 40px;
-    text-align: center;
-    font-size: 12px;
-    color: #555;
-    line-height: 1.8;
+  padding: 20px 0 40px;
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.8;
 }
-.footer a { color: #b8c1e0; text-decoration: none; }
-.footer a:hover { color: #7eebdc; }
+.footer a {
+  color: #b8c1e0;
+  text-decoration: none;
+}
+.footer a:hover {
+  color: #7eebdc;
+}
 
 /* ---------- 中等宽度：整体缩放，保证右侧面板不被裁切 ---------- */
 @media (min-width: 1121px) and (max-width: 1280px) {
-    .scene { transform: scale(0.85); }
+  .scene {
+    transform: scale(0.85);
+  }
 }
 @media (min-width: 901px) and (max-width: 1120px) {
-    .scene { transform: scale(0.7); }
+  .scene {
+    transform: scale(0.7);
+  }
 }
 
 /* ---------- 窄屏（手机 / 小屏平板）：改为纵向布局 ---------- */
 @media (max-width: 900px) {
-    .stage {
-        height: auto;
-        min-height: 100vh;
-        align-items: flex-start;
-        padding: 52px 18px 70px;
-    }
-    .scene {
-        width: 100%;
-        height: auto;
-        display: block;
-        text-align: center;
-    }
+  .stage {
+    height: auto;
+    min-height: 100vh;
+    align-items: flex-start;
+    padding: 52px 18px 70px;
+  }
+  .scene {
+    width: 100%;
+    height: auto;
+    display: block;
+    text-align: center;
+  }
 
-    /* 三角形进入文档流，居中 */
-    .tri {
-        position: relative;
-        left: auto;
-        top: auto;
-        width: 150px;
-        height: 130px;
-        /* 绕自身中心翻转，避免激活后压到下面的名字 */
-        transform-origin: 50% 50%;
-        display: block;
-        margin: 4px auto 0;
-    }
-    .reflect-layer,
-    .reflect-wrap,
-    .line { display: none; }
+  /* 三角形进入文档流，居中 */
+  .tri {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 150px;
+    height: 130px;
+    /* 绕自身中心翻转，避免激活后压到下面的名字 */
+    transform-origin: 50% 50%;
+    display: block;
+    margin: 4px auto 0;
+  }
+  .reflect-layer,
+  .reflect-wrap {
+    display: none;
+  }
+  .line {
+    display: block;
+    top: 121px;
+  }
 
-    /* 站点名 */
-    .name {
-        position: relative;
-        left: auto;
-        top: auto;
-        transform: none;
-        margin-top: 12px;
-        font-size: 22px;
-        letter-spacing: 3px;
-        opacity: 1;
-        filter: none;
-        text-align: center;
-    }
-    .scene.active .name { transform: none; }
+  /* 站点名 */
+  .name {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    margin-top: 12px;
+    font-size: 22px;
+    letter-spacing: 3px;
+    opacity: 1;
+    filter: none;
+    text-align: center;
+  }
+  .scene.active .name {
+    transform: none;
+  }
 
-    /* 主菜单：点击三角形后纵向下拉 */
-    .nav {
-        position: relative;
-        left: auto;
-        top: auto;
-        display: none;
-        margin-top: 14px;
-    }
-    .scene.active .nav { display: block; }
-    .nav a {
-        margin: 0;
-        padding: 6px 14px;
-        font-size: 17px;
-    }
+  /* 主菜单：点击三角形后纵向下拉 */
+  .nav {
+    position: relative;
+    left: auto;
+    top: auto;
+    display: none;
+    margin-top: 14px;
+  }
+  .scene.active .nav {
+    display: block;
+  }
+  .nav a {
+    margin: 0;
+    padding: 6px 14px;
+    font-size: 17px;
+  }
 
-    /* 各内容面板：激活时进入文档流，避免绝对定位被裁切 */
-    .nav_1, .nav_2, .nav_3, .nav_4, .nav_5 {
-        position: relative;
-        left: auto;
-        top: auto;
-        width: auto;
-        max-width: 560px;
-        display: none;
-        margin: 18px auto 0;
-        text-align: center;
-    }
-    .scene.active_1 .nav_1,
-    .scene.active_2 .nav_2,
-    .scene.active_3 .nav_3,
-    .scene.active_4 .nav_4,
-    .scene.active_5 .nav_5 { display: block; }
+  /* 各内容面板：激活时进入文档流，避免绝对定位被裁切 */
+  .nav_1,
+  .nav_2,
+  .nav_3,
+  .nav_4,
+  .nav_5 {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    max-width: 560px;
+    display: none;
+    margin: 18px auto 0;
+    text-align: center;
+  }
+  .scene.active_1 .nav_1,
+  .scene.active_2 .nav_2,
+  .scene.active_3 .nav_3,
+  .scene.active_4 .nav_4,
+  .scene.active_5 .nav_5 {
+    display: block;
+  }
 
-    .nav_1 a,
-    .nav_2 a,
-    .nav_3 a,
-    .nav_4 a,
-    .nav_5 a {
-        margin: 10px 0;
-        padding: 0 8px;
-        font-size: 19px !important;
-        white-space: normal;
-        /* 抵消元素上的内联 top 偏移 */
-        top: auto !important;
-    }
-    .nav_1 a { font-size: 24px !important; }
-    .nav_2 a[style*="font-size: 10px"] { font-size: 13px !important; line-height: 1.6; }
-    .nav_4 a[style*="font-size: 20px"] { font-size: 17px !important; }
+  .nav_1 a,
+  .nav_2 a,
+  .nav_3 a,
+  .nav_4 a,
+  .nav_5 a {
+    margin: 10px 0;
+    padding: 0 8px;
+    font-size: 19px !important;
+    white-space: normal;
+    /* 抵消元素上的内联 top 偏移 */
+    top: auto !important;
+  }
+  .nav_1 a {
+    font-size: 24px !important;
+  }
+  .nav_2 a[style*="font-size: 10px"] {
+    font-size: 13px !important;
+    line-height: 1.6;
+  }
+  .nav_4 a[style*="font-size: 20px"] {
+    font-size: 17px !important;
+  }
 
-    .hint { bottom: 16px; font-size: 11px; letter-spacing: 2px; }
-    .stage:has(.scene.active) ~ .hint { opacity: 0; }
-    .footer { padding: 16px 16px 40px; }
+  .hint {
+    bottom: 16px;
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+  .stage:has(.scene.active) ~ .hint {
+    opacity: 0;
+  }
+  .footer {
+    padding: 16px 16px 40px;
+  }
 }
