@@ -44,8 +44,7 @@ const ROADMAP = {
       title: "学习主线与技能全景",
       weeks: "第 0 步 · 2 周",
       weight: 5,
-      brief:
-        "技术主线：硬件与软件集成，机械结构、电气、控制、软件四块。",
+      brief: "技术主线：硬件与软件集成，机械结构、电气、控制、软件四块。",
       sections: [
         {
           t: "1. 主线：硬件与软件集成",
@@ -124,8 +123,7 @@ const ROADMAP = {
       title: "自动控制原理",
       weeks: "大一下 - 大二上",
       weight: 4,
-      brief:
-        "闭环控制的数学地基。大一必须学会「负反馈 → 稳定性 → PID」。",
+      brief: "闭环控制的数学地基。大一必须学会「负反馈 → 稳定性 → PID」。",
       sections: [
         {
           t: "1. 数学与系统基础",
@@ -235,8 +233,7 @@ const ROADMAP = {
       title: "C 语言与嵌入式基础（STM32）",
       weeks: "大一全年",
       weight: 5,
-      brief:
-        "练 外设驱动 + 裸机工程结构。",
+      brief: "练 外设驱动 + 裸机工程结构。",
       sections: [
         {
           t: "1. C 语言",
@@ -274,8 +271,7 @@ const ROADMAP = {
       title: "项目 A · STM32 电机闭环调速",
       weeks: "3-6 周 · 成本约 300 元",
       weight: 5,
-      brief:
-        "大一必须产出的：一个能拍视频、能讲原理的闭环控制系统。",
+      brief: "大一必须产出的：一个能拍视频、能讲原理的闭环控制系统。",
       sections: [
         {
           t: "1. 硬件配置",
@@ -429,8 +425,7 @@ const ROADMAP = {
       title: "CAD / CAE 与电气制图",
       weeks: "大二 - 大三",
       weight: 4,
-      brief:
-        "设计表达的三件套：三维建模、二维出图、电气制图；再加仿真验证。",
+      brief: "设计表达的三件套：三维建模、二维出图、电气制图；再加仿真验证。",
       sections: [
         {
           t: "1. 三维与二维 CAD",
@@ -450,10 +445,7 @@ const ROADMAP = {
         },
         {
           t: "3. 电气制图",
-          p: [
-            "EPLAN：读电气原理图、简单绘图 ⭐⭐",
-            "电气 BOM 与接线表 ⭐",
-          ],
+          p: ["EPLAN：读电气原理图、简单绘图 ⭐⭐", "电气 BOM 与接线表 ⭐"],
         },
       ],
     },
@@ -502,8 +494,7 @@ const ROADMAP = {
       title: "Python 与产线数据分析",
       weeks: "大三上",
       weight: 4,
-      brief:
-        "处理设备日志和产线数据——这一块 C 语言很难替代。",
+      brief: "处理设备日志和产线数据——这一块 C 语言很难替代。",
       sections: [
         {
           t: "1. Python 基础",
@@ -1222,3 +1213,31 @@ renderNav();
 renderModules();
 refreshAllProgress();
 /* [ANCHOR:LOGIC] 渲染与进度逻辑结束 */
+
+// 登录状态与计算机类学习页面保持一致
+function setAuthState(loggedIn) {
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+  btn.dataset.action = loggedIn ? "logout" : "login";
+  btn.textContent = loggedIn ? "退出登录" : "登录";
+}
+
+async function authAction() {
+  const btn = document.getElementById("authBtn");
+  if (btn && btn.dataset.action === "logout") {
+    try {
+      await fetch("/api/user/logout", { method: "POST" });
+    } catch (e) {
+      console.warn("退出登录失败", e);
+    }
+  }
+  location.href = "login.html";
+}
+
+function enterGuestMode() {
+  const notice = document.getElementById("cloudNotice");
+  if (notice) notice.hidden = false;
+  setAuthState(false);
+}
+
+enterGuestMode();

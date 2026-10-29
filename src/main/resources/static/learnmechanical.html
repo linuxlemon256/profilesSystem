@@ -46,6 +46,11 @@
           <div class="sub">
             STM32 闭环 · PLC/HMI 自动化 · 机械设计与仿真 · Python 数据分析 ——
             勾选小点自动计算进度，进度保存在本机浏览器。
+
+            <div class="cloud-notice" id="cloudNotice" hidden>
+              游客模式：进度只保存在本机浏览器，<a href="login.html">登录</a
+              >后可云端同步。
+            </div>
           </div>
         </div>
         <div class="ring-wrap">
@@ -81,7 +86,9 @@
           </div>
         </div>
         <div class="hero-actions">
-          <button class="btn primary" onclick="expandAll(true)">全部展开</button>
+          <button class="btn primary" onclick="expandAll(true)">
+            全部展开
+          </button>
           <button class="btn" onclick="expandAll(false)">全部收起</button>
           <button class="btn" onclick="exportJSON()">导出进度(JSON)</button>
           <button
@@ -92,10 +99,17 @@
                 .scrollIntoView({ behavior: 'smooth' })
             "
           >
-            前往 AI 交接区 ↓
-          </button>
-          <button class="btn" onclick="location.href = 'learnServer.html'">
+            前往 AI 交接区 ↓</button
+          ><button class="btn" onclick="location.href = 'learnServer.html'">
             ← 返回专业选择
+          </button>
+          <button
+            class="btn"
+            id="authBtn"
+            data-action="login"
+            onclick="authAction()"
+          >
+            登录
           </button>
           <button class="btn danger" onclick="resetAll()">清空所有进度</button>
         </div>
@@ -114,8 +128,8 @@
         />
         <div id="nav-container"></div>
         <div class="tiny-tip">
-          💡 进度保存在本机浏览器。换电脑请用「导出进度(JSON)」+
-          交接区「导入 JSON」迁移。
+          💡 进度保存在本机浏览器。换电脑请用「导出进度(JSON)」+ 交接区「导入
+          JSON」迁移。
         </div>
       </aside>
 
@@ -180,7 +194,9 @@
           <div class="hv-box" style="grid-column: 1/-1">
             <h4>③ 进度迁移 / 备份（JSON）</h4>
             <div class="row">
-              <button class="btn" onclick="exportJSON()">导出 JSON 到下方</button>
+              <button class="btn" onclick="exportJSON()">
+                导出 JSON 到下方
+              </button>
               <button class="btn primary" onclick="importJSON()">
                 从下方文本导入 JSON
               </button>
