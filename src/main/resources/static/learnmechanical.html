@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh-CN">
+  <!--
+╔══════════════════════════════════════════════════════════════════════╗
+║  AI-MAP-START · 文件结构导航（供大模型快速定位，人类可忽略）         ║
+║                                                                      ║
+║  本文件：机械类 · 机电一体化学习路线 · 可视化进度路线图              ║
+║  内容依据：zzl.pdf（技术主线 / 核心课程 / 学习节奏 / 能力清单）      ║
+║  内容范围：只含可学习、可验证的技术知识点与项目要求                  ║
+║  风格来源：learncomputer.html（同一套布局、组件与交互）              ║
+║                                                                      ║
+║  快速定位索引（搜索下方方括号锚点名即可跳转）：                      ║
+║  [ANCHOR:HEADER]       页头 + 总进度环 + 全局操作按钮                ║
+║  [ANCHOR:NAV]          侧边导航容器（JS 渲染，按阶段分组）           ║
+║  [ANCHOR:MODULES]      模块卡片容器（JS 渲染 18 张卡，m01-m18）      ║
+║  [ANCHOR:HANDOVER]     AI 交接区：快照导出 / JSON 导入 / 交接记录    ║
+║                                                                      ║
+║  数据与逻辑位置（本文件不含内联脚本）：                              ║
+║  learnmechanical.js    [ANCHOR:DATA] 主数据 + [ANCHOR:LOGIC] 逻辑    ║
+║  learnmechanical.css   与 learncomputer.css 完全一致的设计系统       ║
+║                                                                      ║
+║  模块清单（改内容只改 learnmechanical.js 的 ROADMAP，再同步本注释）：║
+║  阶段一 大一：m01 学习主线 / m02 机械设计读图 / m03 自动控制原理     ║
+║  m04 电机与拖动 / m05 传感器 / m06 C 与嵌入式                        ║
+║  m07 项目A 电机闭环 / m08 技术英语                                   ║
+║  阶段二 大二：m09 PLC·TIA Portal / m10 HMI 与工业仿真                ║
+║  m11 CAD·CAE 与电气制图 / m12 项目B 传送带分拣                       ║
+║  阶段三 大三：m13 Python 与产线数据 / m14 数据库与工具链             ║
+║  m15 综合项目 机电一体化闭环                                         ║
+║  阶段四 矩阵：m16 能力清单·工程实现 / m17 能力清单·建模与理论        ║
+║  m18 掌握程度分级与常见缺口                                          ║
+╚══════════════════════════════════════════════════════════════════════╝
+-->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>机械类 · 机电一体化学习路线 · 进度路线图</title>
+    <link rel="stylesheet" href="learnmechanical.css" />
+  </head>
+  <body>
+    <!-- [ANCHOR:HEADER] 页头：总进度 + 全局操作 -->
+    <header class="hero">
+      <div class="hero-inner">
+        <div>
+          <h1>🛠️ 机械类 · 机电一体化学习路线</h1>
+          <div class="sub">
+            STM32 闭环 · PLC/HMI 自动化 · 机械设计与仿真 · Python 数据分析 ——
+            勾选小点自动计算进度，进度保存在本机浏览器。
+          </div>
+        </div>
+        <div class="ring-wrap">
+          <div class="ring">
+            <svg width="104" height="104" viewBox="0 0 104 104">
+              <circle
+                cx="52"
+                cy="52"
+                r="46"
+                fill="none"
+                stroke="rgba(255,255,255,.25)"
+                stroke-width="9"
+              />
+              <circle
+                id="ring-fg"
+                cx="52"
+                cy="52"
+                r="46"
+                fill="none"
+                stroke="#fff"
+                stroke-width="9"
+                stroke-linecap="round"
+                stroke-dasharray="289"
+                stroke-dashoffset="289"
+              />
+            </svg>
+            <div class="val"><b id="overall-pct">0%</b><span>总进度</span></div>
+          </div>
+          <div class="hero-stats">
+            <div class="item"><b id="stat-points">0/0</b>已学小点</div>
+            <div class="item"><b id="stat-modules">0/18</b>完成模块</div>
+            <div class="item"><b>约 3 年</b>建议周期</div>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn primary" onclick="expandAll(true)">全部展开</button>
+          <button class="btn" onclick="expandAll(false)">全部收起</button>
+          <button class="btn" onclick="exportJSON()">导出进度(JSON)</button>
+          <button
+            class="btn"
+            onclick="
+              document
+                .getElementById('ai-handover')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            前往 AI 交接区 ↓
+          </button>
+          <button class="btn" onclick="location.href = 'learnServer.html'">
+            ← 返回专业选择
+          </button>
+          <button class="btn danger" onclick="resetAll()">清空所有进度</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- [ANCHOR:NAV] 侧边导航（JS 渲染：搜索框 + 按阶段分组的模块进度） -->
+      <aside class="sidebar">
+        <input
+          type="text"
+          class="search-box"
+          id="search-input"
+          placeholder="🔍 搜索知识点，如 TIA Portal / STM32 / 编码器"
+          oninput="renderSearch(this.value)"
+        />
+        <div id="nav-container"></div>
+        <div class="tiny-tip">
+          💡 进度保存在本机浏览器。换电脑请用「导出进度(JSON)」+
+          交接区「导入 JSON」迁移。
+        </div>
+      </aside>
+
+      <!-- [ANCHOR:MODULES] 模块卡片容器（JS 渲染 18 张卡，每张含：进度条/百分比/知识点勾选/模块备注） -->
+      <main id="modules-container"></main>
+    </div>
+
+    <!-- [ANCHOR:HANDOVER] AI 交接区开始（供大模型交接：导出快照给 AI / 导入 AI 整理的 JSON / 保存 AI 回传的交接记录） -->
+    <section class="handover" id="ai-handover">
+      <div class="hero-inner" style="padding: 0; max-width: 1180px">
+        <h2>🤝 AI 交接区（Handover Zone）</h2>
+        <div class="desc">
+          ① <b>生成快照 → 复制</b>：把下方进度快照 +
+          你的请求一起粘贴给任何大模型，让它接着教你；<br />
+          ② <b>保存 AI 回复</b>：把 AI 生成的教学交接摘要 / 学习报告粘贴进「AI
+          交接记录」并保存，下次会话先贴给 AI，实现跨模型、跨会话无缝交接；<br />
+          ③ <b>迁移/备份</b>：JSON 区用于设备间迁移全部进度（勾选 + 备注 +
+          交接记录）。
+        </div>
+        <div class="grid">
+          <div class="hv-box">
+            <h4>① 进度快照导出（给 AI 看）</h4>
+            <p>
+              点击生成 Markdown 快照：总进度、各模块进度、备注卡点、AI
+              交接记录一并打包。
+            </p>
+            <div class="row">
+              <button class="btn primary" onclick="buildSnapshot()">
+                生成 AI 快照
+              </button>
+              <button class="btn" onclick="copyArea('snapshot-text')">
+                复制快照
+              </button>
+            </div>
+            <textarea
+              id="snapshot-text"
+              placeholder="点击「生成 AI 快照」后，此处出现 Markdown 文本，复制后连同你的问题一起发给大模型即可。"
+            ></textarea>
+          </div>
+          <div class="hv-box">
+            <h4>② AI 交接记录（AI 的回复存这里）</h4>
+            <p>
+              粘贴教学 AI 输出的交接摘要（学习进度结论 / 卡点 /
+              下次起点），保存后随快照一起导出。
+            </p>
+            <div class="row">
+              <button class="btn" onclick="saveHandoverLog()">
+                保存交接记录
+              </button>
+              <button
+                class="btn"
+                onclick="document.getElementById('handover-log').value = ''"
+              >
+                清空
+              </button>
+            </div>
+            <textarea
+              id="handover-log"
+              placeholder="例如：【交接摘要】2026-10-26&#10;1. 本次完成：M07.2.3、M07.2.4&#10;2. 掌握度评估：已掌握=[M07 增量式PID]；欠佳=[M07 抗扰测试]&#10;3. 卡点与误区：学员把编码器脉冲直接当转速用，忘了换算 ⭐&#10;4. 下次起点：M07.3.2 抗扰测试，先复习 PID 三个参数的作用&#10;5. 给下一个 AI 的话：多画 I/O 信号流向图，少讲寄存器位定义"
+            ></textarea>
+          </div>
+          <div class="hv-box" style="grid-column: 1/-1">
+            <h4>③ 进度迁移 / 备份（JSON）</h4>
+            <div class="row">
+              <button class="btn" onclick="exportJSON()">导出 JSON 到下方</button>
+              <button class="btn primary" onclick="importJSON()">
+                从下方文本导入 JSON
+              </button>
+            </div>
+            <textarea
+              id="json-text"
+              placeholder="导出：点击后此处出现完整 JSON，可存档或发到新设备。&#10;导入：把 JSON 粘贴回这里，点击导入即可恢复全部勾选与备注。"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- [ANCHOR:HANDOVER] AI 交接区结束 -->
+
+    <footer>
+      机械类 · 机电一体化学习路线 v2.0 · 依据《zzl.pdf》整理 · 与「AI 全栈 +
+      Agent 学习路线」同一套 UI · 18 个模块 / 四个阶段（大一 → 大三 +
+      能力矩阵）· 进度默认存于本机浏览器，可用 JSON 备份迁移
+    </footer>
+    <div id="toast"></div>
+
+    <script src="learnmechanical.js" defer></script>
+  </body>
+</html>
