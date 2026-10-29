@@ -35,7 +35,580 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>机械类 · 机电一体化学习路线 · 进度路线图</title>
-    <link rel="stylesheet" href="learnmechanical.css" />
+    <style>
+      :root {
+        --bg: #eef3ff;
+        --card: #ffffff;
+        --border: #dce5f5;
+        --text: #172554;
+        --muted: #64748b;
+        --primary: #2563eb;
+        --primary-soft: #e8efff;
+        --accent: #7c3aed;
+        --ok: #16a34a;
+        --warn: #d97706;
+        --shadow:
+                0 1px 3px rgba(16, 24, 40, 0.08), 0 8px 24px rgba(16, 24, 40, 0.06);
+        --radius: 14px;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family:
+                "Segoe UI",
+                "Microsoft YaHei",
+                system-ui,
+                -apple-system,
+                sans-serif;
+        background: linear-gradient(
+                135deg,
+                #eef3ff 0%,
+                #f8fafc 55%,
+                #f1edff 100%
+        );
+        color: var(--text);
+        line-height: 1.6;
+      }
+      a {
+        color: var(--primary);
+      }
+
+      /* ── 页头 ── */
+      .hero {
+        background: linear-gradient(
+                135deg,
+                #1e3a8a 0%,
+                #2563eb 55%,
+                #7c3aed 100%
+        );
+        color: #fff;
+        padding: 28px 32px 22px;
+      }
+      .hero-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 24px;
+      }
+      .hero h1 {
+        font-size: 24px;
+        letter-spacing: 0.5px;
+      }
+      .hero .sub {
+        opacity: 0.85;
+        font-size: 13.5px;
+        margin-top: 4px;
+        max-width: 640px;
+      }
+      .cloud-notice {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        font-size: 12.5px;
+      }
+      .cloud-notice a {
+        color: #fff;
+        text-decoration: underline;
+        font-weight: 600;
+      }
+      .cloud-notice[hidden] {
+        display: none;
+      }
+      .ring-wrap {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-left: auto;
+      }
+      .ring {
+        width: 104px;
+        height: 104px;
+        position: relative;
+        flex: none;
+      }
+      .ring svg {
+        transform: rotate(-90deg);
+      }
+      .ring .val {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+      .ring .val b {
+        font-size: 24px;
+      }
+      .ring .val span {
+        font-size: 10px;
+        opacity: 0.8;
+        font-weight: 400;
+      }
+      .hero-stats {
+        display: flex;
+        gap: 18px;
+        font-size: 12.5px;
+      }
+      .hero-stats .item {
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 10px;
+        padding: 8px 14px;
+        text-align: center;
+      }
+      .hero-stats .item b {
+        display: block;
+        font-size: 17px;
+      }
+      .hero-actions {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .btn {
+        cursor: pointer;
+        border: none;
+        border-radius: 9px;
+        padding: 8px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: 0.15s;
+        color: var(--text);
+        background: #eef1f7;
+      }
+      .btn:hover {
+        filter: brightness(0.96);
+      }
+      .btn.primary {
+        background: #fff;
+        color: var(--primary);
+      }
+      .btn.danger {
+        background: rgba(239, 68, 68, 0.18);
+        color: #fecaca;
+        border: 1px solid rgba(239, 68, 68, 0.4);
+      }
+      .btn.small {
+        padding: 4px 10px;
+        font-size: 12px;
+      }
+
+      /* ── 布局 ── */
+      .layout {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 24px 20px 80px;
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 22px;
+        align-items: start;
+      }
+      @media (max-width: 960px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          position: static !important;
+          max-height: none !important;
+        }
+      }
+
+      /* ── 侧边导航 ── */
+      .sidebar {
+        position: sticky;
+        top: 16px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 14px;
+        max-height: calc(100vh - 32px);
+        overflow: auto;
+      }
+      .sidebar h3 {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 10px 4px 6px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .nav-mod {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 9px;
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--text);
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .nav-mod:hover {
+        background: var(--primary-soft);
+      }
+      .nav-mod .no {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 12px;
+        flex: none;
+      }
+      .nav-mod .nm {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .nav-mod .pc {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--muted);
+        flex: none;
+      }
+      .nav-mod.done .pc {
+        color: var(--ok);
+      }
+      .nav-stage {
+        font-size: 11.5px;
+        color: var(--accent);
+        font-weight: 700;
+        margin: 12px 4px 2px;
+      }
+      .search-box {
+        width: 100%;
+        padding: 7px 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
+      .tiny-tip {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 10px;
+        padding: 8px;
+        background: #f8fafc;
+        border-radius: 8px;
+        line-height: 1.5;
+      }
+
+      /* ── 模块卡片 ── */
+      .stage-head {
+        margin: 26px 0 12px;
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .stage-head h2 {
+        font-size: 18px;
+        color: #111827;
+      }
+      .stage-head .meta {
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .stage-head .spct {
+        margin-left: auto;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--primary);
+      }
+      .mod-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 18px;
+        overflow: hidden;
+        transition: 0.2s;
+      }
+      .mod-head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .mod-head .badge {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        font-weight: 700;
+        font-size: 12.5px;
+        border-radius: 8px;
+        padding: 4px 10px;
+        flex: none;
+      }
+      .mod-head h3 {
+        font-size: 16.5px;
+        flex: 1;
+        min-width: 0;
+      }
+      .mod-head .tags {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex: none;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .stars {
+        color: #f59e0b;
+        letter-spacing: 1px;
+      }
+      .mod-pct {
+        font-weight: 800;
+        font-size: 15px;
+        color: var(--primary);
+        width: 52px;
+        text-align: right;
+        flex: none;
+      }
+      .mod-pct.done {
+        color: var(--ok);
+      }
+      .caret {
+        transition: 0.2s;
+        color: var(--muted);
+        flex: none;
+        font-size: 12px;
+      }
+      .mod-card.open .caret {
+        transform: rotate(90deg);
+      }
+      .mod-bar {
+        height: 6px;
+        background: #edf0f7;
+      }
+      .mod-bar i {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        border-radius: 3px;
+        transition: width 0.4s ease;
+        width: 0;
+      }
+      .mod-bar i.done {
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+      }
+      .mod-body {
+        display: none;
+        padding: 6px 20px 18px;
+        border-top: 1px dashed var(--border);
+      }
+      .mod-card.open .mod-body {
+        display: block;
+      }
+      .mod-brief {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 10px 0 4px;
+      }
+      .mod-notes {
+        font-size: 12.5px;
+        color: var(--muted);
+        margin: 4px 0 8px;
+      }
+      .mod-notes a {
+        color: var(--primary);
+        text-decoration: none;
+        margin-right: 10px;
+        border-bottom: 1px dashed rgba(37, 99, 235, 0.35);
+      }
+      .mod-notes a:hover {
+        border-bottom-style: solid;
+      }
+      .sec {
+        margin-top: 14px;
+      }
+      .sec > h4 {
+        font-size: 14px;
+        color: #0f172a;
+        margin-bottom: 6px;
+        padding-left: 9px;
+        border-left: 3px solid var(--primary);
+      }
+      .pt {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 5px 6px 5px 0;
+        border-radius: 6px;
+        font-size: 13.5px;
+        cursor: pointer;
+      }
+      .pt:hover {
+        background: var(--primary-soft);
+      }
+      .pt input {
+        margin-top: 4px;
+        accent-color: var(--primary);
+        width: 15px;
+        height: 15px;
+        flex: none;
+        cursor: pointer;
+      }
+      .pt input:checked + span {
+        color: var(--muted);
+        text-decoration: line-through;
+        text-decoration-color: rgba(107, 114, 128, 0.5);
+      }
+      .pt .imp {
+        color: #dc2626;
+        font-weight: 700;
+        flex: none;
+      }
+      .note-area {
+        margin-top: 14px;
+      }
+      .note-area label {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      .note-area textarea {
+        width: 100%;
+        min-height: 56px;
+        margin-top: 6px;
+        padding: 9px 11px;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        font-size: 13px;
+        font-family: inherit;
+        resize: vertical;
+      }
+      .note-area textarea:focus {
+        outline: 2px solid var(--primary-soft);
+        border-color: var(--primary);
+      }
+
+      /* ── AI 交接区 ── */
+      .handover {
+        background: linear-gradient(180deg, #0f172a, #1e293b);
+        color: #e2e8f0;
+        border-radius: var(--radius);
+        padding: 22px;
+        margin-top: 34px;
+      }
+      .handover h2 {
+        font-size: 18px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .handover .desc {
+        font-size: 13px;
+        color: #94a3b8;
+        margin: 8px 0 14px;
+        line-height: 1.7;
+      }
+      .handover .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 960px) {
+        .handover .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .hv-box {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 14px;
+      }
+      .hv-box h4 {
+        font-size: 13.5px;
+        color: #a5b4fc;
+        margin-bottom: 8px;
+      }
+      .hv-box p {
+        font-size: 12px;
+        color: #94a3b8;
+        margin-bottom: 8px;
+      }
+      .hv-box textarea {
+        width: 100%;
+        min-height: 150px;
+        background: #0b1220;
+        color: #cbd5e1;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 12px;
+        font-family: Consolas, monospace;
+        resize: vertical;
+      }
+      .hv-box textarea:focus {
+        outline: none;
+        border-color: #6366f1;
+      }
+      .hv-box .row {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+      .hv-box .btn {
+        background: #334155;
+        color: #e2e8f0;
+      }
+      .hv-box .btn.primary {
+        background: #6366f1;
+        color: #fff;
+      }
+      .handover textarea::placeholder {
+        color: #475569;
+      }
+
+      /* ── 底部 ── */
+      footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 12px;
+        padding: 24px 0 40px;
+      }
+      .hidden {
+        display: none !important;
+      }
+      #toast {
+        position: fixed;
+        bottom: 26px;
+        left: 50%;
+        transform: translateX(-50%) translateY(80px);
+        background: #111827;
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 13px;
+        opacity: 0;
+        transition: 0.3s;
+        z-index: 99;
+        pointer-events: none;
+      }
+      #toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+    </style>
   </head>
   <body>
     <!-- [ANCHOR:HEADER] 页头：总进度 + 全局操作 -->
@@ -47,9 +620,9 @@
             STM32 闭环 · PLC/HMI 自动化 · 机械设计与仿真 · Python 数据分析 ——
             勾选小点自动计算进度，进度保存在本机浏览器。
 
-            <div class="cloud-notice" id="cloudNotice" hidden>
-              游客模式：进度只保存在本机浏览器，<a href="login.html">登录</a
-              >后可云端同步。
+            <div class="cloud-notice" id="cloudNotice">
+              <span class="cloud-notice-icon" id="loginUserName">
+              </span>
             </div>
           </div>
         </div>
@@ -100,17 +673,7 @@
             "
           >
             前往 AI 交接区 ↓</button
-          ><button class="btn" onclick="location.href = 'learnServer.html'">
-            ← 返回专业选择
-          </button>
-          <button
-            class="btn"
-            id="authBtn"
-            data-action="login"
-            onclick="authAction()"
-          >
-            登录
-          </button>
+          ><button class="btn" onclick="location.href = 'learnServer.html'">← 返回专业选择</button>
           <button class="btn danger" onclick="resetAll()">清空所有进度</button>
         </div>
       </div>
@@ -218,6 +781,1237 @@
     </footer>
     <div id="toast"></div>
 
-    <script src="learnmechanical.js" defer></script>
+    <script>
+      /* ==========================================================================
+ * 机械类 · 机电一体化学习路线 —— 知识点主数据与交互逻辑
+ * 内容依据：zzl.pdf（技术主线 / 核心课程 / 学习节奏 / 技能分级 / 能力清单）
+ * 内容范围：只保留可学习、可验证的技术知识点与项目要求。
+ * 交互与样式：与 learncomputer.js 同一套实现（勾选 → 进度 → 快照 → 导入导出）
+ * 修改知识点请只改 [ANCHOR:DATA] 区域的 ROADMAP。
+ * ========================================================================== */
+
+      /* [ANCHOR:DATA] 知识点主数据开始 */
+      const ROADMAP = {
+        version: "2.0",
+        updated: "2026-10-26",
+        stages: [
+          {
+            id: "s1",
+            name: "阶段一 · 建立动手闭环",
+            period: "第 1-2 学期",
+            goal: "用 STM32 + 电机把闭环控制跑通，同时补机械、控制、电机、传感器四门课的地基。",
+          },
+          {
+            id: "s2",
+            name: "阶段二 · 工业控制与设计软件",
+            period: "第 3-4 学期",
+            goal: "掌握 TIA Portal + S7-1200 + HMI + Factory I/O，做出一个完整可验证的工业控制项目。",
+          },
+          {
+            id: "s3",
+            name: "阶段三 · 综合项目与数据能力",
+            period: "第 5-6 学期",
+            goal: "补上数据与工具能力，并做一个跨机械 / 电气 / 软件的完整闭环项目。",
+          },
+          {
+            id: "s4",
+            name: "阶段四 · 能力全景与进阶",
+            period: "随时对照 · 贯穿全程",
+            goal: "对着两份能力清单逐条打勾，再用四档分级自检，补齐常被忽略的能力项。",
+          },
+        ],
+        modules: [
+          {
+            id: "m01",
+            stage: "s1",
+            no: "M01",
+            title: "学习主线与技能全景",
+            weeks: "第 0 步 · 2 周",
+            weight: 5,
+            brief: "技术主线：硬件与软件集成，机械结构、电气、控制、软件四块。",
+            sections: [
+              {
+                t: "1. 主线：硬件与软件集成",
+                p: [
+                  "硬件与软件集成是机电系统的核心能力 ⭐⭐",
+                  "机械结构 / 电气 / 控制 / 软件 ⭐",
+                  "从需求 → 方案 → 结构 → 控制 → 验证的完整链路 ⭐",
+                ],
+              },
+              {
+                t: "2. 四类技术栈与学习节奏",
+                p: [
+                  "机电系统建模与控制、PLC / 自动化系统 ⭐⭐",
+                  "MATLAB/Simulink 仿真",
+                  "C/C++ 嵌入式开发、Python 数据分析 ⭐⭐",
+                  "SolidWorks / ANSYS 快速原型",
+                ],
+              },
+              {
+                t: "3. 核心课程对照",
+                p: [
+                  "机械设计、自动控制原理、电机与拖动 ⭐",
+                  "嵌入式系统、PLC 编程、传感器与检测技术 ⭐",
+                ],
+              },
+              {
+                t: "4. 技能清单四块",
+                p: [
+                  "设计与仿真、控制与编程、系统与工具、语言 ⭐",
+                  "每一块都要有一个能演示的产出物 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m02",
+            stage: "s1",
+            no: "M02",
+            title: "机械设计基础与读图能力",
+            weeks: "贯穿大一",
+            weight: 4,
+            brief:
+                    "「能读懂机械图纸和电气原理图」是机械类最通用的基本功——容易被忽略。",
+            sections: [
+              {
+                t: "1. 核心课程",
+                p: [
+                  "机械设计：机构、连接、传动件选型 ⭐",
+                  "工程制图：三视图、剖视、尺寸标注与技术要求 ⭐⭐",
+                  "GD&T 行为公差图纸规范 ⭐",
+                  "理论力学 / 材料力学：受力与强度判断的基本盘 ⭐",
+                ],
+              },
+              {
+                t: "2. 读图能力",
+                p: [
+                  "读零件图：基准、配合、表面粗糙度 ⭐⭐",
+                  "读装配图：拆装顺序与运动关系 ⭐⭐",
+                  "读电气原理图：配合 EPLAN 一起练（见 M11）⭐⭐",
+                ],
+              },
+              {
+                t: "3. 设计与快速原型",
+                p: [
+                  "SolidWorks 零件建模 + 装配体（系统训练在 M11）⭐",
+                  "3D 打印原型验证结构方案 ⭐",
+                  "ANSYS 静力学分析基本流程",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m03",
+            stage: "s1",
+            no: "M03",
+            title: "自动控制原理",
+            weeks: "大一下 - 大二上",
+            weight: 4,
+            brief: "闭环控制的数学地基。大一必须学会「负反馈 → 稳定性 → PID」。",
+            sections: [
+              {
+                t: "1. 数学与系统基础",
+                p: [
+                  "线性系统分析：传递函数、频率响应、稳定性判据 ⭐⭐",
+                  "一阶 / 二阶系统时域指标：超调、调节时间、稳态误差 ⭐⭐",
+                  "状态估计与参数估计概念（进阶）⭐",
+                  "运动规划概念（进阶）⭐",
+                ],
+              },
+              {
+                t: "2. 控制器设计",
+                p: [
+                  "PID 三参数的物理意义与整定方法 ⭐⭐⭐",
+                  "位置式 vs 增量式 PID 的实现差异 ⭐⭐",
+                  "积分饱和、输出限幅、前馈与串级控制 ⭐",
+                  "离散化与采样周期选择 ⭐",
+                ],
+              },
+              {
+                t: "3. 建模与仿真",
+                p: [
+                  "MATLAB/Simulink 机电系统动态建模 ⭐",
+                  "用仿真复现 M07 的阶跃响应并对照实测 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m04",
+            stage: "s1",
+            no: "M04",
+            title: "电机与拖动 / 伺服控制",
+            weeks: "大一下 - 大二",
+            weight: 4,
+            brief:
+                    "从 TT 电机到伺服系统。用直流电机把 PWM 与编码器搞透，之后再看伺服与功率电子——伺服是自动化设备的核心执行部件。",
+            sections: [
+              {
+                t: "1. 直流电机",
+                p: [
+                  "直流电机原理与转矩-转速特性 ⭐",
+                  "PWM 调速：占空比与平均电压、转速的关系 ⭐⭐",
+                  "减速箱与霍尔编码器的信号输出 ⭐⭐",
+                  "电机供电、驱动板与保护电路",
+                ],
+              },
+              {
+                t: "2. 驱动器与功率电子",
+                p: [
+                  "TB6612FNG：方向 / 使能 / PWM 三线控制逻辑 ⭐",
+                  "H 桥、续流回路与死区概念 ⭐",
+                  "功率电子基础（进阶）⭐",
+                ],
+              },
+              {
+                t: "3. 伺服与工业应用",
+                p: [
+                  "伺服电机与控制器（SINAMICS / Kinetix）⭐⭐",
+                  "交流电机驱动系统分析、建模与控制 ⭐",
+                  "电驱动系统与底盘执行器物理 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m05",
+            stage: "s1",
+            no: "M05",
+            title: "传感器与检测技术",
+            weeks: "大一下 - 大二",
+            weight: 4,
+            brief:
+                    "PLC 与单片机的「感官」。重点不是背传感器种类，而是每个 I/O 点的物理含义与信号流向。",
+            sections: [
+              {
+                t: "1. 常见传感器",
+                p: [
+                  "光电 / 电感 / 电容式接近开关的选型 ⭐⭐",
+                  "颜色传感器与物料属性检测（M12 要用）⭐⭐",
+                  "霍尔编码器与增量式脉冲计数 ⭐⭐",
+                  "限位开关、温度 / 压力 / 力传感器",
+                ],
+              },
+              {
+                t: "2. 信号链",
+                p: [
+                  "数字量 NPN / PNP 接法与共阴共阳 ⭐⭐",
+                  "模拟量 4-20mA / 0-10V 与量程转换 ⭐",
+                  "AD 采样、滤波时间与软件去抖 ⭐⭐",
+                ],
+              },
+              {
+                t: "3. 数据采集与诊断",
+                p: [
+                  "数据采集系统的基本构成 ⭐",
+                  "采样频率与信号完整性",
+                  "传感器误触发与故障排查思路 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m06",
+            stage: "s1",
+            no: "M06",
+            title: "C 语言与嵌入式基础（STM32）",
+            weeks: "大一全年",
+            weight: 5,
+            brief: "练 外设驱动 + 裸机工程结构。",
+            sections: [
+              {
+                t: "1. C 语言",
+                p: [
+                  "指针、结构体、位操作 ⭐⭐",
+                  "volatile 与寄存器访问、内存对齐 ⭐",
+                  ".h/.c 分层与模块化组织 ⭐",
+                  "栈 / 堆 / 静态区与常见内存错误",
+                ],
+              },
+              {
+                t: "2. STM32 外设",
+                p: [
+                  "时钟树与 GPIO 初始化流程 ⭐",
+                  "定时器 PWM 输出（ARR / CCR / 预分频）⭐⭐",
+                  "定时器编码器接口模式 ⭐⭐",
+                  "UART 收发与 printf 重定向 ⭐",
+                  "中断与 NVIC 优先级、DMA 概念 ⭐",
+                ],
+              },
+              {
+                t: "3. 工具链与调试",
+                p: [
+                  "Keil / STM32CubeMX / HAL 库 ⭐",
+                  "SWD 下载与在线调试（断点、寄存器、变量观察）⭐",
+                  "逻辑分析仪抓 PWM 与编码器波形 ⭐⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m07",
+            stage: "s1",
+            no: "M07",
+            title: "项目 A · STM32 电机闭环调速",
+            weeks: "3-6 周 · 成本约 300 元",
+            weight: 5,
+            brief: "大一必须产出的：一个能拍视频、能讲原理的闭环控制系统。",
+            sections: [
+              {
+                t: "1. 硬件配置",
+                p: [
+                  "STM32F103C8T6 最小系统板 ⭐",
+                  "TT 直流减速电机（带霍尔编码器）⭐",
+                  "TB6612FNG 驱动模块，材料成本约 300 元 ⭐",
+                ],
+              },
+              {
+                t: "2. 实现路径",
+                p: [
+                  "定时器输出 PWM 控制电机转速 ⭐⭐",
+                  "定时器编码器接口读取脉冲测速 ⭐⭐",
+                  "增量式 PID 按目标与实测偏差动态调整占空比 ⭐⭐⭐",
+                  "串口上位机实时曲线（目标 / 实测 / 占空比）⭐",
+                ],
+              },
+              {
+                t: "3. 验收与沉淀",
+                p: [
+                  "阶跃响应可复现：超调、调节时间、稳态误差能讲清 ⭐⭐",
+                  "抗扰测试：手加负载后转速能回稳 ⭐",
+                  "一段演示视频 + 一页原理框图 + README ⭐⭐",
+                ],
+              },
+              {
+                t: "4. 可以先放放",
+                p: [
+                  "MATLAB/Simulink、ANSYS、六自由度机械臂、ROS ⭐⭐⭐",
+                  "理由：缺数学与专业课地基，硬做只会「照教程跑一遍，一被追问就废」⭐⭐⭐",
+                  "英语同步推进：技术文档要能读（见 M08）⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m08",
+            stage: "s1",
+            no: "M08",
+            title: "技术英语",
+            weeks: "贯穿大一 - 大三",
+            weight: 4,
+            brief:
+                    "技术英语是隐性门槛：datasheet、PLC 手册、标准文档大多是英文，读不动的话，你也没救了。",
+            sections: [
+              {
+                t: "1. 读写能力",
+                p: [
+                  "能读写 datasheet、PLC 手册与技术文档 ⭐⭐",
+                  "机械 / 电气 / 控制术语的英中对照表 ⭐",
+                  "英文技术标准与安全规范阅读 ⭐",
+                ],
+              },
+              {
+                t: "2. 听说与输出",
+                p: [
+                  "英文技术讲解视频能跟下来 ⭐",
+                  "用英文写项目 README 与技术说明 ⭐",
+                ],
+              },
+              {
+                t: "3. 阶段检验（可选）",
+                p: [
+                  "CET-4 / CET-6 作为阶段性检验 ⭐",
+                  "以「能读完一份英文手册」为准，而不是以分数为准 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m09",
+            stage: "s2",
+            no: "M09",
+            title: "PLC 编程 · Siemens TIA Portal",
+            weeks: "大二全年",
+            weight: 5,
+            brief:
+                    "大二：梯形图 → SCL → 功能块，把「逻辑能跑通」升级成「结构清晰、别人也能改」。",
+            sections: [
+              {
+                t: "1. 平台与基础",
+                p: [
+                  "TIA Portal 工程结构：设备组态、符号表、程序块 ⭐⭐",
+                  "S7-1200 硬件组态与 I/O 地址分配 ⭐",
+                  "梯形图（LAD）基本指令：常开常闭、线圈、置位复位 ⭐⭐",
+                  "电机启停、正反转、定时器 / 计数器逻辑 ⭐⭐⭐",
+                ],
+              },
+              {
+                t: "2. 结构化编程",
+                p: [
+                  "功能块 FB / 功能 FC 与数据块 DB ⭐⭐",
+                  "基础 SCL（IEC 61131-3 结构化文本）⭐⭐",
+                  "模拟量处理：量程转换、滤波、报警阈值 ⭐",
+                  "扫描周期与中断组织块 OB ⭐",
+                ],
+              },
+              {
+                t: "3. 调试与仿真",
+                p: [
+                  "用 S7-1200 的 PLCSIM 完成逻辑仿真 ⭐⭐",
+                  "在线监控、强制表、交叉引用 ⭐⭐",
+                  "诊断缓冲区排查故障 ⭐",
+                  "程序备份与版本管理 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m10",
+            stage: "s2",
+            no: "M10",
+            title: "HMI 与工业仿真",
+            weeks: "大二下",
+            weight: 5,
+            brief:
+                    "只写 PLC 不画 HMI 是半成品；没有实物 PLC 也能用 Factory I/O + PLCSIM 做完整、可验证的仿真项目。",
+            sections: [
+              {
+                t: "1. HMI 组态",
+                p: [
+                  "手动 / 自动模式切换画面 ⭐⭐",
+                  "故障报警显示与报警记录 ⭐⭐",
+                  "变量绑定、趋势曲线、操作权限 ⭐",
+                  "WinCC / Ignition / TIA 内置 HMI 选一深入 ⭐",
+                ],
+              },
+              {
+                t: "2. 工业仿真",
+                p: [
+                  "Factory I/O 场景搭建与传感器 / 执行器映射 ⭐⭐",
+                  "Factory I/O + PLCSIM 纯仿真方案完全可接受 ⭐⭐⭐",
+                  "每个 I/O 点的物理含义与信号流向都要讲得清 ⭐⭐⭐",
+                ],
+              },
+              {
+                t: "3. 电气与控制柜意识",
+                p: [
+                  "EPLAN 读电气原理图、简单绘图 ⭐⭐",
+                  "工业电气控制柜设计（常被忽略的能力项，见 M18）⭐⭐",
+                  "现场安全：急停、互锁、接地 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m11",
+            stage: "s2",
+            no: "M11",
+            title: "CAD / CAE 与电气制图",
+            weeks: "大二 - 大三",
+            weight: 4,
+            brief: "设计表达的三件套：三维建模、二维出图、电气制图；再加仿真验证。",
+            sections: [
+              {
+                t: "1. 三维与二维 CAD",
+                p: [
+                  "SolidWorks：零件建模 + 装配体 ⭐⭐",
+                  "AutoCAD：二维出图与读图 ⭐⭐",
+                  "CATIA（深入机械设计方向再补）⭐",
+                ],
+              },
+              {
+                t: "2. CAE 与仿真",
+                p: [
+                  "ANSYS Workbench 静力学分析基本流程 ⭐",
+                  "拓扑优化思路（用来给末端执行器减重）⭐",
+                  "FEA 与仿真编程 ⭐",
+                ],
+              },
+              {
+                t: "3. 电气制图",
+                p: ["EPLAN：读电气原理图、简单绘图 ⭐⭐", "电气 BOM 与接线表 ⭐"],
+              },
+            ],
+          },
+          {
+            id: "m12",
+            stage: "s2",
+            no: "M12",
+            title: "项目 B · 三工位传送带分拣系统（大二旗舰）",
+            weeks: "4-8 周",
+            weight: 5,
+            brief:
+                    "完整工业控制项目：传感器输入 → PLC 程序 → 气缸输出 + HMI 操作。调试中出的问题一定要复现和解释。",
+            sections: [
+              {
+                t: "1. 项目构成",
+                p: [
+                  "S7-1200 PLC + TIA Portal 程序与 HMI 画面 ⭐⭐",
+                  "三工位传送带、气缸执行分拣、模拟量传感器检测物料属性 ⭐",
+                  "手动 / 自动模式切换与故障报警显示 ⭐",
+                  "在 Factory I/O 中完成全流程仿真验证 ⭐⭐",
+                ],
+              },
+              {
+                t: "2. 逻辑设计",
+                p: [
+                  "输入（传感器）→ 决策（程序）→ 输出（气缸）链路要画得清 ⭐⭐",
+                  "顺序控制 / 状态机设计，避免互相打架的置位复位 ⭐⭐",
+                  "异常分支：缺料、堵料、急停后恢复 ⭐",
+                ],
+              },
+              {
+                t: "3. 调试踩坑（最能体现深度）",
+                p: [
+                  "气缸动作延迟导致物料错分 ⭐⭐⭐",
+                  "定位手段：在线监控 + 时间戳对比 ⭐⭐",
+                  "解决：调整 PLC 扫描周期 + 传感器滤波时间 ⭐⭐⭐",
+                  "沉淀 badcase 记录，形成可复现的排查过程 ⭐⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m13",
+            stage: "s3",
+            no: "M13",
+            title: "Python 与产线数据分析",
+            weeks: "大三上",
+            weight: 4,
+            brief: "处理设备日志和产线数据——这一块 C 语言很难替代。",
+            sections: [
+              {
+                t: "1. Python 基础",
+                p: [
+                  "语法、列表 / 字典、函数与模块 ⭐",
+                  "文件与 CSV 读写、异常处理 ⭐",
+                ],
+              },
+              {
+                t: "2. pandas 数据分析",
+                p: [
+                  "读 CSV、清洗缺失值与异常值 ⭐⭐",
+                  "groupby 聚合、画趋势图、算均值 / 方差 ⭐⭐",
+                  "设备日志解析：按时间段统计停线时长 ⭐",
+                  "良率、节拍、OEE 类指标计算 ⭐",
+                ],
+              },
+              {
+                t: "3. 输出与复用",
+                p: [
+                  "Jupyter 做一份可复现的分析报告 ⭐",
+                  "定时巡检 / 日报脚本 ⭐",
+                  "用 Git 管理脚本版本 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m14",
+            stage: "s3",
+            no: "M14",
+            title: "数据库、Linux 与工程工具链",
+            weeks: "大三上",
+            weight: 3,
+            brief:
+                    "数据要落地就要库，脚本要跑起来就要 Linux，代码要协作就要 Git——工具层的最低配置。",
+            sections: [
+              {
+                t: "1. 数据库",
+                p: [
+                  "MySQL 建库建表、主键与索引 ⭐",
+                  "基本 SQL：CRUD、join、group by、子查询 ⭐⭐",
+                  "采集数据落库与报表取数 ⭐",
+                ],
+              },
+              {
+                t: "2. Linux 与命令行",
+                p: [
+                  "常用命令、文件权限、日志查看 ⭐",
+                  "Shell 脚本与定时任务（crontab）⭐",
+                ],
+              },
+              {
+                t: "3. 工程工具",
+                p: [
+                  "Git：分支、提交规范、回滚 ⭐⭐",
+                  "Office：PPT / Word / Excel 文档与报告 ⭐",
+                  "Minitab / JMP 等数据分析工具 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m15",
+            stage: "s3",
+            no: "M15",
+            title: "综合项目 · 机电一体化闭环",
+            weeks: "6-12 周",
+            weight: 5,
+            brief:
+                    "把前面所有东西拧成一个闭环：结构设计 + 嵌入式控制 + 建模验证 + 量化指标。最能体现工程完整度的一个项目。",
+            sections: [
+              {
+                t: "1. 选题方向",
+                p: [
+                  "机电一体化完整闭环（如六自由度机械臂控制系统）⭐⭐",
+                  "物理本质驱动型选题：找到瓶颈环节，用第一性原理重做设计 ⭐⭐",
+                ],
+              },
+              {
+                t: "2. 结构设计",
+                p: [
+                  "SolidWorks 完成机械结构设计与优化 ⭐⭐",
+                  "拓扑优化使末端执行器减重，记录减重比例 ⭐⭐",
+                ],
+              },
+              {
+                t: "3. 控制实现",
+                p: [
+                  "STM32 上写 C 底层驱动，实现电机位置闭环 ⭐⭐⭐",
+                  "定位精度的量化方式与提升手段 ⭐⭐",
+                  "与项目 A 的转速闭环对比：控制量、执行器、精度要求 ⭐",
+                ],
+              },
+              {
+                t: "4. 建模与验证",
+                p: [
+                  "Simulink 建立机电系统动力学模型 ⭐⭐",
+                  "仿真结果与实测数据对照 ⭐⭐",
+                  "连续运行稳定性（MTBF）与识别准确率等指标 ⭐⭐",
+                ],
+              },
+              {
+                t: "5. 交付物",
+                p: [
+                  "原理框图 + 结构图纸 + 代码仓库 + 演示视频 ⭐⭐",
+                  "一页量化总结：指标从多少优化到多少 ⭐⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m16",
+            stage: "s4",
+            no: "M16",
+            title: "能力清单 · 工程实现",
+            weeks: "随时对照",
+            weight: 5,
+            brief:
+                    "工程实现侧的全景清单：编程、PLC/HMI、嵌入式与硬件、机械设计读图、数据与工程方法。",
+            sections: [
+              {
+                t: "1. 编程语言与软件基础",
+                p: [
+                  "C/C++：嵌入式开发与设备控制 ⭐⭐",
+                  "Python：数据处理与脚本编写 ⭐⭐",
+                  "SQL / MySQL 数据库应用 ⭐⭐",
+                  "一种工业结构化文本编程（IEC 61131-3）⭐⭐",
+                ],
+              },
+              {
+                t: "2. PLC 与工业控制",
+                p: [
+                  "PLC 编程：TIA Portal 为主，Allen-Bradley / Beckhoff 亦可 ⭐⭐⭐",
+                  "HMI 编程：WinCC / Ignition 或类似 ⭐⭐",
+                  "工业电气控制柜设计 ⭐⭐",
+                  "伺服电机与控制器（SINAMICS / Kinetix）⭐⭐",
+                ],
+              },
+              {
+                t: "3. 嵌入式与硬件",
+                p: [
+                  "嵌入式项目设计实践经验 ⭐⭐",
+                  "微控制器编程、模拟与数字电路基础 ⭐",
+                  "工业机器人（Fanuc / Kuka）⭐",
+                ],
+              },
+              {
+                t: "4. 机械设计与读图",
+                p: [
+                  "CAD：SolidWorks / CATIA / AutoCAD ⭐⭐",
+                  "能阅读并解释机械图纸与电气原理图 ⭐⭐⭐",
+                  "FEA 与仿真编程 ⭐",
+                ],
+              },
+              {
+                t: "5. 数据分析与工具",
+                p: [
+                  "Minitab / JMP 等数据分析工具 ⭐",
+                  "Office（PPT / Word / Excel）⭐",
+                ],
+              },
+              {
+                t: "6. 系统与工程方法",
+                p: [
+                  "自动化系统、机器人、PLC、数据采集系统理解 ⭐⭐",
+                  "设备故障根本原因分析（RCA）⭐⭐",
+                  "预防性维护计划制定 ⭐⭐",
+                  "5S 方法论 ⭐",
+                  "MES 报告使用与工具性能量化评估 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m17",
+            stage: "s4",
+            no: "M17",
+            title: "能力清单 · 建模与理论",
+            weeks: "随时对照",
+            weight: 4,
+            brief:
+                    "偏理论与建模侧的能力：数学、建模仿真、视觉与机器人、机械与电驱设计——难度更高，回报周期更长。",
+            sections: [
+              {
+                t: "1. 数学与理论",
+                p: [
+                  "线性系统分析（第一性原理）⭐⭐",
+                  "状态估计与参数估计 ⭐",
+                  "运动规划、控制器设计 ⭐⭐",
+                  "交流电机与驱动系统分析、建模与控制 ⭐",
+                  "电驱动系统与底盘执行器物理（制动 / 转向 / 悬架）⭐",
+                ],
+              },
+              {
+                t: "2. 建模与仿真",
+                p: [
+                  "MATLAB/Simulink 机电系统动态建模 ⭐⭐",
+                  "面向控制的动力总成系统模型开发 ⭐",
+                  "用 Python 进行模型开发与数据分析 ⭐",
+                ],
+              },
+              {
+                t: "3. 编程与嵌入式",
+                p: [
+                  "C/C++ 嵌入式固件开发基础 ⭐",
+                  "Python 与 C/C++ 的进阶工程实践 ⭐",
+                  "机器学习模型设计与实现 ⭐",
+                ],
+              },
+              {
+                t: "4. 视觉与机器人",
+                p: [
+                  "OpenCV 实践经验 ⭐",
+                  "ROS / ROS2 机器人编程 ⭐",
+                  "图像处理入门 ⭐",
+                ],
+              },
+              {
+                t: "5. 机械与电驱设计",
+                p: [
+                  "CAD（CATIA / AutoCAD）⭐",
+                  "理论力学与材料力学 ⭐",
+                  "结构仿真 ⭐",
+                  "GD&T 行为公差图纸规范 ⭐",
+                  "机械设计原理 ⭐",
+                ],
+              },
+              {
+                t: "6. 英语",
+                p: ["能读写英文技术资料与标准文档 ⭐"],
+              },
+            ],
+          },
+          {
+            id: "m18",
+            stage: "s4",
+            no: "M18",
+            title: "掌握程度分级与常见缺口",
+            weeks: "随时自检",
+            weight: 5,
+            brief:
+                    "按四档实话自评：核心熟练 / 会用 / 了解 / 暂不深入。把「知道有这东西」写成「熟练」，一被追问就露。",
+            sections: [
+              {
+                t: "1. 核心熟练",
+                p: [
+                  "Siemens TIA Portal：梯形图 + 基础 SCL，S7-1200 平台 ⭐⭐⭐",
+                  "C 语言：STM32 外设驱动（GPIO、定时器 PWM、编码器接口、UART）⭐⭐⭐",
+                  "SolidWorks：基础零件建模与装配体 ⭐⭐",
+                ],
+              },
+              {
+                t: "2. 会用",
+                p: [
+                  "Python：pandas 基础数据处理、脚本编写 ⭐",
+                  "EPLAN：读电气原理图、简单绘图 ⭐",
+                  "Git：基本版本管理 ⭐",
+                ],
+              },
+              {
+                t: "3. 了解",
+                p: [
+                  "MATLAB/Simulink：跑过教程级模型，理解仿真流程",
+                  "Factory I/O：做过 PLC 仿真项目",
+                  "ANSYS：知道静力学分析基本流程",
+                  "MySQL：能写基本 SQL 查询",
+                ],
+              },
+              {
+                t: "4. 暂不深入",
+                p: [
+                  "六自由度机械臂、ROS/ROS2、运动规划、状态估计、CAN/AUTOSAR ⭐⭐",
+                  "缺数学与课程地基时硬上，你也就「照教程跑一遍」⭐⭐",
+                ],
+              },
+              {
+                t: "5. 常被忽略、但补上就领先的能力项",
+                p: [
+                  "工业电气控制柜设计——实际设计能力 ⭐⭐",
+                  "伺服电机与控制器——自动化设备的核心执行部件 ⭐⭐",
+                  "Structured Text（IEC 61131-3）——结构化文本编程 ⭐",
+                  "MES 系统认知——制造执行系统 ⭐",
+                  "5S 与预防性维护——精益生产与设备维护体系 ⭐",
+                  "根本原因分析——系统性问题解决方法论 ⭐",
+                  "工业机器人（Fanuc / Kuka）⭐",
+                ],
+              },
+            ],
+          },
+        ],
+      };
+      /* [ANCHOR:DATA] 知识点主数据结束 */
+
+      /* [ANCHOR:LOGIC] 渲染与进度逻辑开始 */
+
+      /* ============ 状态与持久化（本机浏览器） ============ */
+      const LS_KEY = "mechRoadmapStateV1";
+      let state = { checks: {}, notes: {}, handoverLog: "", updatedAt: null };
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(LS_KEY);
+          if (raw) {
+            const p = JSON.parse(raw);
+            state.checks = p.checks || {};
+            state.notes = p.notes || {};
+            state.handoverLog = p.handoverLog || "";
+          }
+        } catch (e) {
+          console.warn("读取本地进度失败", e);
+        }
+        const logEl = document.getElementById("handover-log");
+        if (logEl) logEl.value = state.handoverLog || "";
+      }
+
+      function saveState() {
+        state.updatedAt = new Date().toISOString();
+        const logEl = document.getElementById("handover-log");
+        if (logEl) state.handoverLog = logEl.value;
+        try {
+          localStorage.setItem(LS_KEY, JSON.stringify(state));
+        } catch (e) {
+          alert("保存失败：" + e.message);
+        }
+      }
+
+      function isChecked(mid, si, pi) {
+        return !!(state.checks[mid] && state.checks[mid].includes(si + ":" + pi));
+      }
+
+      function toggleCheck(mid, si, pi, on) {
+        state.checks[mid] = state.checks[mid] || [];
+        const k = si + ":" + pi;
+        const arr = state.checks[mid];
+        const i = arr.indexOf(k);
+        if (on && i < 0) arr.push(k);
+        if (!on && i >= 0) arr.splice(i, 1);
+        saveState();
+        refreshProgress(mid);
+      }
+
+      /* ============ 进度计算 ============ */
+      function modStats(m) {
+        let total = 0;
+        let checked = 0;
+        m.sections.forEach((s, si) =>
+                s.p.forEach((p, pi) => {
+                  total++;
+                  if (isChecked(m.id, si, pi)) checked++;
+                }),
+        );
+        return {
+          total,
+          checked,
+          pct: total ? Math.round((checked / total) * 100) : 0,
+        };
+      }
+
+      function allStats() {
+        let total = 0;
+        let checked = 0;
+        let doneMods = 0;
+        ROADMAP.modules.forEach((m) => {
+          const s = modStats(m);
+          total += s.total;
+          checked += s.checked;
+          if (s.total && s.checked === s.total) doneMods++;
+        });
+        return {
+          total,
+          checked,
+          doneMods,
+          pct: total ? Math.round((checked / total) * 100) : 0,
+        };
+      }
+
+      function stageStats(stageId) {
+        let total = 0;
+        let checked = 0;
+        ROADMAP.modules
+                .filter((m) => m.stage === stageId)
+                .forEach((m) => {
+                  const s = modStats(m);
+                  total += s.total;
+                  checked += s.checked;
+                });
+        return {
+          total,
+          checked,
+          pct: total ? Math.round((checked / total) * 100) : 0,
+        };
+      }
+
+      /* ============ 渲染 ============ */
+      function esc(s) {
+        return String(s)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+      }
+
+      function renderNav() {
+        const box = document.getElementById("nav-container");
+        let html = "";
+        ROADMAP.stages.forEach((st) => {
+          html += `<div class="nav-stage">${esc(st.name)}</div>`;
+          ROADMAP.modules
+                  .filter((m) => m.stage === st.id)
+                  .forEach((m) => {
+                    const s = modStats(m);
+                    html += `<div class="nav-mod ${s.pct === 100 ? "done" : ""}" id="nav-${m.id}" onclick="jumpTo('${m.id}')">
+        <span class="no">${esc(m.no)}</span><span class="nm" title="${esc(m.title)}">${esc(m.title)}</span><span class="pc">${s.pct}%</span></div>`;
+                  });
+        });
+        box.innerHTML = html;
+      }
+
+      function renderModuleNotes(mid) {
+        const notes =
+                (typeof MODULE_NOTES !== "undefined" && MODULE_NOTES[mid]) || [];
+        if (!notes.length) return "";
+        return `<div class="mod-notes">📚 配套笔记：${notes.map((n) => `<a href="${n.href}" target="_blank">${esc(n.label)}</a>`).join("")}</div>`;
+      }
+
+      function renderModules() {
+        const box = document.getElementById("modules-container");
+        let html = "";
+        ROADMAP.stages.forEach((st) => {
+          const ss = stageStats(st.id);
+          html += `<div class="stage-head" id="stage-${st.id}"><h2>${esc(st.name)}</h2>
+      <span class="meta">${esc(st.period)} · ${esc(st.goal)}</span>
+      <span class="spct" id="stage-pct-${st.id}">阶段进度 ${ss.pct}%（${ss.checked}/${ss.total}）</span></div>`;
+          ROADMAP.modules
+                  .filter((m) => m.stage === st.id)
+                  .forEach((m) => {
+                    const s = modStats(m);
+                    html += `<article class="mod-card open" id="mod-${m.id}" data-mod="${m.id}">
+        <div class="mod-head" onclick="toggleCard('${m.id}')">
+          <span class="badge">${esc(m.no)}</span>
+          <h3>${esc(m.title)}</h3>
+          <div class="tags"><span>⏱ ${esc(m.weeks)}</span><span class="stars" title="重要度 ${m.weight}/5">${"★".repeat(m.weight)}${"☆".repeat(5 - m.weight)}</span></div>
+          <span class="mod-pct ${s.pct === 100 ? "done" : ""}" id="pct-${m.id}">${s.pct}%</span>
+          <span class="caret">▶</span>
+        </div>
+        <div class="mod-bar"><i id="bar-${m.id}" style="width:${s.pct}%"></i></div>
+        <div class="mod-body">
+          <div class="mod-brief">${esc(m.brief)}</div>${renderModuleNotes(m.id)}`;
+                    m.sections.forEach((sec, si) => {
+                      html += `<div class="sec"><h4>${esc(sec.t)}</h4>`;
+                      sec.p.forEach((p, pi) => {
+                        html += `<label class="pt"><input type="checkbox" data-mod="${m.id}" data-si="${si}" data-pi="${pi}" ${isChecked(m.id, si, pi) ? "checked" : ""} onchange="toggleCheck('${m.id}',${si},${pi},this.checked)"><span>${esc(p)}</span></label>`;
+                      });
+                      html += `</div>`;
+                    });
+                    html += `<div class="note-area"><label>📝 本模块备注 / 卡点（随进度保存，并写入 AI 快照）</label>
+        <textarea data-note="${m.id}" placeholder="记录：学到哪了？哪里卡住？项目做到哪一步？" oninput="saveNote('${m.id}',this.value)">${esc(state.notes[m.id] || "")}</textarea></div>
+        </div></article>`;
+                  });
+        });
+        box.innerHTML = html;
+        const logEl = document.getElementById("handover-log");
+        if (logEl) logEl.value = state.handoverLog || "";
+      }
+
+      function toggleCard(id) {
+        document.getElementById("mod-" + id).classList.toggle("open");
+      }
+
+      function expandAll(open) {
+        document
+                .querySelectorAll(".mod-card")
+                .forEach((c) => c.classList.toggle("open", open));
+      }
+
+      function jumpTo(id) {
+        const el = document.getElementById("mod-" + id);
+        if (el) {
+          el.classList.add("open");
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      function saveNote(mid, val) {
+        state.notes[mid] = val;
+        saveState();
+      }
+
+      /* ============ 进度刷新（局部更新，不重绘 DOM） ============ */
+      function refreshProgress(mid) {
+        const m = ROADMAP.modules.find((x) => x.id === mid);
+        const s = modStats(m);
+        const pctEl = document.getElementById("pct-" + mid);
+        const barEl = document.getElementById("bar-" + mid);
+        const navEl = document.getElementById("nav-" + mid);
+        if (pctEl) {
+          pctEl.textContent = s.pct + "%";
+          pctEl.classList.toggle("done", s.pct === 100);
+        }
+        if (barEl) {
+          barEl.style.width = s.pct + "%";
+          barEl.classList.toggle("done", s.pct === 100);
+        }
+        if (navEl) {
+          navEl.querySelector(".pc").textContent = s.pct + "%";
+          navEl.classList.toggle("done", s.pct === 100);
+        }
+        const ss = stageStats(m.stage);
+        const sp = document.getElementById("stage-pct-" + m.stage);
+        if (sp) sp.textContent = `阶段进度 ${ss.pct}%（${ss.checked}/${ss.total}）`;
+        refreshOverall();
+      }
+
+      function refreshOverall() {
+        const a = allStats();
+        const C = 2 * Math.PI * 46;
+        document.getElementById("overall-pct").textContent = a.pct + "%";
+        document.getElementById("ring-fg").setAttribute("stroke-dasharray", C);
+        document
+                .getElementById("ring-fg")
+                .setAttribute("stroke-dashoffset", C * (1 - a.pct / 100));
+        document.getElementById("stat-points").textContent =
+                a.checked + "/" + a.total;
+        document.getElementById("stat-modules").textContent =
+                a.doneMods + "/" + ROADMAP.modules.length;
+      }
+
+      /* ============ 搜索 ============ */
+      function renderSearch(q) {
+        q = (q || "").trim().toLowerCase();
+        ROADMAP.modules.forEach((m) => {
+          const card = document.getElementById("mod-" + m.id);
+          const nav = document.getElementById("nav-" + m.id);
+          if (!card) return;
+          if (!q) {
+            card.classList.remove("hidden");
+            if (nav) nav.classList.remove("hidden");
+            return;
+          }
+          let hit = (m.no + " " + m.title + " " + m.brief).toLowerCase().includes(q);
+          if (!hit)
+            hit = m.sections.some((s) =>
+                    (s.t + " " + s.p.join(" ")).toLowerCase().includes(q),
+            );
+          card.classList.toggle("hidden", !hit);
+          if (nav) nav.classList.toggle("hidden", !hit);
+          if (hit) card.classList.add("open");
+        });
+        if (!q)
+          document
+                  .querySelectorAll(".stage-head")
+                  .forEach((e) => e.classList.remove("hidden"));
+        else
+          ROADMAP.stages.forEach((st) => {
+            const any = ROADMAP.modules.some(
+                    (m) =>
+                            m.stage === st.id &&
+                            document.getElementById("mod-" + m.id) &&
+                            !document.getElementById("mod-" + m.id).classList.contains("hidden"),
+            );
+            document
+                    .getElementById("stage-" + st.id)
+                    .classList.toggle("hidden", !any);
+          });
+      }
+
+      /* ============ AI 交接区：快照 / 记录 / JSON 导入导出 ============ */
+      function toast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(t._h);
+        t._h = setTimeout(() => t.classList.remove("show"), 2200);
+      }
+
+      function buildSnapshot() {
+        const a = allStats();
+        const now = new Date().toLocaleString("zh-CN");
+        let md = `# 机械类学习进度快照（AI 交接区导出）
+
+- 导出时间：${now}
+- 路线版本：${ROADMAP.version}（${ROADMAP.updated}）
+- 总进度：**${a.pct}%**（${a.checked}/${a.total} 小点，完成模块 ${a.doneMods}/${ROADMAP.modules.length}）
+
+## 模块进度
+| 模块 | 进度 | 已学/总数 | 备注/卡点 |
+|---|---|---|---|
+`;
+        ROADMAP.modules.forEach((m) => {
+          const s = modStats(m);
+          md += `| ${m.no} ${m.title} | ${s.pct}% | ${s.checked}/${s.total} | ${(state.notes[m.id] || "").replace(/\n/g, " ")} |\n`;
+        });
+        md += `\n## 阶段进度\n`;
+        ROADMAP.stages.forEach((st) => {
+          const s = stageStats(st.id);
+          md += `- ${st.name}：${s.pct}%（${s.checked}/${s.total}）\n`;
+        });
+        md += `\n## AI 交接记录（上次会话 AI 留下的内容）\n${state.handoverLog || "（暂无）"}\n\n## 本次请求（学员手填）\n> 请把你的需求写在这里再发给 AI，例如：继续教 M09 的下一个知识小点。\n`;
+        document.getElementById("snapshot-text").value = md;
+        toast("快照已生成，点「复制快照」发给 AI");
+      }
+
+      function copyArea(id) {
+        const el = document.getElementById(id);
+        el.select();
+        el.setSelectionRange(0, el.value.length);
+        const done = () => toast("已复制到剪贴板");
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+                  .writeText(el.value)
+                  .then(done)
+                  .catch(() => {
+                    document.execCommand("copy");
+                    done();
+                  });
+        } else {
+          document.execCommand("copy");
+          done();
+        }
+      }
+
+      function saveHandoverLog() {
+        saveState();
+        toast("交接记录已保存（并计入快照 / JSON 导出）");
+      }
+
+      function exportJSON() {
+        saveState();
+        const payload = {
+          app: "mech-roadmap",
+          version: ROADMAP.version,
+          exportedAt: new Date().toISOString(),
+          checks: state.checks,
+          notes: state.notes,
+          handoverLog: state.handoverLog,
+        };
+        document.getElementById("json-text").value = JSON.stringify(payload, null, 1);
+        toast("JSON 已导出到下方文本框");
+      }
+
+      function importJSON() {
+        const txt = document.getElementById("json-text").value.trim();
+        if (!txt) {
+          toast("请先粘贴 JSON");
+          return;
+        }
+        let p;
+        try {
+          p = JSON.parse(txt);
+        } catch (e) {
+          toast("JSON 解析失败：" + e.message);
+          return;
+        }
+        if (!p || !p.checks) {
+          toast("格式不对：缺少 checks 字段");
+          return;
+        }
+        const validMods = new Set(ROADMAP.modules.map((m) => m.id));
+        const clean = {};
+        Object.keys(p.checks).forEach((mid) => {
+          if (!validMods.has(mid)) return;
+          const arr = Array.isArray(p.checks[mid]) ? p.checks[mid] : [];
+          const m = ROADMAP.modules.find((x) => x.id === mid);
+          clean[mid] = arr.filter((k) => {
+            const mt = /^(\d+):(\d+)$/.exec(k);
+            if (!mt) return false;
+            const si = +mt[1];
+            const pi = +mt[2];
+            return m.sections[si] && m.sections[si].p[pi] !== undefined;
+          });
+        });
+        state.checks = clean;
+        state.notes = {};
+        if (p.notes && typeof p.notes === "object") {
+          Object.keys(p.notes).forEach((k) => {
+            if (validMods.has(k)) state.notes[k] = String(p.notes[k]);
+          });
+        }
+        state.handoverLog = typeof p.handoverLog === "string" ? p.handoverLog : "";
+        saveState();
+        renderNav();
+        renderModules();
+        refreshAllProgress();
+        document.getElementById("handover-log").value = state.handoverLog || "";
+        toast("导入成功，进度已恢复");
+      }
+
+      function resetAll() {
+        if (
+                !confirm(
+                        "确定清空所有勾选、备注与交接记录？此操作不可恢复（建议先导出 JSON 备份）。",
+                )
+        )
+          return;
+        localStorage.removeItem(LS_KEY);
+        state = { checks: {}, notes: {}, handoverLog: "", updatedAt: null };
+        renderNav();
+        renderModules();
+        refreshAllProgress();
+        document.getElementById("handover-log").value = "";
+        toast("已全部清空");
+      }
+
+      function refreshAllProgress() {
+        ROADMAP.modules.forEach((m) => refreshProgress(m.id));
+      }
+
+      /* ============ 账户 ============ */
+
+      function account(){
+        fetch("api/user/me",{method:"GET"})
+                .then(response => response.json())
+                .then(data => {
+                  if (data.code != 200) {
+                    document.getElementById("loginUserName").innerHTML = "游客模式：进度只保存在本机浏览器，<a href='login.html'>登录</a>后可云端同步。"
+                  } else {
+                    document.getElementById("loginUserName").innerHTML = "欢迎 · " + data.data.username + "——云端存储已启动，如果没有那就是我还没更新"
+                  }
+                })
+      }
+
+      /* ============ 启动 ============ */
+      window.addEventListener("pageshow", (event) => {
+        if (event.persisted) location.reload();
+      });
+
+      loadState();
+      renderNav();
+      renderModules();
+      refreshAllProgress();
+      account()
+
+    </script>
   </body>
 </html>

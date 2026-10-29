@@ -4,7 +4,247 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>申请账户 · ProfilesSystem</title>
-    <link rel="stylesheet" href="register.css" />
+    <style>
+      :root {
+        font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: #eef2ff;
+        background: #090d1d;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background:
+                radial-gradient(circle at 15% 10%, #3947a8 0, transparent 32%),
+                radial-gradient(circle at 90% 90%, #0e7490 0, transparent 30%),
+                #090d1d;
+      }
+      .shell {
+        width: min(900px, 94vw);
+        display: grid;
+        grid-template-columns: 1.05fr 1fr;
+        overflow: hidden;
+        border: 1px solid #ffffff1c;
+        border-radius: 28px;
+        background: #ffffff0b;
+        box-shadow: 0 28px 90px #0008;
+        backdrop-filter: blur(22px);
+      }
+      .intro {
+        padding: 56px 48px;
+        background: linear-gradient(145deg, #ffffff16, #ffffff03);
+      }
+      .brand {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        font-weight: 700;
+      }
+      .mark {
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #9ca9ff, #62e4d5);
+        color: #111a3b;
+        font-weight: 900;
+      }
+      .intro h1 {
+        margin: 95px 0 16px;
+        font-size: 42px;
+        line-height: 1.15;
+        letter-spacing: -0.04em;
+      }
+      .intro p {
+        color: #b8c1e0;
+        line-height: 1.8;
+      }
+      .form {
+        padding: 56px 11%;
+        background: #090d1db8;
+      }
+      .eyebrow {
+        margin: 0 0 12px;
+        color: #7eebdc;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .form h2 {
+        margin: 0 0 10px;
+        font-size: 30px;
+      }
+      .sub {
+        margin: 0 0 32px;
+        color: #9da7c8;
+      }
+      .notice {
+        padding: 13px 14px;
+        margin-bottom: 24px;
+        border: 1px solid #7eebdc33;
+        border-radius: 12px;
+        background: #7eebdc0d;
+        color: #a9e8e0;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .method-label {
+        margin-top: 22px;
+        margin-bottom: 10px;
+        color: #7eebdc;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+      .apply-form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 22px;
+      }
+      .apply-form label {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        color: #cbd3ef;
+        font-size: 13px;
+      }
+      .apply-form input,
+      .apply-form textarea {
+        width: 100%;
+        padding: 13px 14px;
+        border: 1px solid #ffffff20;
+        border-radius: 11px;
+        outline: none;
+        background: #ffffff0b;
+        color: #fff;
+        font: inherit;
+        resize: vertical;
+      }
+      .apply-form input:focus,
+      .apply-form textarea:focus {
+        border-color: #7eebdc;
+        box-shadow: 0 0 0 4px #7eebdc18;
+      }
+      .apply-form textarea {
+        min-height: 86px;
+      }
+      .apply-btn {
+        padding: 14px;
+        border: 0;
+        border-radius: 11px;
+        background: linear-gradient(100deg, #9ca9ff, #62e4d5);
+        color: #111a3b;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .apply-btn:hover {
+        box-shadow: 0 10px 22px #62e4d544;
+        transform: translateY(-1px);
+      }
+      .success {
+        display: none;
+        margin-top: 22px;
+        padding: 18px;
+        border: 1px solid #7eebdc55;
+        border-radius: 14px;
+        background: #7eebdc12;
+        color: #c8fff6;
+        line-height: 1.7;
+      }
+      .success.show {
+        display: block;
+      }
+      .error {
+        display: none;
+        margin-top: 22px;
+        padding: 14px 18px;
+        border: 1px solid #ff8fa355;
+        border-radius: 14px;
+        background: #ff8fa312;
+        color: #ffd6de;
+        line-height: 1.7;
+      }
+      .error.show {
+        display: block;
+      }
+      .back-btn {
+        display: inline-block;
+        margin-top: 14px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        background: #ffffff12;
+        color: #cbd3ef;
+        text-decoration: none;
+      }
+      .back-btn:hover {
+        background: #ffffff22;
+        color: #fff;
+      }
+      .contact {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        padding: 16px;
+        margin-top: 18px;
+        border: 1px solid #ffffff18;
+        border-radius: 14px;
+        background: #ffffff08;
+        font-size: 13px;
+      }
+      .contact strong {
+        color: #eef2ff;
+        font-size: 14px;
+      }
+      .contact span {
+        color: #8792ba;
+        font-size: 12px;
+        margin-bottom: 3px;
+      }
+      .contact a {
+        color: #a9e8e0;
+        text-decoration: none;
+      }
+      .contact a:hover {
+        color: #fff;
+      }
+      .links {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 24px;
+        font-size: 13px;
+      }
+      .links a {
+        color: #b8c1e0;
+        text-decoration: none;
+      }
+      .links a:hover {
+        color: #7eebdc;
+      }
+      @media (max-width: 700px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+        .intro {
+          padding: 34px 28px;
+        }
+        .intro h1 {
+          margin: 50px 0 14px;
+          font-size: 34px;
+        }
+        .form {
+          padding: 36px 28px 42px;
+        }
+      }
+
+    </style>
   </head>
   <body>
     <main class="shell">
@@ -79,6 +319,63 @@
         </div>
       </section>
     </main>
-    <script src="register.js" defer></script>
+    <script>
+      const applyForm = document.getElementById("applyForm");
+      const applySuccess = document.getElementById("applySuccess");
+      const applyError = document.getElementById("applyError");
+      const applyBtn = applyForm.querySelector(".apply-btn");
+
+      const EMAIL_PATTERN = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+      applyForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        applyError.classList.remove("show");
+
+        const payload = {
+          username: document.getElementById("applyName").value.trim(),
+          reason: document.getElementById("applyReason").value.trim(),
+          email: document.getElementById("applyContact").value.trim(),
+        };
+
+        // 邮箱必填：先查空，再查格式，后端也会再校验一次
+        if (!payload.email) {
+          applyError.textContent = "请填写邮箱";
+          applyError.classList.add("show");
+          return;
+        }
+        if (!EMAIL_PATTERN.test(payload.email)) {
+          applyError.textContent = "邮箱格式不正确，例如 name@example.com";
+          applyError.classList.add("show");
+          return;
+        }
+
+        applyBtn.disabled = true;
+
+        try {
+          const response = await fetch("/api/user/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          const result = await response.json();
+
+          if (result.code === 200) {
+            applyForm.style.display = "none";
+            applySuccess.classList.add("show");
+          } else {
+            applyError.textContent = result.message || "提交失败，请稍后重试";
+            applyError.classList.add("show");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          applyError.textContent = "网络异常，请稍后重试";
+          applyError.classList.add("show");
+        } finally {
+          applyBtn.disabled = false;
+        }
+      });
+
+    </script>
   </body>
 </html>
