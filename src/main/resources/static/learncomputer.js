@@ -1,0 +1,1528 @@
+const ROADMAP = {
+        version: "1.3",
+        updated: "2026-10-25",
+        stages: [
+          {
+            id: "s1",
+            name: "阶段一 · Java 后端基石",
+            period: "第 1-6 个月",
+            goal: "拿下大厂后端工程的硬地基：语言、并发、框架、存储、分布式、计算机基础。",
+          },
+          {
+            id: "s2",
+            name: "阶段二 · Python 与 AI 基础",
+            period: "第 6-8 个月",
+            goal: "Python 工程级能力 + 深度学习直觉 + 手写 Transformer，拿到 LLM 世界的门票。",
+          },
+          {
+            id: "s3",
+            name: "阶段三 · 大模型应用",
+            period: "第 8-11 个月",
+            goal: "模型原理与微调、LLM API 工程、RAG 全链路——AI 应用岗的核心竞争力。",
+          },
+          {
+            id: "s4",
+            name: "阶段四 · Agent 与工程化",
+            period: "第 11-13 个月",
+            goal: "Agent 范式、MCP、LangGraph、Java 系 Agent 与 LLMOps——岗位差异化王牌。",
+          },
+          {
+            id: "s5",
+            name: "阶段五 · 项目与求职",
+            period: "贯穿全程 · 冲刺 1-2 月",
+            goal: "4 个量化项目打磨成简历王牌，算法八股系统设计与模拟面试全冲刺。",
+          },
+        ],
+        modules: [
+          {
+            id: "m01",
+            stage: "s1",
+            no: "M01",
+            title: "Java 核心语法与工程基础",
+            weeks: "3-4 周",
+            weight: 5,
+            brief:
+              "一切的地基：语法、集合（源码级）、反射与动态代理、Java 8-21 新特性、IO 与工程规范。反射/代理是理解 Spring 的钥匙。",
+            sections: [
+              {
+                t: "1. 环境与工具链",
+                p: [
+                  "JDK/JRE/JVM 关系；JDK 8/17/21 选型与 LTS 概念 ⭐",
+                  "IDEA 高效用法：断点调试、条件断点、Evaluate",
+                  "Maven：依赖仲裁、scope、生命周期、多模块工程、BOM",
+                  "Git：分支/merge/rebase、冲突解决、cherry-pick、reset vs revert ⭐",
+                ],
+              },
+              {
+                t: "2. 语言基础",
+                p: [
+                  "包装类与自动拆装箱、Integer 缓存池 -128~127 陷阱 ⭐",
+                  "String 不可变性、常量池、intern、StringBuilder vs StringBuffer ⭐",
+                  "重载 vs 重写、流程控制与数组",
+                  "Java 只有值传递：参数传递经典陷阱 ⭐",
+                  "面向对象三大特性、构造初始化顺序、this/super ⭐",
+                  "抽象类 vs 接口、四种内部类、枚举本质与枚举单例 ⭐",
+                  "equals 与 hashCode 契约、clone 浅/深拷贝 ⭐",
+                  "异常体系：Checked/Unchecked、try-with-resources、finally 陷阱 ⭐",
+                  "正则与 BigDecimal 精度计算（金额/舍入模式）⭐",
+                ],
+              },
+              {
+                t: "3. 泛型、注解与反射（Spring 地基）",
+                p: [
+                  "类型擦除及副作用、通配符 PECS 原则 ⭐",
+                  "元注解与自定义注解、APT 概念",
+                  "反射 API：Class/Method/Field、setAccessible、JDK17 模块化限制 ⭐",
+                  "动态代理：JDK Proxy vs CGLIB（Spring AOP 基石）⭐⭐",
+                ],
+              },
+              {
+                t: "4. Java 8+ 函数式与新特性",
+                p: [
+                  "Lambda 与四大函数式接口、方法引用",
+                  "Stream：collect/groupingBy、惰性求值、并行流陷阱 ⭐",
+                  "Optional 正确用法、java.time 日期 API ⭐",
+                  "Java 9-17：var、record、sealed、文本块、switch 模式匹配",
+                  "Java 21 虚拟线程入门（原理在 M02）",
+                ],
+              },
+              {
+                t: "5. 集合框架（源码级）⭐⭐⭐",
+                p: [
+                  "集合体系总览、fail-fast 与 modCount",
+                  "ArrayList 扩容 1.5 倍、LinkedList 与 Deque",
+                  "HashMap 源码：扰动/2 的幂/树化 8 退化 6/扩容优化/JDK7 死循环 ⭐⭐",
+                  "ConcurrentHashMap：分段锁 vs CAS+synchronized、null 限制 ⭐⭐",
+                  "LinkedHashMap 实现 LRU、TreeMap 红黑树、WeakHashMap ⭐",
+                  "并发容器概览：CopyOnWriteArrayList、BlockingQueue 家族",
+                ],
+              },
+              {
+                t: "6. IO 与序列化",
+                p: [
+                  "字节/字符流体系、装饰器模式、字符编码",
+                  "序列化：serialVersionUID、transient；JSON 库与反序列化漏洞意识",
+                ],
+              },
+              {
+                t: "7. 测试与编码规范",
+                p: [
+                  "JUnit5 + Mockito 单元测试、TDD 概念",
+                  "《阿里巴巴 Java 开发手册》高频规约 ⭐",
+                  "日志：SLF4J+Logback、级别选择、MDC 链路打点",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m02",
+            stage: "s1",
+            no: "M02",
+            title: "Java 并发编程与 JVM",
+            weeks: "3-4 周",
+            weight: 5,
+            brief:
+              "大厂面试深挖重灾区：JMM/锁/AQS/线程池到 G1/ZGC 与线上排查。目标是不止背八股，还能真的排查一次 OOM。",
+            sections: [
+              {
+                t: "1. 并发基础",
+                p: [
+                  "进程/线程/协程、并发 vs 并行、线程六状态 ⭐",
+                  "线程创建方式、interrupt 中断机制、join/sleep ⭐",
+                  "虚拟线程（Loom）：挂载原理、pin 问题、适用场景 ⭐",
+                  "Future/CompletableFuture 异步编排、与虚拟线程选型 ⭐",
+                ],
+              },
+              {
+                t: "2. JMM 与三性",
+                p: [
+                  "JMM：可见性/原子性/有序性、happens-before ⭐⭐",
+                  "volatile：内存屏障语义、DCL 单例 ⭐⭐",
+                  "synchronized：锁升级链路、偏向锁废弃 ⭐⭐",
+                  "CAS 与原子类、ABA 问题、LongAdder 原理 ⭐",
+                  "final 语义、ThreadLocal 内存泄漏根因与 TTL ⭐",
+                ],
+              },
+              {
+                t: "3. 锁与并发工具（AQS 体系）",
+                p: [
+                  "AQS 源码主线：state/CLH 队列/独占共享模板 ⭐⭐",
+                  "ReentrantLock：公平性、Condition 队列 ⭐",
+                  "Semaphore/CountDownLatch/CyclicBarrier 场景对比 ⭐",
+                  "读写锁与 StampedLock 乐观读",
+                  "并发容器：ConcurrentLinkedQueue、BlockingQueue 家族 ⭐",
+                ],
+              },
+              {
+                t: "4. 线程池 ⭐⭐⭐",
+                p: [
+                  "七参数与 execute 执行流程 ⭐⭐",
+                  "四种拒绝策略、为什么禁用 Executors ⭐",
+                  "参数经验与压测校准、动态调参原理",
+                  "监控、优雅关闭、上下文传递（TTL）",
+                ],
+              },
+              {
+                t: "5. JVM 内存与 GC",
+                p: [
+                  "运行时数据区、对象创建与内存布局 Mark Word ⭐",
+                  "逃逸分析、四种引用 ⭐",
+                  "可达性分析/GC Roots、三大 GC 算法 ⭐",
+                  "收集器：CMS 废弃原因、G1 Region/SATB、ZGC 亚毫秒 ⭐⭐",
+                  "三色标记与漏标/浮动垃圾、SafePoint",
+                  "类加载流程与双亲委派、打破场景 ⭐⭐",
+                  "JIT 分层编译与常用 JVM 参数",
+                  "实战排查：OOM 矩阵、CPU 飙高定位、Arthas ⭐⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m03",
+            stage: "s1",
+            no: "M03",
+            title: "Spring 生态与主流后端框架",
+            weeks: "3 周",
+            weight: 5,
+            brief:
+              "从「会用」到「懂原理」：Bean 生命周期、三级缓存、事务失效、自动装配是三大必考；再加 Web 规范、MyBatis、安全鉴权。",
+            sections: [
+              {
+                t: "1. Spring Framework 核心",
+                p: [
+                  "IoC/DI 思想、BeanFactory vs ApplicationContext ⭐",
+                  "Bean 生命周期与扩展点（BeanPostProcessor 等）⭐⭐",
+                  "三级缓存与循环依赖、@Lazy、构造器为何无解 ⭐⭐",
+                  "AOP：代理选择、切面语法、失效场景 ⭐⭐",
+                  "@Transactional 原理、七种传播行为、失效十连问 ⭐⭐",
+                  "事件机制、@Async 与线程池配置",
+                  "WebFlux 与响应式：Reactor/背压、MVC 选型 ⭐",
+                ],
+              },
+              {
+                t: "2. Spring Boot",
+                p: [
+                  "自动装配原理：@EnableAutoConfiguration 与条件装配 ⭐⭐",
+                  "Starter 原理与自定义 Starter 实战",
+                  "配置体系：yml 优先级、@ConfigurationProperties、Profile",
+                  "Actuator 健康检查与指标暴露",
+                  "SpringBoot 启动流程八步与内嵌容器 ⭐",
+                ],
+              },
+              {
+                t: "3. Web 与 ORM",
+                p: [
+                  "MVC 请求处理流程：DispatcherServlet 全链路 ⭐",
+                  "参数校验、统一异常处理、统一返回体设计 ⭐",
+                  "MyBatis：#{} vs ${}、缓存、插件原理 ⭐",
+                  "MyBatis-Plus：条件构造器、分页、乐观锁插件",
+                  "RESTful 规范、接口版本、OpenAPI 文档",
+                ],
+              },
+              {
+                t: "4. 安全与工程化",
+                p: [
+                  "Session vs JWT、RBAC、OAuth2.0 授权码模式 ⭐",
+                  "Spring Security 过滤器链 / Sa-Token（选一深入）",
+                  "接口幂等设计（token/唯一索引/分布式锁）、防重放 ⭐",
+                  "TraceId 全链路打点与日志规范",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m04",
+            stage: "s1",
+            no: "M04",
+            title: "数据库与中间件",
+            weeks: "4 周",
+            weight: 5,
+            brief:
+              "后端面试占比最高的一块：MySQL 索引与 MVCC、Redis 缓存三兄弟与分布式锁、Kafka 三大问题、ES 与向量存储概览。",
+            sections: [
+              {
+                t: "1. MySQL（重中之重）",
+                p: [
+                  "SQL 执行流程、redo/undo/binlog 与两阶段提交 ⭐⭐",
+                  "B+ 树原理、聚簇/二级索引、回表、覆盖索引、索引下推 ⭐⭐",
+                  "事务 ACID 实现、隔离级别、MVCC（ReadView+版本链）⭐⭐",
+                  "行锁/间隙锁/临键锁、幻读解决、死锁排查 ⭐",
+                  "explain 分析、慢查询、索引失效场景 ⭐⭐",
+                  "主从复制原理、读写分离、主从延迟应对 ⭐",
+                  "分库分表：ShardingSphere、雪花 ID、扩容迁移 ⭐",
+                  "大表优化：冷热分离、归档、深分页 ⭐",
+                  "连接池：HikariCP 调优、Druid 监控、泄漏排查 ⭐",
+                ],
+              },
+              {
+                t: "2. Redis（重中之重）",
+                p: [
+                  "底层数据结构：SDS/ziplist/listpack/skiplist ⭐",
+                  "核心场景：String/List/Hash/Set/ZSet/Bitmap/HyperLogLog ⭐",
+                  "持久化：RDB fork+COW、AOF、混合持久化 ⭐",
+                  "过期删除与八种内存淘汰策略 ⭐",
+                  "缓存穿透（布隆过滤器）/击穿/雪崩全套方案 ⭐⭐",
+                  "缓存一致性：删缓存/延迟双删/binlog 订阅 ⭐⭐",
+                  "分布式锁：SETNX+Lua、Redisson 看门狗、RedLock 争议 ⭐⭐",
+                  "主从/哨兵/Cluster 16384 槽、大 key 热 key 治理 ⭐",
+                ],
+              },
+              {
+                t: "3. 消息队列",
+                p: [
+                  "MQ 三大问题：丢失/重复/顺序的解决套路 ⭐⭐",
+                  "Kafka 架构、ISR、acks、消费者组与 Rebalance ⭐⭐",
+                  "Kafka 高性能：顺序写、零拷贝、批量压缩；幂等与事务 ⭐",
+                  "RocketMQ：延迟消息、事务消息、与 Kafka 对比 ⭐",
+                ],
+              },
+              {
+                t: "4. Elasticsearch",
+                p: [
+                  "倒排索引、IK 分词、与 MySQL 同步（Canal/Flink CDC）⭐",
+                  "DSL 与聚合、深分页三方案 ⭐",
+                ],
+              },
+              {
+                t: "5. MongoDB 与向量能力",
+                p: [
+                  "文档模型、索引、副本集（概念级）",
+                  "向量存储概览：Milvus/pgvector/ES 对比（深入在 M11）⭐",
+                ],
+              },
+              {
+                t: "6. OLAP 与新存储（了解级）",
+                p: ["ClickHouse/Doris 定位与 AI 数据分析场景；HBase 概念"],
+              },
+            ],
+          },
+          {
+            id: "m05",
+            stage: "s1",
+            no: "M05",
+            title: "分布式、微服务与云原生",
+            weeks: "3-4 周",
+            weight: 4,
+            brief:
+              "把单体变成系统：分布式理论与事务、Spring Cloud Alibaba 全家桶、限流熔断设计方法论、Docker/K8s 落地与可观测性。",
+            sections: [
+              {
+                t: "1. 分布式理论",
+                p: [
+                  "CAP/BASE、Raft 概念级理解（选主+日志复制）⭐",
+                  "分布式 ID：雪花/Leaf/号段对比 ⭐",
+                  "分布式事务：2PC/TCC/SAGA/本地消息表/Seata AT ⭐⭐",
+                  "分布式锁/限流/任务调度（XXL-JOB）概览",
+                ],
+              },
+              {
+                t: "2. Spring Cloud Alibaba",
+                p: [
+                  "Nacos：注册发现流程、AP/CP 切换 ⭐",
+                  "配置中心动态刷新（长轮询）原理 ⭐",
+                  "OpenFeign：动态代理原理、超时重试、负载均衡 ⭐",
+                  "Gateway：路由与过滤器链、全局鉴权 ⭐",
+                  "Sentinel：流控/熔断降级/热点参数 ⭐",
+                  "链路追踪：TraceId 透传、SkyWalking ⭐",
+                ],
+              },
+              {
+                t: "3. 高并发系统设计方法论",
+                p: [
+                  "容量估算：日活→峰值 QPS 推导 ⭐",
+                  "限流四算法：计数器/滑窗/漏桶/令牌桶 ⭐⭐",
+                  "高可用三板斧：熔断/降级/舱壁隔离 ⭐",
+                  "性能优化全景与秒杀系统完整设计 ⭐⭐",
+                  "经典设计题套路：短链/Feed 流/点赞/排行榜",
+                ],
+              },
+              {
+                t: "4. Docker",
+                p: [
+                  "镜像分层与 Dockerfile 最佳实践（多阶段构建）⭐",
+                  "网络模式、数据卷、docker-compose 编排",
+                  "容器资源限制与 JVM 容器感知",
+                ],
+              },
+              {
+                t: "5. Kubernetes",
+                p: [
+                  "架构组件与声明式 API 思想 ⭐",
+                  "核心对象：Pod/Deployment/Service/Ingress/ConfigMap ⭐",
+                  "滚动更新、探针、HPA 弹性伸缩 ⭐",
+                  "CI/CD：Jenkins/GitLab CI + Helm + ArgoCD ⭐",
+                  "服务网格与 Istio：Sidecar 模式（了解级）⭐",
+                ],
+              },
+              {
+                t: "6. 可观测性与 SRE 基础",
+                p: [
+                  "三支柱：Prometheus+Grafana / ELK / Tracing ⭐",
+                  "SLA/SLO/错误预算、告警分级、排查 SOP ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m06",
+            stage: "s1",
+            no: "M06",
+            title: "计算机基础（网络、操作系统与设计能力）",
+            weeks: "2-3 周（可穿插）",
+            weight: 4,
+            brief:
+              "八股地基 + 设计能力：TCP/HTTPS/epoll 必考；Linux 实操、设计模式落地、DDD 入门与白板设计题答题框架。",
+            sections: [
+              {
+                t: "1. 计算机网络",
+                p: [
+                  "分层模型与一个 HTTP 请求的完整旅程 ⭐",
+                  "TCP 三次握手/四次挥手、TIME_WAIT 排查、粘包 ⭐⭐",
+                  "TCP 可靠性：重传/滑动窗口/拥塞控制 ⭐",
+                  "HTTP 1.1/2/3 演进、多路复用、状态码 ⭐",
+                  "HTTPS：TLS 握手全流程、证书链 ⭐⭐",
+                  "Cookie/Session/Token/JWT、SSO 单点登录 ⭐",
+                  "DNS/CDN/反向代理、WebSocket ⭐",
+                ],
+              },
+              {
+                t: "2. 操作系统与 Linux",
+                p: [
+                  "进程线程、进程通信方式 ⭐",
+                  "虚拟内存、页表、缺页中断",
+                  "IO 多路复用：select/poll/epoll（Netty 地基）⭐⭐",
+                  "零拷贝：mmap/sendfile 与 Kafka ⭐",
+                  "死锁四条件、上下文切换成本",
+                  "Linux 实操命令矩阵：top/netstat/lsof/awk/jstack ⭐",
+                  "Socket 编程与协议设计（粘包/长度头）、systemd 与 Shell 运维 ⭐",
+                ],
+              },
+              {
+                t: "3. 设计原则与模式",
+                p: [
+                  "SOLID 五原则与反例 ⭐",
+                  "高频模式落地：单例/工厂/策略/模板/责任链/观察者/建造者/代理 ⭐⭐",
+                  "模式绑定框架源码实例讲（策略+工厂消除 if-else）",
+                  "DDD 入门：聚合根/领域服务/防腐层/四层架构 ⭐",
+                ],
+              },
+              {
+                t: "4. 系统设计方法论",
+                p: [
+                  "白板四步框架：澄清→估算→画图→权衡演进 ⭐⭐",
+                  "一致性话术与可用性数字（99.9x% 的含义）",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m07",
+            stage: "s2",
+            no: "M07",
+            title: "Python 语言与工程化",
+            weeks: "2-3 周",
+            weight: 4,
+            brief:
+              "AI 岗的另一个引擎：装饰器、asyncio 异步、FastAPI+SSE 是硬通货；用「Python vs Java」对比快速上手，直奔工程级。",
+            sections: [
+              {
+                t: "1. 语言核心",
+                p: [
+                  "动态类型与鸭子类型、可变默认参数陷阱 ⭐",
+                  "切片/推导式/解包、深浅拷贝 ⭐",
+                  "闭包与装饰器（带参、functools.wraps）⭐⭐",
+                  "生成器与 yield 惰性求值 ⭐",
+                  "魔法方法、property、dataclass、MRO ⭐",
+                  "typing 类型注解、mypy、Pydantic 建模 ⭐",
+                  "异常与上下文管理器（with/contextlib）⭐",
+                  "GIL：并发选型（线程/进程/协程）⭐⭐",
+                ],
+              },
+              {
+                t: "2. 异步编程 asyncio ⭐⭐⭐",
+                p: [
+                  "事件循环模型、与 epoll 的关系",
+                  "async/await、Task/gather、超时控制",
+                  "异步上下文管理器、httpx 异步客户端",
+                  "阻塞混入的坑、信号量限流、run_in_executor ⭐⭐",
+                  "虚拟线程 vs 协程 vs goroutine 对比（面试谈资）",
+                ],
+              },
+              {
+                t: "3. 工程化",
+                p: [
+                  "venv/uv/poetry、pyproject.toml 与锁文件",
+                  "ruff/mypy/pre-commit 质量三件套",
+                  "pytest：fixture/参数化/mock ⭐",
+                  "打包、CLI（typer/click）、logging 结构化日志",
+                ],
+              },
+              {
+                t: "4. FastAPI Web 框架 ⭐⭐⭐",
+                p: [
+                  "路由、Pydantic 请求校验与响应模型 ⭐",
+                  "依赖注入、中间件、后台任务",
+                  "SSE 流式接口与 WebSocket ⭐⭐（LLM 流式关键）",
+                  "SQLAlchemy 2.0 async、连接池",
+                  "部署：uvicorn/gunicorn worker、Docker 化、健康检查",
+                ],
+              },
+              {
+                t: "5. 数据处理（够用即可）",
+                p: [
+                  "NumPy：ndarray/广播/向量化",
+                  "pandas：DataFrame 清洗聚合（评测数据分析）",
+                  "Jupyter 与可视化入门",
+                ],
+              },
+              {
+                t: "6. 辅助技能（了解级）",
+                p: [
+                  "爬虫与数据获取：requests/Playwright（RAG 语料）",
+                  "调试：breakpoint/pdb/py-spy",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m08",
+            stage: "s2",
+            no: "M08",
+            title: "机器学习与深度学习基础",
+            weeks: "3-4 周",
+            weight: 3,
+            brief:
+              "应用工程师视角的 ML/DL：不推导证明，建立直觉。皇冠任务是「手写 mini-Transformer」——M09 的一切都建立在它上面。",
+            sections: [
+              {
+                t: "1. 数学与机器学习（够用原则）",
+                p: [
+                  "数学最小集：矩阵形状思维/梯度链式法则/最大似然（直觉级）",
+                  "ML 流程：过拟合欠拟合、正则化、交叉验证 ⭐",
+                  "经典算法直觉：逻辑回归/树集成/XGBoost/KMeans/PCA ⭐",
+                  "评估指标：F1/AUC/RMSE 与业务对齐 ⭐",
+                ],
+              },
+              {
+                t: "2. 深度学习核心",
+                p: [
+                  "MLP：前向/反向传播直觉 ⭐⭐",
+                  "激活函数、交叉熵与 softmax ⭐",
+                  "优化器：SGD→Adam/AdamW、学习率调度 ⭐",
+                  "BN vs LN（Transformer 为何用 LN）、Dropout ⭐",
+                  "CNN 速通：卷积/ResNet 残差思想 ⭐",
+                  "RNN→LSTM→为何被 Attention 取代 ⭐⭐",
+                  "Embedding：Word2Vec 思想与语义几何 ⭐",
+                ],
+              },
+              {
+                t: "3. Transformer 精通 ⭐⭐⭐",
+                p: [
+                  "整体架构：Token→Embedding+位置编码→N 层→LM Head",
+                  "Self-Attention 逐矩阵拆解、缩放因子 √d、因果掩码 ⭐⭐",
+                  "Multi-Head 动机、FFN 与知识存储、Pre/Post-Norm ⭐",
+                  "位置编码演进：正弦→相对→RoPE ⭐⭐",
+                  "三大流派：BERT/GPT/T5 与掩码差异 ⭐⭐",
+                  "注意力 O(n²) 瓶颈、FlashAttention/MQA/GQA 概念",
+                ],
+              },
+              {
+                t: "4. PyTorch 实操",
+                p: [
+                  "Tensor：创建/广播/设备/dtype",
+                  "autograd：backward、no_grad/inference_mode ⭐",
+                  "nn.Module 定义模型与 save/load",
+                  "DataLoader/Dataset 与 collate_fn",
+                  "完整训练循环：早停/AMP/梯度累积 ⭐",
+                  "HuggingFace Transformers：AutoModel/pipeline ⭐",
+                ],
+              },
+              {
+                t: "5. NLP 工程基础",
+                p: [
+                  "分词：BPE/WordPiece/SentencePiece 与 token 成本 ⭐",
+                  "BERT 时代经典任务微调范式概览",
+                  "语义检索：双塔 vs 交叉编码器（M11 地基）⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m09",
+            stage: "s3",
+            no: "M09",
+            title: "大模型（LLM）核心原理与微调",
+            weeks: "3-4 周",
+            weight: 5,
+            brief:
+              "从训练全流程到 LoRA 微调、vLLM 部署优化。显存估算与 KV Cache 是「应用工程师」与「调包侠」的分水岭。",
+            sections: [
+              {
+                t: "1. LLM 训练全流程",
+                p: [
+                  "预训练：数据/token/算力、Scaling Law 直觉 ⭐",
+                  "SFT 指令微调：数据构造、Chat Template、灾难性遗忘 ⭐⭐",
+                  "对齐：RLHF/PPO、DPO、GRPO 概念 ⭐⭐",
+                  "推理模型：o1/R1 长思维链 RL、测试时算力 ⭐",
+                  "MoE 架构：专家路由、激活参数 vs 总参数 ⭐",
+                ],
+              },
+              {
+                t: "2. 参数高效微调 PEFT ⭐⭐⭐",
+                p: [
+                  "全参 vs PEFT 成本账：显存估算方法 ⭐",
+                  "LoRA 原理：低秩分解、r/alpha/target_modules ⭐⭐",
+                  "QLoRA：NF4 双重量化——消费级卡微调 7B ⭐",
+                  "Adapter/Prefix/P-Tuning v2 对比（概念级）",
+                  "实操：LLaMA-Factory 微调 Qwen 小模型全流程 ⭐⭐",
+                  "微调 vs RAG vs Prompt 选型框架 ⭐⭐",
+                ],
+              },
+              {
+                t: "3. 推理优化与部署 ⭐⭐⭐",
+                p: [
+                  "Prefill vs Decode：算力/带宽瓶颈、TTFT/TPOT ⭐",
+                  "KV Cache 原理与显存计算 ⭐⭐",
+                  "MQA/GQA、PagedAttention、Prefix Caching ⭐⭐",
+                  "vLLM 实操：OpenAI 兼容服务、continuous batching、压测 ⭐⭐",
+                  "量化：GPTQ/AWQ/GGUF/FP8 权衡 ⭐",
+                  "Ollama/llama.cpp/LM Studio 定位、模型格式",
+                  "投机解码、FlashAttention、TP/PP/EP（概念级）",
+                ],
+              },
+              {
+                t: "4. 主流模型生态与选型 ⭐",
+                p: [
+                  "开源系谱：Qwen/DeepSeek/Llama/GLM/Mistral 与闭源 API",
+                  "选型维度：参数/上下文/许可/工具调用/成本 ⭐⭐",
+                  "榜单与评测陷阱：为什么自建评测才可靠 ⭐",
+                ],
+              },
+              {
+                t: "5. Tokenizer 与 Embedding 模型",
+                p: [
+                  "BPE 训练流程、token 与成本/延迟的关系",
+                  "Embedding 选型：BGE/GTE、bge-m3 多语言 ⭐",
+                  "Reranker：交叉编码器为什么更准 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m10",
+            stage: "s3",
+            no: "M10",
+            title: "LLM 应用开发与 Prompt 工程",
+            weeks: "2-3 周",
+            weight: 5,
+            brief:
+              "把模型能力工程化：提示词设计方法论、多模型 API 网关、Function Calling、结构化输出、流式全链路与上下文管理。",
+            sections: [
+              {
+                t: "1. Prompt 工程 ⭐⭐",
+                p: [
+                  "提示词结构学：角色/任务/约束/格式/示例、XML 标签组织",
+                  "Few-shot：示例选择与动态 few-shot",
+                  "CoT 与 Self-Consistency、何时有用 ⭐",
+                  "防 Prompt 注入与幻觉抑制（引用+允许说不知道）⭐⭐",
+                  "提示词版本管理与 A/B 测试 ⭐",
+                ],
+              },
+              {
+                t: "2. LLM API 编程 ⭐⭐⭐",
+                p: [
+                  "OpenAI 风格 API：messages/role/采样参数全解",
+                  "多 provider 接入：GLM/通义/DeepSeek 与兼容层、模型路由 ⭐",
+                  "SDK 工程实践：重试/退避/429 处理/连接池 ⭐",
+                  "流式输出全链路：SSE→EventSource→打字机→abort ⭐⭐",
+                  "usage 统计与成本核算 ⭐",
+                ],
+              },
+              {
+                t: "3. Function Calling 与结构化输出 ⭐⭐⭐",
+                p: [
+                  "工具定义 JSON Schema、tools 消息流转 ⭐⭐",
+                  "多工具与并行调用、失败重试兜底 ⭐",
+                  "JSON Mode/Structured Outputs、Pydantic+Instructor ⭐⭐",
+                  "工具设计最佳实践：对 LLM 友好的参数与返回 ⭐",
+                ],
+              },
+              {
+                t: "4. 应用架构模式 ⭐⭐",
+                p: [
+                  "多轮对话：历史裁剪、滚动摘要、状态机 ⭐",
+                  "上下文工程：System Prompt 分层与预算分配 ⭐",
+                  "精确缓存与语义缓存及其风险 ⭐",
+                  "模型分级路由：成本-质量平衡 ⭐",
+                  "异步编排：并发请求、超时降级 ⭐",
+                ],
+              },
+              {
+                t: "5. 多模态 API（实战级）",
+                p: [
+                  "视觉理解：图片问答/OCR/表格识别",
+                  "语音 ASR/TTS 概览（Whisper）、文生图接入",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m11",
+            stage: "s3",
+            no: "M11",
+            title: "RAG 检索增强系统",
+            weeks: "3 周",
+            weight: 5,
+            brief:
+              "AI 应用岗简历必备项目核心：解析-切分-检索-重排-生成全链路，加「评估驱动迭代」方法论——面试区分度最高的模块。",
+            sections: [
+              {
+                t: "1. RAG 原理与总体架构",
+                p: [
+                  "为什么 RAG：时效/私有知识/溯源/成本对比微调 ⭐⭐",
+                  "Naive→Advanced→Modular/Agentic RAG 演进、离线在线链路图 ⭐",
+                ],
+              },
+              {
+                t: "2. 文档处理与切分 ⭐⭐",
+                p: [
+                  "解析：PDF/Word/HTML、表格图片、MinerU/OCR 场景",
+                  "切分策略：固定/递归/语义/结构感知 ⭐⭐",
+                  "chunk 大小权衡与 overlap 代价 ⭐",
+                  "元数据设计与父子块（小块检索大块生成）⭐",
+                ],
+              },
+              {
+                t: "3. Embedding 与向量检索",
+                p: [
+                  "Embedding 选型：维度/长度/多语言、归一化与度量 ⭐",
+                  "向量库对比：Milvus/Qdrant/Chroma/FAISS/pgvector ⭐⭐",
+                  "HNSW/IVF/PQ 原理概念、召回-速度权衡 ⭐",
+                  "混合检索：BM25+向量 RRF 融合、适用判断 ⭐⭐",
+                  "标量过滤与权限过滤的正确姿势 ⭐",
+                ],
+              },
+              {
+                t: "4. 检索优化进阶 ⭐⭐",
+                p: [
+                  "Query 改写：指代消解/HyDE/多查询/Step-back",
+                  "Rerank 精排：Cross-Encoder 两阶段架构 ⭐⭐",
+                  "上下文压缩与 lost in the middle 排序策略 ⭐",
+                  "GraphRAG：知识图谱+社区摘要、成本考量 ⭐",
+                  "Agentic RAG：让 Agent 决定检索策略 ⭐",
+                ],
+              },
+              {
+                t: "5. 评估与迭代 ⭐⭐⭐",
+                p: [
+                  "RAGAS 四指标：忠实度/相关性/上下文精度/召回 ⭐⭐",
+                  "评测集建设与 LLM-as-Judge 用法与偏差",
+                  "badcase 归因：检索问题 vs 生成问题 ⭐⭐",
+                  "迭代闭环：改动→复测→对比报告 ⭐",
+                ],
+              },
+              {
+                t: "6. 生成侧与产品化",
+                p: [
+                  "引用溯源与拒答兜底策略 ⭐",
+                  "流式回答与首 token 优化、多轮检索触发策略 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m12",
+            stage: "s4",
+            no: "M12",
+            title: "Agent 智能体开发（旗舰）",
+            weeks: "4 周",
+            weight: 5,
+            brief:
+              "岗位核心卖点：Agent 范式与记忆、MCP 协议、LangGraph 实战、AutoGen/CrewAI 多智能体、Java 系 Spring AI/LangChain4j 与工程化治理。",
+            sections: [
+              {
+                t: "1. Agent 原理与设计范式 ⭐⭐⭐",
+                p: [
+                  "Agent=LLM+规划+记忆+工具、自主性光谱（工作流→自主）⭐⭐",
+                  "ReAct：思考-行动-观察循环、与 Function Calling 关系 ⭐⭐",
+                  "Plan-and-Execute、Reflection/Self-Critique 范式 ⭐⭐",
+                  "Anthropic 组合思想：chaining/routing/orchestrator-workers ⭐⭐",
+                  "Human-in-the-loop 审批、停止条件设计 ⭐",
+                ],
+              },
+              {
+                t: "2. 记忆系统 ⭐⭐",
+                p: [
+                  "短期记忆：窗口管理、滚动摘要、LangGraph 显式状态 ⭐",
+                  "长期记忆：向量库（mem0 思路）、写入与遗忘策略 ⭐",
+                  "多会话个性化：用户画像与事实抽取",
+                ],
+              },
+              {
+                t: "3. 工具生态与协议（重中之重）⭐⭐⭐",
+                p: [
+                  "MCP：解决 M×N 问题、Host/Client/Server、tools/resources/prompts ⭐⭐",
+                  "MCP 传输层：stdio/SSE/streamable HTTP、能力协商 ⭐",
+                  "MCP 实战：Python SDK 写 Server 并消费 ⭐⭐",
+                  "MCP Java SDK + Spring AI 集成（差异化亮点）⭐",
+                  "A2A 协议概念与 MCP 分工 ⭐",
+                  "OpenAI Agents SDK、Computer Use/Browser Use ⭐",
+                ],
+              },
+              {
+                t: "4. 框架实战 ⭐⭐⭐",
+                p: [
+                  "LangChain 核心抽象与 LCEL、何时不该用",
+                  "LangGraph：StateGraph/条件路由/checkpointer/interrupt ⭐⭐",
+                  "LangGraph 实战：手写 ReAct→对照 prebuilt→自定义工作流 ⭐⭐",
+                  "LlamaIndex：索引与 Query Engine",
+                  "多智能体框架：AutoGen/CrewAI/MetaGPT 对比 ⭐",
+                  "低代码平台视角：Dify/Coze/n8n 能力边界 ⭐",
+                ],
+              },
+              {
+                t: "5. Java 系 Agent 生态（差异化护城河）⭐⭐",
+                p: [
+                  "Spring AI：ChatClient/Advisor/@Tool/ChatMemory/RAG 支持 ⭐⭐",
+                  "LangChain4j：AiServices/Tools/RAG 组件与对比",
+                  "混合架构：Java 微服务底盘 + Python 编排层分工（P4 灵魂）⭐⭐",
+                ],
+              },
+              {
+                t: "6. Agent 工程化与可靠性 ⭐⭐",
+                p: [
+                  "失败处理：重试/校验/最大步数/死循环防护 ⭐",
+                  "安全：工具白名单、注入防护、沙箱、费用熔断 ⭐⭐",
+                  "可观测：全链路 trace 与 LangSmith/Langfuse ⭐",
+                  "评估：轨迹评估与终态评估、自建任务集 ⭐",
+                  "性能：并行工具调用、流式中间态、模型分级 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m13",
+            stage: "s4",
+            no: "M13",
+            title: "AI 工程化与 LLMOps",
+            weeks: "2 周",
+            weight: 4,
+            brief:
+              "把 Demo 变成生产系统：vLLM 部署、Langfuse 观测、评测门禁与灰度发布、成本优化与安全合规——大厂看重的工程成熟度。",
+            sections: [
+              {
+                t: "1. 模型部署与推理服务",
+                p: [
+                  "vLLM 生产化：多卡并行、压测、资源估算 ⭐",
+                  "推理网关设计：排队/优先级/多模型热切换 ⭐",
+                  "GPU 基础与 K8s GPU 调度概念 ⭐",
+                ],
+              },
+              {
+                t: "2. LLMOps 平台",
+                p: [
+                  "Langfuse：trace/Prompt 版本管理/评估接入 ⭐⭐",
+                  "LangSmith 对比、开源自建 vs SaaS 选型",
+                  "Dify/Coze 企业化与私有化部署 ⭐",
+                  "CI/CD for AI：Prompt review 与评测门禁 ⭐⭐",
+                ],
+              },
+              {
+                t: "3. 质量保障体系 ⭐⭐⭐",
+                p: [
+                  "评估三件套：自动化指标/LLM-as-Judge/人工抽检",
+                  "回归测试集：badcase 沉淀、黄金集与灰度对比",
+                  "线上监控：效果漂移、badcase 聚类、反馈闭环 ⭐",
+                  "A/B 实验与三层灰度发布 ⭐",
+                ],
+              },
+              {
+                t: "4. 成本与性能优化 ⭐⭐",
+                p: [
+                  "Token 成本账：分级路由、批处理 API ⭐",
+                  "缓存：精确/语义/Prompt 前缀缓存 ⭐",
+                  "延迟优化：TTFT/流式体验/投机解码场景",
+                ],
+              },
+              {
+                t: "5. 安全与合规 ⭐",
+                p: [
+                  "数据安全：PII 脱敏、私有化与云 API 边界",
+                  "内容安全：输入输出审核、越狱防护与红队概念",
+                  "合规意识：生成内容标识、备案与版权风险 ⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m14",
+            stage: "s5",
+            no: "M14",
+            title: "实战项目组合（P1-P4）",
+            weeks: "贯穿全程 · 累计 8-10 周",
+            weight: 5,
+            brief:
+              "简历的最终弹药：P1 Java 单体 → P2 秒杀微服务 → P3 企业知识库 RAG → P4 多智能体平台（Java+Python 混合旗舰）。每个项目都要有量化指标。",
+            sections: [
+              {
+                t: "P1 · 在线教育平台后端（Java 单体基石）",
+                p: [
+                  "里程碑①：三大域 CRUD + JWT/RBAC 鉴权",
+                  "里程碑②：课程搜索 + 多级缓存",
+                  "里程碑③：订单最终一致性（本地消息表）+ 接口幂等",
+                  "里程碑④：JMeter 压测与优化报告 ⭐",
+                  "验收：≥1500 QPS、P99<200ms、覆盖率≥60%",
+                ],
+              },
+              {
+                t: "P2 · 仿外卖/秒杀微服务（分布式）",
+                p: [
+                  "里程碑①：四服务拆分 + 公共 Starter",
+                  "里程碑②：Redis+Lua 预扣库存 + MQ 异步落库",
+                  "里程碑③：订单分库分表 + 分布式 ID",
+                  "里程碑④：SkyWalking 链路 + 故障演练 ⭐",
+                  "验收：5000 QPS 零超卖、故障自愈<30s",
+                ],
+              },
+              {
+                t: "P3 · 企业知识库 RAG（LLM 应用）",
+                p: [
+                  "里程碑①：文档接入管线（解析→切分→入库）",
+                  "里程碑②：混合检索+重排+权限过滤",
+                  "里程碑③：流式回答+引用溯源+拒答兜底",
+                  "里程碑④：RAGAS 评估闭环与三轮迭代 ⭐",
+                  "验收：忠实度≥0.85、P95 首 token<2s",
+                ],
+              },
+              {
+                t: "P4 · 多智能体协作平台（Java+Python 旗舰）",
+                p: [
+                  "里程碑①：单 Agent 基座（ReAct+沙箱+重试）",
+                  "里程碑②：多 Agent 深度研究流水线（LangGraph）",
+                  "里程碑③：记忆系统（窗口压缩+pgvector 长期）",
+                  "里程碑④：MCP 双向互操作（Java Server↔Python Host）⭐",
+                  "里程碑⑤：安全治理（白名单/费用熔断/人审）",
+                  "验收：20 题集可用率≥80%、trace 100% 覆盖",
+                ],
+              },
+              {
+                t: "项目方法论（贯穿）",
+                p: [
+                  "Git 规范与 PR 自审 ⭐",
+                  "README+架构图+压测/评测报告三件套 ⭐",
+                  "每项目 2 篇技术博客与开源沉淀 ⭐",
+                  "STAR 简历转换与深挖防御三问预演 ⭐⭐",
+                ],
+              },
+            ],
+          },
+          {
+            id: "m15",
+            stage: "s5",
+            no: "M15",
+            title: "面试冲刺",
+            weeks: "4-6 周",
+            weight: 5,
+            brief:
+              "最后冲刺：算法刷题体系、Java/AI 双八股清单、系统设计白板训练、简历包装与模拟面试复盘闭环。",
+            sections: [
+              {
+                t: "1. 算法与手撕 ⭐⭐⭐",
+                p: [
+                  "刷题体系：LeetCode Hot 100 按类型推进",
+                  "每题四件套：思路/复杂度/边界/变体，25 分钟节奏 ⭐",
+                  "高频手撕：LRU/快排/生产者消费者/交替打印/单例 ⭐⭐",
+                  "面试表达：先确认→给思路→边写边说→自测用例 ⭐",
+                ],
+              },
+              {
+                t: "2. Java 八股查漏 ⭐⭐",
+                p: [
+                  "高频 Top30：HashMap/线程池/AQS/GC/事务/MVCC/缓存/消息/TCP ⭐⭐",
+                  "答题模板：定义→原理→场景对比→踩坑（60-90 秒版）⭐",
+                ],
+              },
+              {
+                t: "3. AI 八股（本岗位主战场）⭐⭐⭐",
+                p: [
+                  "原理题：Transformer 手推/KV Cache/LoRA/量化/MoE/RLHF ⭐⭐",
+                  "应用题：RAG 优化故事/评估体系/注入防护/上下文管理 ⭐⭐",
+                  "Agent 题：范式选型/MCP/多 Agent 治理/成本延迟优化 ⭐⭐",
+                ],
+              },
+              {
+                t: "4. 系统设计白板 ⭐⭐⭐",
+                p: [
+                  "传统题：秒杀/短链/Feed 流/排行榜",
+                  "AI 题：知识库问答/Agent 平台/推理网关/评测平台 ⭐⭐",
+                  "四步框架计时演练：澄清→估算→画图→权衡 ⭐",
+                ],
+              },
+              {
+                t: "5. 简历与项目包装 ⭐⭐⭐",
+                p: [
+                  "技能分层（Java 工程/AI 工程/Agent）与项目四行法 ⭐",
+                  "每个数字能回答「怎么测的」⭐⭐",
+                  "深挖防御：每项目 5 个追问的预备答案 ⭐⭐",
+                ],
+              },
+              {
+                t: "6. 求职流程实战",
+                p: [
+                  "内推渠道与投递节奏、秋招/社招窗口",
+                  "三轮模拟面试：一面/二面/三面各至少一次 ⭐",
+                  "复盘表回写各模块交接区，形成「面试→复学」闭环 ⭐",
+                  "HR 面与谈薪基本盘",
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      // 每个模块对应的笔记入口（相对路径，浏览器可直接打开）
+
+/* ============ 状态与持久化 ============ */
+      const LS_KEY = "aiRoadmapStateV1";
+      let state = { checks: {}, notes: {}, handoverLog: "", updatedAt: null };
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(LS_KEY);
+          if (raw) {
+            const p = JSON.parse(raw);
+            state.checks = p.checks || {};
+            state.notes = p.notes || {};
+            state.handoverLog = p.handoverLog || "";
+          }
+        } catch (e) {
+          console.warn("读取本地进度失败", e);
+        }
+        const logEl = document.getElementById("handover-log");
+        if (logEl) logEl.value = state.handoverLog || "";
+      }
+      function saveState() {
+        state.updatedAt = new Date().toISOString();
+        const logEl = document.getElementById("handover-log");
+        if (logEl) state.handoverLog = logEl.value;
+        try {
+          localStorage.setItem(LS_KEY, JSON.stringify(state));
+        } catch (e) {
+          alert("保存失败：" + e.message);
+        }
+        scheduleCloudSync();
+      }
+      function isChecked(mid, si, pi) {
+        return !!(
+          state.checks[mid] && state.checks[mid].includes(si + ":" + pi)
+        );
+      }
+      function toggleCheck(mid, si, pi, on) {
+        state.checks[mid] = state.checks[mid] || [];
+        const k = si + ":" + pi,
+          arr = state.checks[mid],
+          i = arr.indexOf(k);
+        if (on && i < 0) arr.push(k);
+        if (!on && i >= 0) arr.splice(i, 1);
+        saveState();
+        refreshProgress(mid);
+      }
+
+      /* ============ 进度计算 ============ */
+      function modStats(m) {
+        let total = 0,
+          checked = 0;
+        m.sections.forEach((s, si) =>
+          s.p.forEach((p, pi) => {
+            total++;
+            if (isChecked(m.id, si, pi)) checked++;
+          }),
+        );
+        return {
+          total,
+          checked,
+          pct: total ? Math.round((checked / total) * 100) : 0,
+        };
+      }
+      function allStats() {
+        let total = 0,
+          checked = 0,
+          doneMods = 0;
+        ROADMAP.modules.forEach((m) => {
+          const s = modStats(m);
+          total += s.total;
+          checked += s.checked;
+          if (s.total && s.checked === s.total) doneMods++;
+        });
+        return {
+          total,
+          checked,
+          doneMods,
+          pct: total ? Math.round((checked / total) * 100) : 0,
+        };
+      }
+      function stageStats(stageId) {
+        let total = 0,
+          checked = 0;
+        ROADMAP.modules
+          .filter((m) => m.stage === stageId)
+          .forEach((m) => {
+            const s = modStats(m);
+            total += s.total;
+            checked += s.checked;
+          });
+        return {
+          total,
+          checked,
+          pct: total ? Math.round((checked / total) * 100) : 0,
+        };
+      }
+
+      /* ============ 渲染 ============ */
+      function esc(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function renderNav() {
+        const box = document.getElementById("nav-container");
+        let html = "";
+        ROADMAP.stages.forEach((st) => {
+          const ss = stageStats(st.id);
+          html += `<div class="nav-stage">${esc(st.name)}</div>`;
+          ROADMAP.modules
+            .filter((m) => m.stage === st.id)
+            .forEach((m) => {
+              const s = modStats(m);
+              html += `<div class="nav-mod ${s.pct === 100 ? "done" : ""}" id="nav-${m.id}" onclick="jumpTo('${m.id}')">
+        <span class="no">${esc(m.no)}</span><span class="nm" title="${esc(m.title)}">${esc(m.title)}</span><span class="pc">${s.pct}%</span></div>`;
+            });
+        });
+        box.innerHTML = html;
+      }
+
+      function renderModuleNotes(mid) {
+        const notes =
+          (typeof MODULE_NOTES !== "undefined" && MODULE_NOTES[mid]) || [];
+        if (!notes.length) return "";
+        return `<div class="mod-notes">📚 配套笔记：${notes.map((n) => `<a href="${n.href}" target="_blank">${esc(n.label)}</a>`).join("")}</div>`;
+      }
+
+      function renderModules() {
+        const box = document.getElementById("modules-container");
+        let html = "";
+        ROADMAP.stages.forEach((st) => {
+          const ss = stageStats(st.id);
+          html += `<div class="stage-head" id="stage-${st.id}"><h2>${esc(st.name)}</h2>
+      <span class="meta">${esc(st.period)} · ${esc(st.goal)}</span>
+      <span class="spct" id="stage-pct-${st.id}">阶段进度 ${ss.pct}%（${ss.checked}/${ss.total}）</span></div>`;
+          ROADMAP.modules
+            .filter((m) => m.stage === st.id)
+            .forEach((m) => {
+              const s = modStats(m);
+              html += `<article class="mod-card open" id="mod-${m.id}" data-mod="${m.id}">
+        <div class="mod-head" onclick="toggleCard('${m.id}')">
+          <span class="badge">${esc(m.no)}</span>
+          <h3>${esc(m.title)}</h3>
+          <div class="tags"><span>⏱ ${esc(m.weeks)}</span><span class="stars" title="面试权重 ${m.weight}/5">${"★".repeat(m.weight)}${"☆".repeat(5 - m.weight)}</span></div>
+          <span class="mod-pct ${s.pct === 100 ? "done" : ""}" id="pct-${m.id}">${s.pct}%</span>
+          <span class="caret">▶</span>
+        </div>
+        <div class="mod-bar"><i id="bar-${m.id}" style="width:${s.pct}%"></i></div>
+        <div class="mod-body">
+          <div class="mod-brief">${esc(m.brief)}</div>${renderModuleNotes(m.id)}`;
+              m.sections.forEach((sec, si) => {
+                html += `<div class="sec"><h4>${esc(sec.t)}</h4>`;
+                sec.p.forEach((p, pi) => {
+                  html += `<label class="pt"><input type="checkbox" data-mod="${m.id}" data-si="${si}" data-pi="${pi}" ${isChecked(m.id, si, pi) ? "checked" : ""} onchange="toggleCheck('${m.id}',${si},${pi},this.checked)"><span>${esc(p)}</span></label>`;
+                });
+                html += `</div>`;
+              });
+              html += `<div class="note-area"><label>📝 本模块备注 / 卡点（随进度保存，并写入 AI 快照）</label>
+        <textarea data-note="${m.id}" placeholder="记录：学到哪了？哪里卡住？AI 给了什么结论？" oninput="saveNote('${m.id}',this.value)">${esc(state.notes[m.id] || "")}</textarea></div>
+        </div></article>`;
+            });
+        });
+        box.innerHTML = html;
+        const logEl = document.getElementById("handover-log");
+        logEl.value = state.handoverLog || "";
+      }
+
+      function toggleCard(id) {
+        document.getElementById("mod-" + id).classList.toggle("open");
+      }
+      function expandAll(open) {
+        document
+          .querySelectorAll(".mod-card")
+          .forEach((c) => c.classList.toggle("open", open));
+      }
+      function jumpTo(id) {
+        const el = document.getElementById("mod-" + id);
+        if (el) {
+          el.classList.add("open");
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+      function saveNote(mid, val) {
+        state.notes[mid] = val;
+        saveState();
+      }
+
+      /* ============ 进度刷新（局部更新，不重绘 DOM） ============ */
+      function refreshProgress(mid) {
+        const m = ROADMAP.modules.find((x) => x.id === mid),
+          s = modStats(m);
+        const pctEl = document.getElementById("pct-" + mid),
+          barEl = document.getElementById("bar-" + mid),
+          navEl = document.getElementById("nav-" + mid);
+        if (pctEl) {
+          pctEl.textContent = s.pct + "%";
+          pctEl.classList.toggle("done", s.pct === 100);
+        }
+        if (barEl) {
+          barEl.style.width = s.pct + "%";
+          barEl.classList.toggle("done", s.pct === 100);
+        }
+        if (navEl) {
+          navEl.querySelector(".pc").textContent = s.pct + "%";
+          navEl.classList.toggle("done", s.pct === 100);
+        }
+        const st = ROADMAP.stages.find((x) => x.id === m.stage),
+          ss = stageStats(m.stage);
+        const sp = document.getElementById("stage-pct-" + m.stage);
+        if (sp)
+          sp.textContent = `阶段进度 ${ss.pct}%（${ss.checked}/${ss.total}）`;
+        refreshOverall();
+      }
+      function refreshOverall() {
+        const a = allStats(),
+          C = 2 * Math.PI * 46;
+        document.getElementById("overall-pct").textContent = a.pct + "%";
+        document.getElementById("ring-fg").setAttribute("stroke-dasharray", C);
+        document
+          .getElementById("ring-fg")
+          .setAttribute("stroke-dashoffset", C * (1 - a.pct / 100));
+        document.getElementById("stat-points").textContent =
+          a.checked + "/" + a.total;
+        document.getElementById("stat-modules").textContent =
+          a.doneMods + "/" + ROADMAP.modules.length;
+      }
+
+      /* ============ 搜索 ============ */
+      function renderSearch(q) {
+        q = (q || "").trim().toLowerCase();
+        ROADMAP.modules.forEach((m) => {
+          const card = document.getElementById("mod-" + m.id),
+            nav = document.getElementById("nav-" + m.id);
+          if (!card) return;
+          if (!q) {
+            card.classList.remove("hidden");
+            nav.classList.remove("hidden");
+            return;
+          }
+          let hit = (m.no + " " + m.title + " " + m.brief)
+            .toLowerCase()
+            .includes(q);
+          if (!hit)
+            hit = m.sections.some((s) =>
+              (s.t + " " + s.p.join(" ")).toLowerCase().includes(q),
+            );
+          card.classList.toggle("hidden", !hit);
+          nav.classList.toggle("hidden", !hit);
+          if (hit) {
+            card.classList.add("open");
+            document
+              .getElementById("stage-" + m.stage)
+              .classList.remove("hidden");
+          } else
+            document.getElementById("stage-" + m.stage).classList.add("hidden");
+        });
+        if (!q)
+          document
+            .querySelectorAll(".stage-head")
+            .forEach((e) => e.classList.remove("hidden"));
+        else
+          ROADMAP.stages.forEach((st) => {
+            const any = ROADMAP.modules.some(
+              (m) =>
+                m.stage === st.id &&
+                !document
+                  .getElementById("mod-" + m.id)
+                  .classList.contains("hidden"),
+            );
+            document
+              .getElementById("stage-" + st.id)
+              .classList.toggle("hidden", !any);
+          });
+      }
+
+      /* ============ AI 交接区：快照 / 记录 / JSON 导入导出 ============ */
+      function toast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(t._h);
+        t._h = setTimeout(() => t.classList.remove("show"), 2200);
+      }
+
+      function buildSnapshot() {
+        const a = allStats(),
+          now = new Date().toLocaleString("zh-CN");
+        let md = `# 学习进度快照（AI 交接区导出）\n- 导出时间：${now}\n- 路线版本：${ROADMAP.version}（${ROADMAP.updated}）\n- 总进度：**${a.pct}%**（${a.checked}/${a.total} 小点，完成模块 ${a.doneMods}/${ROADMAP.modules.length}）\n\n## 模块进度\n| 模块 | 进度 | 已学/总数 | 备注/卡点 |\n|---|---|---|---|\n`;
+        ROADMAP.modules.forEach((m) => {
+          const s = modStats(m);
+          md += `| ${m.no} ${m.title} | ${s.pct}% | ${s.checked}/${s.total} | ${(state.notes[m.id] || "").replace(/\n/g, " ")} |\n`;
+        });
+        md += `\n## 阶段进度\n`;
+        ROADMAP.stages.forEach((st) => {
+          const s = stageStats(st.id);
+          md += `- ${st.name}：${s.pct}%（${s.checked}/${s.total}）\n`;
+        });
+        md += `\n## AI 交接记录（上次会话 AI 留下的内容）\n${state.handoverLog || "（暂无）"}\n\n## 本次请求（学员手填）\n> 请把你的需求写在这里再发给 AI，例如：继续教 M11 的下一个知识小点。\n`;
+        document.getElementById("snapshot-text").value = md;
+        toast("快照已生成，点「复制快照」发给 AI");
+      }
+      function copyArea(id) {
+        const el = document.getElementById(id);
+        el.select();
+        el.setSelectionRange(0, el.value.length);
+        const done = () => toast("已复制到剪贴板");
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText(el.value)
+            .then(done)
+            .catch(() => {
+              document.execCommand("copy");
+              done();
+            });
+        } else {
+          document.execCommand("copy");
+          done();
+        }
+      }
+      function saveHandoverLog() {
+        saveState();
+        toast("交接记录已保存（并计入快照/JSON 导出）");
+      }
+      function exportJSON() {
+        saveState();
+        const payload = {
+          app: "ai-roadmap",
+          version: ROADMAP.version,
+          exportedAt: new Date().toISOString(),
+          checks: state.checks,
+          notes: state.notes,
+          handoverLog: state.handoverLog,
+        };
+        document.getElementById("json-text").value = JSON.stringify(
+          payload,
+          null,
+          1,
+        );
+        toast("JSON 已导出到下方文本框");
+      }
+      function importJSON() {
+        const txt = document.getElementById("json-text").value.trim();
+        if (!txt) {
+          toast("请先粘贴 JSON");
+          return;
+        }
+        let p;
+        try {
+          p = JSON.parse(txt);
+        } catch (e) {
+          toast("JSON 解析失败：" + e.message);
+          return;
+        }
+        if (!p || !p.checks) {
+          toast("格式不对：缺少 checks 字段");
+          return;
+        }
+        const validMods = new Set(ROADMAP.modules.map((m) => m.id));
+        const clean = {};
+        Object.keys(p.checks).forEach((mid) => {
+          if (!validMods.has(mid)) return;
+          const arr = Array.isArray(p.checks[mid]) ? p.checks[mid] : [];
+          const m = ROADMAP.modules.find((x) => x.id === mid);
+          clean[mid] = arr.filter((k) => {
+            const mt = /^(\d+):(\d+)$/.exec(k);
+            if (!mt) return false;
+            const si = +mt[1],
+              pi = +mt[2];
+            return m.sections[si] && m.sections[si].p[pi] !== undefined;
+          });
+        });
+        state.checks = clean;
+        if (Array.isArray(p.notes)) {
+          /* 兼容旧版 */
+        }
+        state.notes = {};
+        if (p.notes && typeof p.notes === "object") {
+          Object.keys(p.notes).forEach((k) => {
+            if (validMods.has(k)) state.notes[k] = String(p.notes[k]);
+          });
+        }
+        state.handoverLog =
+          typeof p.handoverLog === "string" ? p.handoverLog : "";
+        saveState();
+        renderNav();
+        renderModules();
+        refreshAllProgress();
+        const logEl = document.getElementById("handover-log");
+        logEl.value = state.handoverLog || "";
+        toast("导入成功，进度已恢复");
+      }
+      function resetAll() {
+        if (
+          !confirm(
+            "确定清空所有勾选、备注与交接记录？此操作不可恢复（建议先导出 JSON 备份）。",
+          )
+        )
+          return;
+        localStorage.removeItem(LS_KEY);
+        state = { checks: {}, notes: {}, handoverLog: "", updatedAt: null };
+        renderNav();
+        renderModules();
+        refreshAllProgress();
+        document.getElementById("handover-log").value = "";
+        pushProgress();
+        toast("已全部清空");
+      }
+      function refreshAllProgress() {
+        ROADMAP.modules.forEach((m) => refreshProgress(m.id));
+      }
+
+      /* ============ 云端同步 ============ */
+      let syncTimer = null;
+      let cloudGuest = false;
+
+      function enterGuestMode() {
+        cloudGuest = true;
+        const notice = document.getElementById("cloudNotice");
+        if (notice) notice.hidden = false;
+        setAuthState(false);
+      }
+
+      // 根据会话状态切换右上角按钮：游客=登录，已登录=退出登录
+      function setAuthState(loggedIn) {
+        const btn = document.getElementById("authBtn");
+        if (!btn) return;
+        btn.dataset.action = loggedIn ? "logout" : "login";
+        btn.textContent = loggedIn ? "退出登录" : "登录";
+      }
+
+      async function authAction() {
+        const btn = document.getElementById("authBtn");
+        if (btn && btn.dataset.action === "logout") {
+          try {
+            await fetch("/api/user/logout", { method: "POST" });
+          } catch (e) {
+            console.warn("退出登录失败", e);
+          }
+        }
+        location.href = "login.html";
+      }
+
+      async function fetchCloudProgress() {
+        try {
+          const response = await fetch("/api/progress");
+          if (response.status === 401) {
+            enterGuestMode();
+            return "guest";
+          }
+          const result = await response.json();
+          if (result.code === 401) {
+            enterGuestMode();
+            return "guest";
+          }
+          if (result.code !== 200) {
+            console.warn("读取云端进度失败", result.message);
+            return false;
+          }
+          return result.data || null;
+        } catch (e) {
+          console.warn("读取云端进度失败", e);
+          return false;
+        }
+      }
+
+      async function pushProgress() {
+        if (cloudGuest) return;
+        clearTimeout(syncTimer);
+        const logEl = document.getElementById("handover-log");
+        if (logEl) state.handoverLog = logEl.value;
+        state.updatedAt = new Date().toISOString();
+        try {
+          const response = await fetch("/api/progress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ data: JSON.stringify(state) }),
+          });
+          if (response.status === 401) {
+            enterGuestMode();
+            toast("登录状态已失效，进度仅保存在本机");
+            return;
+          }
+          const result = await response.json();
+          if (result.code === 401) {
+            enterGuestMode();
+            toast("登录状态已失效，进度仅保存在本机");
+            return;
+          }
+          if (result.code !== 200) {
+            console.warn("云端保存失败", result.message);
+            toast("云端保存失败：" + result.message);
+          }
+        } catch (e) {
+          console.warn("云端保存失败", e);
+        }
+      }
+
+      function scheduleCloudSync() {
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(pushProgress, 800);
+      }
+
+      async function initCloudProgress() {
+        const remote = await fetchCloudProgress();
+        if (remote === "guest" || remote === false) return;
+        setAuthState(true);
+        if (remote) {
+          try {
+            const p = JSON.parse(remote);
+            state.checks = p.checks || {};
+            state.notes = p.notes || {};
+            state.handoverLog =
+              typeof p.handoverLog === "string" ? p.handoverLog : "";
+            try {
+              localStorage.setItem(LS_KEY, JSON.stringify(state));
+            } catch (e) {
+              console.warn("本地缓存写入失败", e);
+            }
+            renderNav();
+            renderModules();
+            refreshAllProgress();
+            const logEl = document.getElementById("handover-log");
+            if (logEl) logEl.value = state.handoverLog || "";
+          } catch (e) {
+            console.warn("云端进度解析失败", e);
+          }
+        } else {
+          // 云端还没有记录：把本地已有进度上传一次
+          await pushProgress();
+        }
+      }
+
+      window.addEventListener("pageshow", (event) => {
+        if (event.persisted) location.reload();
+      });
+
+      /* ============ 启动 ============ */
+      loadState();
+      renderNav();
+      renderModules();
+      refreshAllProgress();
+      initCloudProgress();

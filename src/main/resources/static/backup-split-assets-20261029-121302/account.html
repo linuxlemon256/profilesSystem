@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>我的账户 · ProfilesSystem</title>
+    <style>
+      :root {
+        font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: #172554;
+        background: #eef3ff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #eef3ff, #f8fafc 58%, #f1edff);
+      }
+      .top {
+        height: 72px;
+        background: #0f1735;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 clamp(20px, 6vw, 88px);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-weight: 800;
+      }
+      .mark {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #9ca9ff, #62e4d5);
+        color: #111a3b;
+      }
+      .top a {
+        color: #cbd5f5;
+        text-decoration: none;
+        font-size: 13px;
+      }
+      .top a:hover {
+        color: #7eebdc;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: auto;
+        padding: 58px 24px;
+      }
+      .hero {
+        padding: 32px;
+        background: #0f1735;
+        color: #fff;
+        border-radius: 22px;
+        box-shadow: 0 16px 35px #18265b26;
+      }
+      .eyebrow {
+        margin: 0 0 10px;
+        color: #7eebdc;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: 38px;
+      }
+      .hero p {
+        margin: 12px 0 0;
+        color: #cbd5f5;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 20px;
+      }
+      .card {
+        padding: 23px;
+        background: #ffffffd9;
+        border: 1px solid #dce5f5;
+        border-radius: 17px;
+        box-shadow: 0 10px 25px #30458e10;
+      }
+      .card span {
+        color: #64748b;
+        font-size: 13px;
+      }
+      .card strong {
+        display: block;
+        margin-top: 10px;
+        color: #172554;
+        font-size: 18px;
+      }
+      .actions {
+        margin-top: 22px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .primary {
+        background: #4f46e5;
+        color: #fff;
+      }
+      .secondary {
+        background: #e0e7ff;
+        color: #4338ca;
+      }
+      @media (max-width: 680px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .hero h1 {
+          font-size: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">
+        <span class="mark">P</span><span>ProfilesSystem</span>
+      </div>
+      <a href="learnServer.html">返回专业选择</a>
+    </header>
+    <main class="wrap">
+      <section class="hero">
+        <p class="eyebrow">Personal account</p>
+        <h1 id="welcome">我的账户</h1>
+        <p>查看账户信息、申请状态和学习空间入口。</p>
+      </section>
+      <section class="grid">
+        <article class="card">
+          <span>账户名称</span><strong id="accountName">未登录</strong>
+        </article>
+        <article class="card">
+          <span>账户状态</span><strong>已登录</strong>
+        </article>
+        <article class="card">
+          <span>学习空间</span><strong>ProfilesSystem</strong>
+        </article>
+      </section>
+      <div class="actions">
+        <a class="btn primary" href="learnServer.html">选择专业方向</a
+        ><a class="btn secondary" href="index.html">访问个人主页</a
+        ><a class="btn secondary" href="login.html">退出登录</a>
+      </div>
+    </main>
+    <script>
+      const name = new URLSearchParams(location.search).get("name");
+      if (name) {
+        document.getElementById("accountName").textContent = name;
+        document.getElementById("welcome").textContent = "你好，" + name;
+      }
+    </script>
+  </body>
+</html>
