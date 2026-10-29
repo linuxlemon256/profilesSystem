@@ -217,6 +217,147 @@
         color: #8a96b5;
         font-size: 12px;
       }
+      .location {
+        position: relative;          /* 作为 .selectBox 的定位参照 */
+        display: inline-block;       /* 宽度随文字自适应 */
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: .5px;
+        color: #1f2333;
+        cursor: default;
+      }
+
+      /* ============ 下拉框（定位到 .location 文字的右侧，垂直居中） ============ */
+      .selectBox {
+        position: absolute;
+        top: calc(100% + 14px);        /* 在 h2 文字正下方 */
+        left: 0;
+        width: 280px;
+        /* 重置 h2 继承的字重、字号 */
+        font-weight: normal;
+        font-size: 15px;
+        letter-spacing: normal;
+      }
+
+      /* ============ 触发器 ============ */
+      .selectBox-trigger {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 16px;
+        font: inherit;
+        font-size: 15px;
+        color: #1f2333;
+        text-align: left;
+        background: #fff;
+        border: 1.5px solid #e6e8f0;
+        border-radius: 14px;
+        cursor: pointer;
+        box-shadow: 0 1px 2px rgba(20, 25, 60, .04);
+        transition: border-color .2s, box-shadow .2s;
+      }
+
+      .selectBox-trigger:hover { border-color: #c7cdf5; }
+
+      .selectBox-trigger:focus-visible,
+      .selectBox.is-open .selectBox-trigger {
+        outline: none;
+        border-color: #6c7bff;
+        box-shadow: 0 0 0 4px rgba(108, 123, 255, .16);
+      }
+
+      .selectBox-value.is-placeholder { color: #9aa1b8; }
+
+      .selectBox-arrow {
+        flex: none;
+        color: #8e95ad;
+        transition: transform .25s cubic-bezier(.2, .9, .3, 1.3), color .2s;
+      }
+
+      .selectBox.is-open .selectBox-arrow {
+        transform: rotate(180deg);
+        color: #6c7bff;
+      }
+
+      /* ============ 下拉面板（相对 .selectBox 定位） ============ */
+      .selectBox-menu {
+        position: absolute;
+        z-index: 20;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        margin: 0;
+        padding: 6px;
+        list-style: none;
+        background: #fff;
+        border: 1px solid #eceef6;
+        border-radius: 16px;
+        max-height: 264px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+        scrollbar-color: #d9ddf0 transparent;
+        box-shadow: 0 18px 40px -12px rgba(23, 28, 63, .28),
+        0 4px 12px rgba(23, 28, 63, .06);
+
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px) scale(.98);
+        transform-origin: top center;
+        transition: opacity .18s ease,
+        transform .18s cubic-bezier(.2, .9, .3, 1.15),
+        visibility .18s;
+      }
+
+      .selectBox.is-open .selectBox-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+      }
+
+      .selectBox-menu::-webkit-scrollbar { width: 8px; }
+      .selectBox-menu::-webkit-scrollbar-thumb {
+        background: #d9ddf0;
+        border: 2px solid #fff;
+        border-radius: 99px;
+      }
+      .selectBox-menu::-webkit-scrollbar-thumb:hover { background: #c3c9ea; }
+
+      /* ============ 选项 ============ */
+      .selectBox-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 14.5px;
+        color: #3b4157;
+        cursor: pointer;
+        user-select: none;
+        transition: background .15s, color .15s;
+      }
+
+      .selectBox-option.is-active {
+        background: #f0f2ff;
+        color: #4b57d6;
+      }
+
+      .selectBox-option[aria-selected="true"] {
+        background: #f5f6ff;
+        color: #4b57d6;
+        font-weight: 600;
+      }
+
+      .selectBox-option[aria-selected="true"]::after {
+        content: "✓";
+        font-size: 13px;
+        line-height: 1;
+        color: #6c7bff;
+      }
       @media (max-width: 820px) {
         .hero {
           align-items: flex-start;
@@ -269,7 +410,7 @@
         </div>
         <div class="grid">
           <article class="card">
-            <div class="icon">⌘</div>
+            <div class="icon">💻</div>
             <h3>计算机类专业</h3>
             <p>
               从 Java 基础、Spring 工程到大模型、RAG 和 Agent，系统掌握 AI
@@ -278,7 +419,7 @@
             <a href="learncomputer.html">进入专业学习 →</a>
           </article>
           <article class="card">
-            <div class="icon">⌘</div>
+            <div class="icon">⚙️</div>
             <h3>机械类与自动化类专业</h3>
             <p>
               围绕机械结构、电气、控制、软件。学习控制原理、传感器、工业网络与智能控制，面向自动化系统设计与实践。
@@ -295,28 +436,65 @@
           </article>
         </div>
       </section>
+      <br>
+      <br>
       <section>
         <div class="section-title">
-          <h2 class="location"><br>内部资源</h2>
+          <!-- ============ h2.location：下拉框在其右侧 ============ -->
+          <h2 class="location">内部资源
+            <div class="selectBox" id="majorResourceBox">
+              <button class="selectBox-trigger" type="button"
+                      aria-haspopup="listbox" aria-expanded="false">
+                <span class="selectBox-value">计算机类专业资源</span>
+                <svg class="selectBox-arrow" width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M5 7.5 10 12.5 15 7.5" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+
+              <ul class="selectBox-menu" role="listbox" aria-label="内部资源">
+                <li class="selectBox-option" role="option" data-value="computer"   aria-selected="true">计算机类专业资源</li>
+                <li class="selectBox-option" role="option" data-value="mechanical" aria-selected="false">机械类专业资源</li>
+              </ul>
+
+              <!-- 用隐藏域替代原生 select，保留 name / id 以便表单提交 -->
+              <input type="hidden" name="majorResource" id="majorResource" value="computer">
+            </div>
+          </h2>
           <span>选择你所需的资料</span>
         </div>
-        <div class="grid">
-          <article class="card">
-            <div class="icon">⌘</div>
-            <h3>本学习系统源代码</h3>
-            <p>
-              什么？本系统不久被看光了吗？变态！
-            </p>
-            <a href="linkResource.html?https://github.com/linuxlemon256/profilesSystem">获取资源 →</a>
-          </article>
-          <article class="card">
-            <div class="icon">✦</div>
-            <h3>暂未添加资源</h3>
-            <p>
-              没有东西，真的，真的。
-            </p>
-            <a href="resourceDemo.html">获取资源 →</a>
-          </article>
+        <br>
+        <br>
+        <br>
+        <div id="computerResource" hidden>
+          <div class="grid">
+            <article class="card">
+              <div class="icon">📘</div>
+              <h3>本学习系统源代码</h3>
+              <p>
+                什么？本系统不久被看光了吗？变态！
+              </p>
+              <a href="linkResource.html?https://github.com/linuxlemon256/profilesSystem">获取资源 →</a>
+            </article>
+            <article class="card">
+              <div class="icon">✦</div>
+              <h3>暂未添加资源</h3>
+              <p>
+                没有东西，真的，真的。
+              </p>
+              <a href="resourceDemo.html">获取资源 →</a>
+            </article>
+          </div>
+          <div id="mechanicalResource" hidden>
+            <article class="card">
+              <div class="icon">✦</div>
+              <h3>暂未添加资源</h3>
+              <p>
+                没有东西，真的，真的。
+              </p>
+              <a href="resourceDemo.html">获取资源 →</a>
+            </article>
+          </div>
         </div>
       </section>
       <p class="foot">ProfilesSystem · 个人学习与资料空间</p>
@@ -389,6 +567,8 @@
         });
       }
 
+      loadCurrentUser();
+
       document.querySelectorAll('.selectBox').forEach(initSelectBox);
 
       function initSelectBox(root) {
@@ -401,13 +581,11 @@
         let isOpen = false;
         let activeIndex = Math.max(0, options.findIndex(o => o.getAttribute('aria-selected') === 'true'));
 
-        /* --- 高亮某一项（仅用于鼠标悬停视觉反馈） --- */
         const setActive = (i) => {
           activeIndex = (i + options.length) % options.length;
           options.forEach((o, idx) => o.classList.toggle('is-active', idx === activeIndex));
         };
 
-        /* --- 打开 / 关闭 --- */
         const openMenu = () => {
           isOpen = true;
           root.classList.add('is-open');
@@ -422,7 +600,6 @@
           options.forEach(o => o.classList.remove('is-active'));
         };
 
-        /* --- 选择某项 --- */
         const choose = (i) => {
           options.forEach(o => o.setAttribute('aria-selected', 'false'));
           const el = options[i];
@@ -434,14 +611,12 @@
           activeIndex = i;
 
           closeMenu();
-          // 派发自定义事件，方便外部监听
           root.dispatchEvent(new CustomEvent('change', {
             detail: { value: el.dataset.value, label: el.textContent.trim() },
             bubbles: true
           }));
         };
 
-        /* --- 交互事件（仅鼠标） --- */
         trigger.addEventListener('click', () => (isOpen ? closeMenu() : openMenu()));
 
         menu.addEventListener('click', (e) => {
@@ -456,13 +631,19 @@
           if (i !== activeIndex) setActive(i);
         });
 
-        // 点击外部关闭
         document.addEventListener('click', (e) => {
           if (isOpen && !root.contains(e.target)) closeMenu();
         });
       }
+      let selectedResource = 'computer'; // 初始值，与默认选中项一致
 
-      loadCurrentUser();
+      const box = document.getElementById('majorResourceBox');
+
+      box.addEventListener('change', (e) => {
+        selectedResource = e.detail.value;        // 赋值
+        console.log('selectedResource =', selectedResource);
+      });
+      document.getElementById(selectedResource + "Resource").hidden = false;
 
     </script>
   </body>
