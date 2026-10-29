@@ -282,8 +282,7 @@
             ></textarea></label
           ><label for="applyContact"
             >联系方式
-            <span style="color: #8792ba; font-size: 12px"
-              >（邮箱）</span
+            <span style="color: #8792ba; font-size: 12px">（邮箱）</span
             ><input
               id="applyContact"
               name="contact"
@@ -315,7 +314,7 @@
         </div>
         <div class="links">
           <a href="login.html">已有账户？去登录</a
-          ><a href="index.html">返回首页</a>
+          ><a href="learnServer.html">返回首页</a>
         </div>
       </section>
     </main>
@@ -334,7 +333,7 @@
         const payload = {
           username: document.getElementById("applyName").value.trim(),
           reason: document.getElementById("applyReason").value.trim(),
-          email: document.getElementById("applyContact").value.trim()
+          email: document.getElementById("applyContact").value.trim(),
         };
 
         // 邮箱必填：先查空，再查格式，后端也会再校验一次
@@ -355,7 +354,7 @@
           const response = await fetch("/api/user/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
           });
 
           const result = await response.json();
