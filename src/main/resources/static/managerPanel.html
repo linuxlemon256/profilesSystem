@@ -286,6 +286,18 @@
         font-weight: 700;
         cursor: pointer;
       }
+      .edit-modal { position: fixed; inset: 0; z-index: 50; display: none; place-items: center; padding: 20px; background: #0f173566; backdrop-filter: blur(5px); }
+      .edit-modal.show { display: grid; }
+      .edit-card { width: min(500px, 100%); padding: 26px; border: 1px solid var(--line); border-radius: 18px; background: #fff; box-shadow: 0 24px 70px #18265b38; }
+      .edit-card h2 { margin: 0 0 18px; color: var(--ink); font-size: 21px; }
+      .edit-field { margin: 12px 0; }
+      .edit-field label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 12px; }
+      .edit-field input, .edit-field textarea, .edit-field select { width: 100%; padding: 10px 11px; border: 1px solid var(--line); border-radius: 9px; outline: none; color: var(--ink); background: #fff; font: inherit; }
+      .edit-field textarea { min-height: 70px; resize: vertical; }
+      .edit-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 18px; }
+      .edit-actions button { padding: 9px 13px; border: 0; border-radius: 9px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+      .edit-cancel { color: var(--muted); background: #f1f5f9; }
+      .edit-save { color: #fff; background: var(--primary); }
       .approve {
         background: #d1fae5;
         color: #047857;
@@ -427,6 +439,17 @@
       </section>
     </main>
     <div class="toast" id="toast"></div>
+    <div class="edit-modal" id="editModal" aria-hidden="true">
+      <form class="edit-card" id="editForm">
+        <h2>编辑用户信息 <span id="editUsername"></span></h2>
+        <div class="edit-field"><label for="editEmail">邮箱</label><input id="editEmail" type="email" /></div>
+        <div class="edit-field"><label for="editReason">申请原因</label><textarea id="editReason"></textarea></div>
+        <div class="edit-field"><label for="editLevel">用户等级</label><select id="editLevel"><option value="0">0 · 游客</option><option value="1">1 · 关联人员</option><option value="2">2 · 内部人员</option></select></div>
+        <div class="edit-field"><label for="editCode">邀请码</label><input id="editCode" type="text" /></div>
+        <div class="edit-field"><label for="editPassword">新密码（留空表示不修改）</label><input id="editPassword" type="password" minlength="6" /></div>
+        <div class="edit-actions"><button class="edit-cancel" id="editCancel" type="button">取消</button><button class="edit-save" type="submit">保存修改</button></div>
+      </form>
+    </div>
     <script>
       const labels = {
         pending: "待审核",
@@ -438,6 +461,9 @@
 
       const rows = document.getElementById("rows");
       const recoveryRows = document.getElementById("recoveryRows");
+      const editModal = document.getElementById("editModal");
+      const editForm = document.getElementById("editForm");
+      let editingUsername = "";
 
       // 后端统一返回 Result：code 为 200 时取 data，否则抛出 message
       async function request(url, options) {
@@ -478,6 +504,7 @@
           contact: user.email || "未填写",
           time: formatTime(user.createdAt),
           code: user.code || "",
+          level: user.level ?? 0,
           status: status,
         };
       }
@@ -554,10 +581,9 @@
                           (x.name || "").slice(0, 1).toUpperCase(),
                   );
                   const name = escapeHtml(x.name);
-                  const actions =
-                          x.status === "pending"
-                                  ? `<button class="approve" data-action="approve" data-name="${name}">通过</button><button class="reject" data-action="reject" data-name="${name}">拒绝</button>`
-                                  : "";
+                  const actions = (x.status === "pending"
+                          ? `<button class="approve" data-action="approve" data-name="${name}">通过</button><button class="reject" data-action="reject" data-name="${name}">拒绝</button>`
+                          : "") + `<button class="view" data-action="edit" data-name="${name}">编辑</button>`;
                   return `<tr><td><div class="user"><span class="user-dot">${initial}</span><div><strong>${name}</strong></div></div></td><td><div class="reason" title="${escapeHtml(
                           x.reason,
                   )}">${escapeHtml(x.reason)}</div></td><td>${escapeHtml(x.contact)}</td><td>${escapeHtml(
@@ -628,7 +654,48 @@
           showToast(item ? `${item.name} · ${item.contact}` : "未找到该申请");
           return;
         }
+        if (action === "edit") {
+          const item = applications.find((x) => x.name === name);
+          if (!item) return;
+          editingUsername = item.name;
+          document.getElementById("editUsername").textContent = `· ${item.name}`;
+          document.getElementById("editEmail").value = item.contact === "未填写" ? "" : item.contact;
+          document.getElementById("editReason").value = item.reason === "未填写" ? "" : item.reason;
+          document.getElementById("editCode").value = item.code || "";
+          document.getElementById("editLevel").value = String(item.level ?? 0);
+          document.getElementById("editPassword").value = "";
+          editModal.classList.add("show");
+          editModal.setAttribute("aria-hidden", "false");
+          return;
+        }
         setStatus(name, action === "approve" ? "approved" : "rejected");
+      });
+
+      document.getElementById("editCancel").addEventListener("click", () => {
+        editModal.classList.remove("show");
+        editModal.setAttribute("aria-hidden", "true");
+      });
+
+      editForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const update = {
+          email: document.getElementById("editEmail").value.trim(),
+          reason: document.getElementById("editReason").value.trim(),
+          level: Number(document.getElementById("editLevel").value),
+          code: document.getElementById("editCode").value.trim(),
+          password: document.getElementById("editPassword").value,
+        };
+        try {
+          await request(`/api/user/admin/update/${encodeURIComponent(editingUsername)}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(update),
+          });
+          editModal.classList.remove("show");
+          editModal.setAttribute("aria-hidden", "true");
+          showToast("用户信息已更新");
+          await loadApplications();
+        } catch (error) { showToast("更新失败：" + error.message); }
       });
 
       document.getElementById("search").addEventListener("input", render);

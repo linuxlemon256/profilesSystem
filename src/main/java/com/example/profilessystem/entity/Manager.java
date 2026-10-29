@@ -11,6 +11,12 @@ public class Manager {
     public void setName(String username) {
         this.managername = username;
     }
+    public String getManagername() {
+        return managername;
+    }
+    public void setManagername(String managername) {
+        this.managername = managername;
+    }
     public String getPassword() {
         return password;
     }

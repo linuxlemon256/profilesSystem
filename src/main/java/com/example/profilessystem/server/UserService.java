@@ -3,6 +3,7 @@ package com.example.profilessystem.server;
 import com.example.profilessystem.entity.LoginBody;
 import com.example.profilessystem.entity.RegisterBody;
 import com.example.profilessystem.entity.User;
+import com.example.profilessystem.entity.UserAdminUpdateBody;
 import com.example.profilessystem.mapper.UserMapper;
 import com.example.profilessystem.result.Result;
 import org.springframework.stereotype.Service;
@@ -177,6 +178,30 @@ public class UserService {
     public Result<String> findAccountByEmail(String email) {
         User user = userMapper.findByEmail(email == null ? "" : email.trim());
         return user == null ? Result.fail("没有找到对应账户") : Result.ok(user.getUsername());
+    }
+
+    @Transactional
+    public Result<String> updateByAdmin(String username, UserAdminUpdateBody update) {
+        User user = userMapper.findByName(username);
+        if (user == null) return Result.fail("未找到该用户");
+        if (update.getLevel() != null && (update.getLevel() < 0 || update.getLevel() > 2)) {
+            return Result.fail("用户等级必须是 0、1 或 2");
+        }
+        if (update.getEmail() != null) {
+            String email = update.getEmail().trim();
+            if (!email.isEmpty() && !email.equalsIgnoreCase(user.getEmail())) {
+                User sameEmail = userMapper.findByEmail(email);
+                if (sameEmail != null && !sameEmail.getUsername().equals(username)) return Result.fail("邮箱已被其他账户使用");
+            }
+            update.setEmail(email);
+        }
+        if (update.getPassword() != null && !update.getPassword().isBlank()) {
+            if (update.getPassword().length() < 6) return Result.fail("密码至少需要 6 位");
+            update.setPassword(passwordEncoder.encode(update.getPassword()));
+        } else {
+            update.setPassword(null);
+        }
+        return userMapper.updateByAdmin(username, update) == 1 ? Result.ok(null) : Result.fail("用户信息未发生变化");
     }
 
     /** 生成不重复的随机邀请码；多次冲突时返回 null。 */

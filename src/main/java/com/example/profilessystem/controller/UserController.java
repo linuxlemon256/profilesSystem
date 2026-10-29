@@ -4,6 +4,7 @@ import com.example.profilessystem.auth.SessionKeys;
 import com.example.profilessystem.entity.LoginBody;
 import com.example.profilessystem.entity.RegisterBody;
 import com.example.profilessystem.entity.User;
+import com.example.profilessystem.entity.UserAdminUpdateBody;
 import com.example.profilessystem.result.Result;
 import com.example.profilessystem.server.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -109,5 +110,10 @@ public class UserController {
     @PostMapping("/reject/{name}")
     public Result<String> reject(@PathVariable String name) {
         return userService.reject(name);
+    }
+
+    @PutMapping("/admin/update/{name}")
+    public Result<String> updateByAdmin(@PathVariable String name, @RequestBody UserAdminUpdateBody body) {
+        return userService.updateByAdmin(name, body);
     }
 }

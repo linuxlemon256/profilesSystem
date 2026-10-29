@@ -1,6 +1,7 @@
 package com.example.profilessystem.mapper;
 
 import com.example.profilessystem.entity.User;
+import com.example.profilessystem.entity.UserAdminUpdateBody;
 import org.apache.ibatis.annotations.*;
 
 import java.util.ArrayList;
@@ -35,4 +36,12 @@ public interface UserMapper {
     java.util.List<User> findPendingRecovery();
     @Update("UPDATE user SET recovery_status=#{status} WHERE username=#{username} AND recovery_status=1")
     int updateRecoveryStatus(@Param("username") String username, @Param("status") int status);
+    @Update({"<script>", "UPDATE user", "<set>",
+            "<if test='update.email != null'>email=#{update.email},</if>",
+            "<if test='update.reason != null'>reason=#{update.reason},</if>",
+            "<if test='update.level != null'>level=#{update.level},</if>",
+            "<if test='update.code != null'>code=#{update.code},</if>",
+            "<if test='update.password != null'>password=#{update.password},</if>",
+            "</set>", "WHERE username=#{username}", "</script>"})
+    int updateByAdmin(@Param("username") String username, @Param("update") UserAdminUpdateBody update);
 }

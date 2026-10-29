@@ -81,7 +81,8 @@ public class AuthInterceptor implements HandlerInterceptor {
                 || path.equals("/api/user/get/rejected")
                 || path.equals("/api/user/insert")
                 || path.startsWith("/api/user/approve/")
-                || path.startsWith("/api/user/reject/");
+                || path.startsWith("/api/user/reject/")
+                || path.startsWith("/api/user/admin/");
     }
 
     private boolean requiresUser(String path) {
@@ -91,11 +92,11 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private boolean requiresAssociatedLevel(String path) {
-        return path.equals("/LLMindex.html") || path.equals("/projectDemo.html");
+        return path.equals("/LLMindex.html") || path.equals("/projectDemo.html") || path.equals("/storageDemo.html");
     }
 
     private int requiredLevel(String path) {
-        return path.equals("/projectDemo.html") ? 2 : 1;
+        return path.equals("/projectDemo.html") || path.equals("/storageDemo.html") ? 2 : 1;
     }
 
     private boolean reject(HttpServletRequest request, HttpServletResponse response, String redirect)
