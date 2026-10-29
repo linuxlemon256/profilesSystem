@@ -54,8 +54,8 @@ public class AuthInterceptor implements HandlerInterceptor {
                 return reject(request, response, "/login.html");
             }
             var user = userMapper.findByName(username);
-            if (user == null || user.getLevel() < 1) {
-                return rejectForbidden(request, response, "/learnIndex.html?denied=level");
+            if (user == null || user.getLevel() < requiredLevel(path)) {
+                return rejectForbidden(request, response, "/learnServer.html?denied=level");
             }
         }
         return true;
@@ -91,7 +91,11 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private boolean requiresAssociatedLevel(String path) {
-        return path.equals("/LLMindex.html");
+        return path.equals("/LLMindex.html") || path.equals("/projectDemo.html");
+    }
+
+    private int requiredLevel(String path) {
+        return path.equals("/projectDemo.html") ? 2 : 1;
     }
 
     private boolean reject(HttpServletRequest request, HttpServletResponse response, String redirect)

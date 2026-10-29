@@ -200,9 +200,25 @@
       .level-undetermined { color: #64748b; background: #fff; border-color: #cbd5e1; }
       .level-public { color: #2563eb; background: #eff6ff; border-color: #93c5fd; }
       .level-associated { color: #6366f1; background: #eef2ff; border-color: #a5b4fc; }
-      .level-internal { color: #7e22ce; background: #faf5ff; border-color: #d8b4fe; }
+      .level-internal {
+        color: #7e22ce;
+        border-color: #c084fc;
+        background: linear-gradient(110deg, #faf5ff 0%, #e9d5ff 38%, #ffffff 50%, #e9d5ff 62%, #faf5ff 100%);
+        background-size: 230% 100%;
+        box-shadow: 0 0 0 1px #d8b4fe44, 0 5px 14px #a855f71c;
+        animation: internalBadgeShimmer 3.2s ease-in-out infinite;
+      }
+      @keyframes internalBadgeShimmer {
+        0%, 35% { background-position: 180% 0; }
+        70%, 100% { background-position: -80% 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .level-internal { animation: none; }
+      }
       .level-legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
       .level-legend .access-level { position: static; padding: 5px 8px; font-size: 10px; }
+      .project-link { display: flex !important; align-items: center; gap: 8px; margin-top: 10px !important; padding-top: 0 !important; }
+      .project-level { display: inline-flex; align-items: center; padding: 4px 7px; border: 1px solid #d8b4fe; border-radius: 999px; color: #7e22ce; background: #faf5ff; font-size: 10px; font-weight: 800; line-height: 1; }
       .resource-view .card {
         opacity: 0;
         transform: translateY(14px) scale(0.97);
@@ -617,6 +633,13 @@
               <a href="linkResource.html?url=https://github.com/linuxlemon256/profilesSystem&title=本学习系统源代码&note=被看光了，呜呜呜 QAQ">获取资源 →</a>
             </article>
             <article class="card">
+              <span class="access-level level-internal">内部</span>
+              <div class="icon">◈</div>
+              <h3>样本项目</h3>
+              <p>计算机类专业的内部样本项目，后续将补充项目结构、运行说明和代码演示。</p>
+              <a href="projectDemo.html">查看样本项目 →</a>
+            </article>
+            <article class="card">
               <span class="access-level level-undetermined">未定</span>
               <div class="icon">✦</div>
               <h3>暂未添加资源</h3>
@@ -633,7 +656,7 @@
             <div class="icon">✦</div>
             <h3>机械类资源正在整理</h3>
             <p>机械设计、制造工艺和智能制造资料正在排队入场。</p>
-            <a href="demo.html">查看建设进度 →</a>
+            <a href="resourceDemo.html">查看建设进度 →</a>
           </article>
         </div>
         <div id="automationResource" class="resource-view" hidden>
@@ -642,7 +665,7 @@
             <div class="icon">✦</div>
             <h3>自动化资源正在整理</h3>
             <p>控制原理、传感器和工业网络资料还在调试中。</p>
-            <a href="demo.html">查看建设进度 →</a>
+            <a href="resourceDemo.html">查看建设进度 →</a>
           </article>
         </div>
       </section>

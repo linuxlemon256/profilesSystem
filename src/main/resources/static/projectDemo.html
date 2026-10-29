@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>样本项目 · ProfilesSystem</title>
+    <style>
+      :root { font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif; color: #172554; background: #f7f3ff; }
+      * { box-sizing: border-box; }
+      body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at 12% 12%, #ddd6fe 0, transparent 32%), radial-gradient(circle at 90% 88%, #bfdbfe 0, transparent 28%), linear-gradient(135deg, #f7f3ff, #eff6ff); }
+      .card { width: min(620px, 100%); padding: 50px clamp(28px, 7vw, 64px); border: 1px solid #e9d5ff; border-radius: 28px; text-align: center; background: #ffffffdd; box-shadow: 0 24px 65px #6d28d91c; }
+      .icon { display: grid; width: 68px; height: 68px; place-items: center; margin: 0 auto 22px; border-radius: 22px; color: #fff; background: linear-gradient(135deg, #7e22ce, #4f46e5); font-size: 28px; }
+      .level { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border: 1px solid #d8b4fe; border-radius: 999px; color: #7e22ce; background: #faf5ff; font-size: 11px; font-weight: 800; }
+      .level::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+      .level-internal { border-color: #c084fc; background: linear-gradient(110deg, #faf5ff 0%, #e9d5ff 38%, #ffffff 50%, #e9d5ff 62%, #faf5ff 100%); background-size: 230% 100%; box-shadow: 0 0 0 1px #d8b4fe44, 0 5px 14px #a855f71c; animation: internalBadgeShimmer 3.2s ease-in-out infinite; }
+      @keyframes internalBadgeShimmer { 0%, 35% { background-position: 180% 0; } 70%, 100% { background-position: -80% 0; } }
+      @media (prefers-reduced-motion: reduce) { .level-internal { animation: none; } }
+      h1 { margin: 18px 0 12px; font-size: clamp(28px, 6vw, 42px); letter-spacing: -.05em; }
+      p { margin: 0 auto; max-width: 440px; color: #64748b; line-height: 1.8; }
+      .back { display: inline-block; margin-top: 28px; padding: 12px 16px; border-radius: 11px; color: #4338ca; background: #e0e7ff; font-size: 13px; font-weight: 800; text-decoration: none; }
+      .back:hover { background: #c7d2fe; }
+      .auth-pending .card { visibility: hidden; }
+    </style>
+  </head>
+  <body class="auth-pending">
+    <main class="card"><div class="icon">◈</div><span class="level level-internal">内部</span><h1>样本项目</h1><p>这里将放置计算机类专业的内部样本项目。项目结构、运行说明和代码演示正在准备中，等你来一起把它搭起来。</p><a class="back" href="learnIndex.html">← 返回专业选择</a></main>
+    <script>
+      fetch("/api/user/level", { credentials: "same-origin" }).then(async (response) => {
+        if (response.status === 401) { location.replace("login.html?redirect=projectDemo.html"); return; }
+        if (!response.ok) throw new Error("access denied");
+        const result = await response.json();
+        if (Number(result.code) !== 200 || Number(result.data) < 2) { location.replace("learnServer.html?denied=level"); return; }
+        document.body.classList.remove("auth-pending");
+      }).catch(() => location.replace("learnServer.html?denied=level"));
+    </script>
+  </body>
+</html>

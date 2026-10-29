@@ -362,7 +362,7 @@
           const success = Number(result.code) === 200;
           if (success) {
             const name = result.data || username;
-            const destination = requestedRedirect === "LLMindex.html"
+            const destination = ["LLMindex.html", "projectDemo.html"].includes(requestedRedirect)
               ? requestedRedirect
               : "learnIndex.html?name=" + encodeURIComponent(name);
             window.location.replace(destination);
