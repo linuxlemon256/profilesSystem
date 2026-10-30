@@ -29,6 +29,7 @@ public class RecoveryService {
     }
 
     public List<User> pending() { return userMapper.findPendingRecovery(); }
+    public List<User> all() { return userMapper.findAllRecovery(); }
 
     @Transactional
     public Result<String> approve(String username) {

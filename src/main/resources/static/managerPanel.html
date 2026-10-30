@@ -445,14 +445,14 @@
         </div>
       </section>
       <section class="panel" style="margin-top: 22px">
-        <div class="toolbar"><strong>邀请码重置申请</strong><span class="count" id="recoveryCount"></span></div>
+        <div class="toolbar"><strong>邀请码重置申请</strong><span class="count" id="recoveryCount"></span><div class="actions"><button class="view history-toggle" data-history="recovery" data-mode="pending">待处理</button><button class="view history-toggle" data-history="recovery" data-mode="history">历史记录</button></div></div>
         <div class="table-wrap">
           <table><thead><tr><th>账户</th><th>邮箱</th><th>申请说明</th><th>提交时间</th><th>操作</th></tr></thead><tbody id="recoveryRows"></tbody></table>
           <div class="empty" id="recoveryEmpty">暂无邀请码重置申请</div>
         </div>
       </section>
       <section class="panel" style="margin-top: 22px">
-        <div class="toolbar"><strong>问题反馈与加入申请</strong><span class="count" id="communityCount"></span></div>
+        <div class="toolbar"><strong>问题反馈与加入申请</strong><span class="count" id="communityCount"></span><div class="actions"><button class="view history-toggle" data-history="community" data-mode="pending">待处理</button><button class="view history-toggle" data-history="community" data-mode="history">历史记录</button></div></div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>类型</th><th>称呼</th><th>联系方式</th><th>方向/类别</th><th>内容</th><th>提交时间</th><th>操作</th></tr></thead>
@@ -489,6 +489,8 @@
       const editModal = document.getElementById("editModal");
       const editForm = document.getElementById("editForm");
       let editingUsername = "";
+      let recoveryMode = "pending";
+      let communityMode = "pending";
 
       // 后端统一返回 Result：code 为 200 时取 data，否则抛出 message
       async function request(url, options) {
@@ -557,22 +559,28 @@
 
       async function loadRecoveryRequests() {
         try {
-          const requests = await request("/api/recovery/admin/pending");
-          recoveryRows.innerHTML = (requests || []).map((item) => `<tr><td>${escapeHtml(item.username)}</td><td>${escapeHtml(item.email)}</td><td>${escapeHtml(item.recoveryReason || "未填写")}</td><td>${escapeHtml(formatTime(item.recoveryCreatedAt))}</td><td><div class="actions"><button class="approve" data-recovery="approve" data-id="${encodeURIComponent(item.username)}">通过</button><button class="reject" data-recovery="reject" data-id="${encodeURIComponent(item.username)}">拒绝</button></div></td></tr>`).join("");
+          const requests = await request(recoveryMode === "history" ? "/api/recovery/admin/all" : "/api/recovery/admin/pending");
+          recoveryRows.innerHTML = (requests || []).map((item) => {
+            const status = item.recoveryStatus === 2 ? "已通过" : item.recoveryStatus === 3 ? "已拒绝" : "待处理";
+            const action = recoveryMode === "history" ? `<span class="badge ${item.recoveryStatus === 2 ? "approved" : item.recoveryStatus === 3 ? "rejected" : "pending"}">${status}</span>` : `<div class="actions"><button class="approve" data-recovery="approve" data-id="${encodeURIComponent(item.username)}">通过</button><button class="reject" data-recovery="reject" data-id="${encodeURIComponent(item.username)}">拒绝</button></div>`;
+            return `<tr><td>${escapeHtml(item.username)}</td><td>${escapeHtml(item.email)}</td><td>${escapeHtml(item.recoveryReason || "未填写")}</td><td>${escapeHtml(formatTime(item.recoveryCreatedAt))}</td><td>${action}</td></tr>`;
+          }).join("");
           document.getElementById("recoveryEmpty").style.display = requests && requests.length ? "none" : "block";
-          document.getElementById("recoveryCount").textContent = `${(requests || []).length} 条待处理`;
+          document.getElementById("recoveryCount").textContent = `${(requests || []).length} 条${recoveryMode === "history" ? "历史记录" : "待处理"}`;
         } catch (error) { showToast("加载找回申请失败：" + error.message); }
       }
 
       async function loadCommunityRequests() {
         try {
-          const requests = await request("/api/community/admin/pending");
+          const requests = await request(communityMode === "history" ? "/api/community/admin/all" : "/api/community/admin/pending");
           communityRows.innerHTML = (requests || []).map((item) => {
             const type = item.requestType === "join" ? "加入申请" : "问题反馈";
-            return `<tr><td><span class="badge pending">${type}</span></td><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.contact || "未填写")}</td><td>${escapeHtml(item.category || "—")}</td><td><div class="reason" title="${escapeHtml(item.message)}">${escapeHtml(item.message)}</div></td><td>${escapeHtml(formatTime(item.createdAt))}</td><td><div class="actions"><button class="approve" data-community="approve" data-id="${item.id}">标记已处理</button><button class="reject" data-community="reject" data-id="${item.id}">忽略</button></div></td></tr>`;
+            const status = item.status === 1 ? "已处理" : item.status === 2 ? "已忽略" : "待处理";
+            const action = communityMode === "history" ? `<span class="badge ${item.status === 1 ? "approved" : item.status === 2 ? "rejected" : "pending"}">${status}</span>` : `<div class="actions"><button class="approve" data-community="approve" data-id="${item.id}">标记已处理</button><button class="reject" data-community="reject" data-id="${item.id}">忽略</button></div>`;
+            return `<tr><td><span class="badge pending">${type}</span></td><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.contact || "未填写")}</td><td>${escapeHtml(item.category || "—")}</td><td><div class="reason" title="${escapeHtml(item.message)}">${escapeHtml(item.message)}</div></td><td>${escapeHtml(formatTime(item.createdAt))}</td><td>${action}</td></tr>`;
           }).join("");
           document.getElementById("communityEmpty").style.display = requests && requests.length ? "none" : "block";
-          document.getElementById("communityCount").textContent = `${(requests || []).length} 条待处理`;
+          document.getElementById("communityCount").textContent = `${(requests || []).length} 条${communityMode === "history" ? "历史记录" : "待处理"}`;
           return true;
         } catch (error) {
           showToast("加载反馈失败：" + error.message);
@@ -589,6 +597,15 @@
           showToast(status === 1 ? "已标记为已处理" : "已忽略该申请");
           await loadCommunityRequests();
         } catch (error) { showToast("处理失败：" + error.message); }
+      });
+
+      document.querySelectorAll(".history-toggle").forEach((button) => {
+        button.addEventListener("click", async () => {
+          if (button.dataset.history === "recovery") recoveryMode = button.dataset.mode;
+          if (button.dataset.history === "community") communityMode = button.dataset.mode;
+          if (button.dataset.history === "recovery") await loadRecoveryRequests();
+          if (button.dataset.history === "community") await loadCommunityRequests();
+        });
       });
 
       recoveryRows.addEventListener("click", async (event) => {

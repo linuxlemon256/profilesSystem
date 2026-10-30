@@ -34,6 +34,8 @@ public interface UserMapper {
     int createRecoveryRequest(@Param("username") String username, @Param("type") String type, @Param("reason") String reason);
     @Select("select username, password, storage, code, isin, level, email, reason, created_at, recovery_type, recovery_reason, recovery_status, recovery_created_at from user where recovery_status=1 order by recovery_created_at asc")
     java.util.List<User> findPendingRecovery();
+    @Select("select username, password, storage, code, isin, level, email, reason, created_at, recovery_type, recovery_reason, recovery_status, recovery_created_at from user where recovery_type is not null order by recovery_created_at desc")
+    java.util.List<User> findAllRecovery();
     @Update("UPDATE user SET recovery_status=#{status} WHERE username=#{username} AND recovery_status=1")
     int updateRecoveryStatus(@Param("username") String username, @Param("status") int status);
     @Update({"<script>", "UPDATE user", "<set>",

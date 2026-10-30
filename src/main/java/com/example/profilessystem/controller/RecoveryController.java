@@ -27,6 +27,8 @@ public class RecoveryController {
     public Result<String> account(@RequestBody User body) { return userService.findAccountByEmail(body.getEmail()); }
     @GetMapping("/admin/pending")
     public Result<List<User>> pending() { return Result.ok(recoveryService.pending()); }
+    @GetMapping("/admin/all")
+    public Result<List<User>> all() { return Result.ok(recoveryService.all()); }
     @PostMapping("/admin/{id}/approve")
     public Result<String> approve(@PathVariable String id) { return recoveryService.approve(id); }
     @PostMapping("/admin/{id}/reject")
