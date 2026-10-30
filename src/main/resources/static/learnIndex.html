@@ -1059,12 +1059,12 @@
         formStatus.classList.remove('show');
         formStatus.textContent = '';
         feedbackForm.reset();
-        const submitted = localStorage.getItem('profilesSystem:' + type + ':submitted') === '1';
+        const submitted = joining && localStorage.getItem('profilesSystem:' + type + ':submitted') === '1';
         formSubmit.disabled = submitted;
         if (submitted) {
           formStatus.textContent = joining
             ? '你已经提交过加入申请，请关注联系方式中的回复，不要重复提交。'
-            : '你已经提交过反馈，请等待处理；如需补充，请在联系方式中说明。';
+            : '你已经提交过加入申请，请等待处理；如需补充，请在联系方式中说明。';
           formStatus.classList.add('show');
         }
       }
@@ -1096,7 +1096,7 @@
       feedbackForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const key = 'profilesSystem:' + activeFormType + ':submitted';
-        if (localStorage.getItem(key) === '1') {
+        if (activeFormType === 'join' && localStorage.getItem(key) === '1') {
           configureForm(activeFormType);
           return;
         }
@@ -1111,11 +1111,15 @@
           });
           const result = await response.json();
           if (result.code !== 200) throw new Error(result.message || '提交失败');
-          localStorage.setItem(key, '1');
+          if (activeFormType === 'join') localStorage.setItem(key, '1');
           formStatus.textContent = activeFormType === 'join'
             ? '加入申请已提交，请关注你填写的联系方式（尤其是邮箱）的回复。'
-            : '反馈已提交，感谢你的建议。请不要重复提交相同内容。';
+            : '反馈已提交，感谢你的建议。你可以继续提交其他问题或建议。';
           formStatus.classList.add('show');
+          if (activeFormType === 'feedback') {
+            formSubmit.disabled = false;
+            feedbackForm.reset();
+          }
         } catch (error) {
           formStatus.textContent = error.message || '网络异常，请稍后重试';
           formStatus.style.color = '#b91c1c';

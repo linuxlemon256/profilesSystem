@@ -24,7 +24,7 @@ public interface UserMapper {
     int deleteByName(String name);
     @Delete("DELETE FROM user WHERE code=#{code};")
     int deleteByCode(String code);
-    @Update("UPDATE user SET isin=#{isin} WHERE username=#{username}")
+    @Update("UPDATE user SET isin=#{isin}, level=CASE WHEN #{isin}=1 AND level=0 THEN 1 ELSE level END WHERE username=#{username}")
     int updateIsin(@Param("username") String username, @Param("isin") int isin);
     @Update("UPDATE user SET code=#{code} WHERE username=#{username}")
     int updateCode(@Param("username") String username, @Param("code") String code);
