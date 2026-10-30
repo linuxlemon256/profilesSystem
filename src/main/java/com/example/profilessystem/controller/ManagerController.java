@@ -33,7 +33,19 @@ public class ManagerController {
         return Result.ok();
     }
 
-    @PostMapping("/insert/")
+    /** 登录页使用的初始化状态接口，不暴露管理员列表。 */
+    @GetMapping("/bootstrap/status")
+    public Result<Boolean> bootstrapStatus() {
+        return Result.ok(managerService.needsBootstrap());
+    }
+
+    /** 仅在管理员表为空时可调用一次。 */
+    @PostMapping("/bootstrap")
+    public Result<String> bootstrap(@RequestBody Manager manager) {
+        return managerService.bootstrap(manager);
+    }
+
+    @PostMapping({"/insert", "/insert/"})
     public Result<String> insert(@RequestBody Manager manager) {
         return managerService.create(manager);
     }

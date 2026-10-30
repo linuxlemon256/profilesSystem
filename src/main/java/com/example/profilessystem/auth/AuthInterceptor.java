@@ -32,11 +32,22 @@ public class AuthInterceptor implements HandlerInterceptor {
             throws IOException {
         String path = request.getRequestURI();
 
+        // 管理员登录页需要读取初始化状态；初始化接口仅在管理员表为空时开放。
+        if ("/api/manager/bootstrap/status".equals(path)) {
+            return true;
+        }
+        if ("/api/manager/bootstrap".equals(path)
+                && "POST".equalsIgnoreCase(request.getMethod())
+                && managerMapper.count() == 0) {
+            return true;
+        }
+
         if (isManagerOnly(path)) {
             // 引导：系统里还没有任何管理员时，允许创建第一个管理员
             if (managerMapper.count() == 0
                     && "POST".equalsIgnoreCase(request.getMethod())
-                    && "/api/manager/insert/".equals(path)) {
+                    && ("/api/manager/insert/".equals(path)
+                        || "/api/manager/insert".equals(path))) {
                 return true;
             }
             if (sessionValue(request, SessionKeys.MANAGER) != null) {

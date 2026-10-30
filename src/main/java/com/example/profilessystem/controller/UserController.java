@@ -74,6 +74,7 @@ public class UserController {
         return result;
     }
 
+
     @PostMapping("/logout")
     public Result<Void> logout(HttpSession session) {
         session.invalidate();

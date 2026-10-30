@@ -13,6 +13,10 @@ public interface ManagerMapper {
     Manager findById(int id);
     @Insert("INSERT INTO manager(managername, password, level) VALUES(#{managername},#{password},#{level})")
     int insert(Manager manager);
+    @Insert("INSERT INTO manager(managername, password, level) "
+            + "SELECT #{managername}, #{password}, #{level} "
+            + "WHERE NOT EXISTS (SELECT 1 FROM manager)")
+    int insertFirst(Manager manager);
     @Delete("DELETE FROM manager WHERE managername=#{name};")
     int deleteByName(String name);
     @Update("UPDATE manager SET managername=#{newManagerName} WHERE managername=#{oldManagerName}")

@@ -233,7 +233,7 @@
         <p class="sub">输入你的账户信息以继续</p>
         <div class="login-methods" role="tablist" aria-label="登录方式">
           <button class="method-tab active" type="button" data-mode="invite">邀请码</button>
-          <button class="method-tab" type="button" data-mode="account">账户密码</button>
+          <button class="method-tab" type="button" data-mode="password">账户密码</button>
           <button class="method-tab" type="button" data-mode="email">邮箱密码</button>
         </div>
         <form id="loginForm" novalidate>
@@ -328,7 +328,7 @@
           showError("请填写账户和邀请码");
           return;
         }
-        if (mode === "account" && (!username || !password)) {
+        if (mode === "password" && (!username || !password)) {
           showError("请填写账户和密码");
           return;
         }
@@ -340,7 +340,7 @@
         button.disabled = true;
         try {
           const endpoint = mode === "invite" ? "/api/user/login" : `/api/user/login/${mode}`;
-          const body = mode === "invite" ? { username, code } : mode === "account" ? { username, password } : { email, password };
+          const body = mode === "invite" ? { username, code } : mode === "password" ? { username, password } : { email, password };
           const response = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

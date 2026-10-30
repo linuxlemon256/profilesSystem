@@ -19,6 +19,30 @@ public class ManagerService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /** 首次初始化状态：管理员表为空时才允许初始化。 */
+    @Transactional(readOnly = true)
+    public boolean needsBootstrap() {
+        return managerMapper.count() == 0;
+    }
+
+    /** 创建首个管理员；管理员表一旦有记录，该接口永久失效。 */
+    @Transactional
+    public Result<String> bootstrap(Manager manager) {
+        if (!needsBootstrap()) {
+            return Result.fail("管理员初始化已完成");
+        }
+        if (manager == null || manager.getManagername() == null
+                || manager.getManagername().trim().isEmpty()
+                || manager.getPassword() == null || manager.getPassword().length() < 6) {
+            return Result.fail("管理员账号不能为空，密码至少需要 6 位");
+        }
+        manager.setManagername(manager.getManagername().trim());
+        manager.setLevel(1);
+        manager.setPassword(passwordEncoder.encode(manager.getPassword()));
+        return managerMapper.insertFirst(manager) == 1
+                ? Result.ok(null) : Result.fail("初始化失败");
+    }
+
 
     /**
      * @param manager

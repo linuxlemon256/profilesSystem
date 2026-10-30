@@ -186,6 +186,15 @@
         color: #7782a7;
         font-size: 12px;
       }
+      [hidden] {
+        display: none !important;
+      }
+      .setup-note {
+        margin: -16px 0 18px;
+        color: #aeb8d8;
+        font-size: 13px;
+        line-height: 1.7;
+      }
       @media (max-width: 700px) {
         body {
           overflow: auto;
@@ -225,8 +234,28 @@
       </section>
       <section class="card">
         <p class="eyebrow">Administrator access</p>
-        <h2>管理员登录</h2>
-        <p class="sub">使用管理员账号和密码登录</p>
+        <h2 id="pageTitle">管理员登录</h2>
+        <p class="sub" id="pageSub">使用管理员账号和密码登录</p>
+        <div id="bootstrapView" hidden>
+          <p class="setup-note">这是系统首次启动。请设置首个管理员账号，完成后该初始化入口将自动关闭。</p>
+          <form onsubmit="bootstrap(); return false;">
+            <div class="field">
+              <label for="bootstrapManager">管理员账号</label>
+              <input id="bootstrapManager" type="text" placeholder="设置管理员账号" autocomplete="username" required />
+            </div>
+            <div class="field">
+              <label for="bootstrapPassword">管理员密码</label>
+              <input id="bootstrapPassword" type="password" placeholder="至少 6 位" autocomplete="new-password" minlength="6" required />
+            </div>
+            <div class="field">
+              <label for="bootstrapConfirm">确认密码</label>
+              <input id="bootstrapConfirm" type="password" placeholder="再次输入密码" autocomplete="new-password" minlength="6" required />
+            </div>
+            <div class="error" id="bootstrapError"></div>
+            <button class="action" id="bootstrapButton" type="submit">完成初始化</button>
+          </form>
+        </div>
+        <div id="loginView">
         <form
           onsubmit="
             login();
@@ -258,6 +287,7 @@
           <div class="error" id="loginError"></div>
           <button class="action" id="submitLogin" type="submit">登录</button>
         </form>
+        </div>
         <div class="links">
           <a href="login.html">用户登录</a
           ><a href="learnServer.html">返回首页</a>
@@ -302,6 +332,58 @@
           button.disabled = false;
         }
       }
+
+      async function bootstrap() {
+        const manager = document.getElementById("bootstrapManager").value.trim();
+        const password = document.getElementById("bootstrapPassword").value;
+        const confirm = document.getElementById("bootstrapConfirm").value;
+        const errorBox = document.getElementById("bootstrapError");
+        const button = document.getElementById("bootstrapButton");
+        errorBox.classList.remove("show");
+        if (password !== confirm) {
+          errorBox.textContent = "两次输入的密码不一致";
+          errorBox.classList.add("show");
+          return;
+        }
+        button.disabled = true;
+        try {
+          const response = await fetch("/api/manager/bootstrap", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ managername: manager, password, level: 1 }),
+          });
+          const result = await response.json();
+          if (result.code === 200) {
+            location.reload();
+          } else {
+            errorBox.textContent = result.message || "初始化失败";
+            errorBox.classList.add("show");
+          }
+        } catch (error) {
+          errorBox.textContent = "网络异常，请稍后重试";
+          errorBox.classList.add("show");
+        } finally {
+          button.disabled = false;
+        }
+      }
+
+      async function checkBootstrap() {
+        try {
+          const response = await fetch("/api/manager/bootstrap/status", { cache: "no-store" });
+          const result = await response.json();
+          if (result.code === 200 && result.data === true) {
+            document.getElementById("pageTitle").textContent = "首次初始化";
+            document.getElementById("pageSub").textContent = "设置系统的首个管理员账号";
+            document.getElementById("loginView").hidden = true;
+            document.getElementById("bootstrapView").hidden = false;
+            document.querySelector(".hint").textContent = "初始化完成后，请使用新账号登录管理后台。";
+          }
+        } catch (error) {
+          console.warn("无法读取管理员初始化状态", error);
+        }
+      }
+
+      checkBootstrap();
     </script>
   </body>
 </html>
