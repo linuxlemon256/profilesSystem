@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>通知中心 · ProfilesSystem</title>
+  <style>
+    :root { font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif; color: #172554; background: #eef3ff; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; padding: 28px 20px 60px; background: linear-gradient(135deg, #eef3ff, #fbfdff 60%, #f1edff); }
+    .page { width: min(860px, 100%); margin: auto; animation: rise .55s ease both; }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 44px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 850; }
+    .mark { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 11px; color: #111a3b; background: linear-gradient(135deg, #9ca9ff, #62e4d5); }
+    .top a, .back { color: #4f46e5; font-size: 13px; font-weight: 800; text-decoration: none; }
+    .hero { margin-bottom: 22px; }
+    .eyebrow { margin: 0 0 9px; color: #6366f1; font-size: 12px; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(30px, 6vw, 48px); letter-spacing: -.05em; }
+    .hero p:not(.eyebrow) { max-width: 580px; margin: 14px 0 0; color: #64748b; line-height: 1.8; }
+    .list { display: grid; gap: 13px; }
+    .notice, .empty { padding: 18px 20px; border: 1px solid #dce5f5; border-radius: 17px; background: #ffffffc7; box-shadow: 0 13px 30px #30458e10; }
+    .notice { animation: rise .42s ease both; }
+    .notice.unread { border-color: #c4b5fd; background: linear-gradient(135deg, #f5f3ff, #ecfeff); }
+    .notice strong { display: block; line-height: 1.7; }
+    .notice small { display: block; margin-top: 8px; color: #64748b; }
+    .read { margin-top: 12px; padding: 8px 12px; border: 0; border-radius: 9px; color: #fff; background: linear-gradient(135deg, #4f46e5, #7c3aed); cursor: pointer; font: inherit; font-size: 12px; font-weight: 800; }
+    .read:hover { transform: translateY(-2px); }
+    .empty { color: #64748b; text-align: center; }
+    .back { display: inline-block; margin-top: 22px; }
+    @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .page, .notice { animation: none; } .read:hover { transform: none; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="top"><div class="brand"><span class="mark">P</span><span>ProfilesSystem</span></div><a href="learnIndex.html">返回学习空间</a></header>
+    <section class="hero"><p class="eyebrow">Notification center</p><h1>通知中心</h1><p>管理员回复、功能安排和重要提醒都会集中显示在这里。</p></section>
+    <section class="list" id="list"><div class="empty">正在加载通知…</div></section>
+    <a class="back" href="learnIndex.html">← 返回学习空间</a>
+  </main>
+  <script>
+    const list = document.getElementById("list");
+    const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"}[char]));
+    async function load() {
+      try {
+        const response = await fetch("/api/notifications");
+        const result = await response.json();
+        if (result.code === 401) { location.href = "login.html?redirect=notification.html"; return; }
+        if (result.code !== 200) throw new Error(result.message || "加载失败");
+        list.innerHTML = (result.data || []).map(item => `<article class="notice ${item.readStatus ? "" : "unread"}"><strong>${item.readStatus ? "" : "【未读】"}${esc(item.content)}</strong><small>${esc(item.senderName || "管理员")} · ${new Date(item.createdAt).toLocaleString("zh-CN", { hour12: false })}</small>${item.readStatus ? "" : `<button class="read" data-id="${item.id}">标记已读</button>`}</article>`).join("") || '<div class="empty">暂时没有通知。</div>';
+        list.querySelectorAll("[data-id]").forEach(button => button.onclick = async () => { await fetch(`/api/notifications/${button.dataset.id}/read`, { method: "POST" }); load(); });
+      } catch (error) { list.innerHTML = `<div class="empty">${esc(error.message || "加载失败")}</div>`; }
+    }
+    load();
+  </script>
+</body>
+</html>

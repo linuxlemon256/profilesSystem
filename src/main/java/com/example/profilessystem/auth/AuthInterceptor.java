@@ -2,6 +2,7 @@ package com.example.profilessystem.auth;
 
 import com.example.profilessystem.mapper.ManagerMapper;
 import com.example.profilessystem.mapper.UserMapper;
+import com.example.profilessystem.mapper.FeatureMapper;
 import com.example.profilessystem.result.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,10 +22,12 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private final ManagerMapper managerMapper;
     private final UserMapper userMapper;
+    private final FeatureMapper featureMapper;
 
-    public AuthInterceptor(ManagerMapper managerMapper, UserMapper userMapper) {
+    public AuthInterceptor(ManagerMapper managerMapper, UserMapper userMapper, FeatureMapper featureMapper) {
         this.managerMapper = managerMapper;
         this.userMapper = userMapper;
+        this.featureMapper = featureMapper;
     }
 
     @Override
@@ -54,6 +57,11 @@ public class AuthInterceptor implements HandlerInterceptor {
                 return true;
             }
             return reject(request, response, "/managerLogin.html");
+        }
+
+        String feature = featureFor(path);
+        if (feature != null && !featureEnabled(feature)) {
+            return rejectFeature(request, response, feature);
         }
 
         if (requiresUser(path) && sessionValue(request, SessionKeys.USER) == null) {
@@ -88,8 +96,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         return path.startsWith("/api/recovery/admin/")
                 || path.startsWith("/api/community/admin/")
-                || path.startsWith("/api/groups/admin/")
                 || path.equals("/api/notifications/admin/send")
+                || path.startsWith("/api/features/")
                 || path.equals("/api/user/get/all")
                 || path.equals("/api/user/get/uncommit")
                 || path.equals("/api/user/get/commit")
@@ -106,13 +114,39 @@ public class AuthInterceptor implements HandlerInterceptor {
                 || path.startsWith("/api/progress")
                 || path.equals("/api/community/messages")
                 || path.matches("/api/community/[0-9]+/messages")
-                || path.startsWith("/api/groups")
-                || path.startsWith("/api/social")
-                || path.startsWith("/api/notifications");
+                || path.startsWith("/api/notifications")
+                ;
+    }
+
+    private String featureFor(String path) {
+        if (path.startsWith("/api/notifications")) return "notifications";
+        if (path.startsWith("/api/community")) return "community";
+        if (path.equals("/notification.html")) return "notifications";
+        if (path.equals("/feedback.html") || path.equals("/joinUs.html")) return "community";
+        if (path.startsWith("/api/progress") || path.equals("/storageDemo.html")) return "storage";
+        return null;
+    }
+
+    private boolean featureEnabled(String feature) {
+        Integer enabled = featureMapper.enabled(feature);
+        return enabled != null && enabled == 1;
+    }
+
+    private boolean rejectFeature(HttpServletRequest request, HttpServletResponse response, String feature) throws IOException {
+        String reason = featureMapper.reason(feature);
+        if (request.getRequestURI().endsWith(".html")) {
+            response.sendRedirect("/featureDisabled.html?feature=" + feature);
+            return false;
+        }
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json;charset=UTF-8");
+        String safeReason = reason == null ? "管理员暂未开放此功能" : reason.replace("\\", "\\\\").replace("\"", "\\\"");
+        response.getWriter().write("{\"code\":403,\"message\":\"该功能暂未开放\",\"reason\":\"" + safeReason + "\"}");
+        return false;
     }
 
     private boolean requiresAssociatedLevel(String path) {
-        return path.equals("/LLMindex.html") || path.equals("/projectDemo.html") || path.equals("/storageDemo.html");
+        return path.equals("/projectDemo.html") || path.equals("/storageDemo.html");
     }
 
     private int requiredLevel(String path) {

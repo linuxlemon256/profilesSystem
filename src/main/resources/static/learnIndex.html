@@ -113,37 +113,72 @@
         gap: 12px;
         min-width: 218px;
       }
-      .llm-entry {
+      /* 右下角常驻快捷入口：和返回顶部按钮一样，不占用主内容空间 */
+      .quick-float {
+        position: fixed !important;
+        inset: auto 24px 24px auto;
+        z-index: 50;
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        align-items: flex-end;
         gap: 11px;
-        padding: 13px 16px;
-        border: 1px solid #c4b5fd;
-        border-radius: 15px;
-        color: #312e81;
-        background: linear-gradient(135deg, #ede9fe, #cffafe);
-        text-decoration: none;
-        box-shadow: 0 10px 24px #6366f11c;
-        transition: transform .2s, box-shadow .2s, border-color .2s;
       }
-      .llm-entry:hover {
-        transform: translateY(-3px);
-        border-color: #818cf8;
-        box-shadow: 0 15px 30px #6366f12c;
-      }
-      .llm-entry-icon {
+      .quick-float a {
+        position: relative;
         display: grid;
-        flex: none;
-        width: 36px;
-        height: 36px;
+        width: 48px;
+        height: 48px;
         place-items: center;
-        border-radius: 12px;
+        border: 1px solid #ffffffb8;
+        border-radius: 50%;
         color: #fff;
-        background: #4f46e5;
-        font-size: 18px;
+        text-decoration: none;
+        font-size: 20px;
+        box-shadow: 0 12px 26px #1725542e, inset 0 1px #ffffff66;
+        transition: transform .22s ease, box-shadow .22s ease, width .22s ease, border-radius .22s ease;
+        animation: quickFloatIn .55s both;
       }
-      .llm-entry strong { display: block; font-size: 14px; }
-      .llm-entry small { display: block; margin-top: 3px; color: #6366f1; font-size: 11px; }
+      .quick-float a:nth-child(2) { animation-delay: .08s; }
+      .quick-float a:nth-child(3) { animation-delay: .16s; }
+      .quick-float a:hover,
+      .quick-float a:focus-visible {
+        width: 146px;
+        border-radius: 16px;
+        transform: translateX(-3px);
+        box-shadow: 0 16px 32px #17255445, inset 0 1px #ffffff80;
+        outline: none;
+      }
+      .quick-float a span { pointer-events: none; }
+      .quick-float a .quick-label {
+        position: absolute;
+        right: 45px;
+        width: 0;
+        overflow: hidden;
+        opacity: 0;
+        white-space: nowrap;
+        font-size: 13px;
+        font-weight: 800;
+        transition: width .22s ease, opacity .16s ease;
+      }
+      .quick-float a:hover .quick-label,
+      .quick-float a:focus-visible .quick-label {
+        right: auto;
+        left: 17px;
+        width: 105px;
+        opacity: 1;
+      }
+      .quick-float a:hover .quick-icon,
+      .quick-float a:focus-visible .quick-icon {
+        position: absolute;
+        right: 14px;
+      }
+      .quick-notice { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
+      .quick-feedback { background: linear-gradient(135deg, #0f766e, #06b6d4); }
+      .quick-join { background: linear-gradient(135deg, #db2777, #f97316); }
+      @keyframes quickFloatIn {
+        from { opacity: 0; transform: translateY(14px) scale(.86); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
       .section-title {
         display: flex;
         align-items: center;
@@ -410,7 +445,7 @@
         font-weight: 700;
       }
       .services-section { margin-top: 38px; }
-      .community-section { margin-top: 38px; }
+      .community-section { display: none; margin-top: 38px; }
       .community-links {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -650,6 +685,27 @@
         .topnav a {
           display: none;
         }
+        .quick-float {
+          inset: auto 14px 16px auto;
+          gap: 9px;
+        }
+        .quick-float a {
+          width: 44px;
+          height: 44px;
+          font-size: 18px;
+        }
+      }
+      @media (hover: none) {
+        .quick-float a:hover,
+        .quick-float a:focus-visible {
+          width: 48px;
+          border-radius: 50%;
+          transform: none;
+        }
+        .quick-float a:hover .quick-label,
+        .quick-float a:focus-visible .quick-label { display: none; }
+        .quick-float a:hover .quick-icon,
+        .quick-float a:focus-visible .quick-icon { position: static; }
       }
 
     </style>
@@ -675,8 +731,6 @@
       </div>
       <nav class="topnav">
         <a href="learnServer.html">学习首页</a
-        ><a href="communication.html">交流中心</a
-        ><a href="groups.html">学习组</a
         ><a href="account.html" id="accountLink">我的账户</a
         ><a href="login.html" id="logoutLink" hidden>退出登录</a
         ><span class="user" id="user">学习成员</span>
@@ -694,14 +748,6 @@
         </div>
         <div class="hero-actions">
           <div class="tip" id="loginTip"><a href="login.html">登录</a></div>
-            <a class="llm-entry" href="LLMindex.html">
-            <span class="llm-entry-icon">✦</span>
-            <span><strong>LLM 学习助手</strong><small>随时问问你的 AI 搭子 →</small></span>
-          </a>
-          <a class="llm-entry communication-entry" href="communication.html">
-            <span class="llm-entry-icon">☏</span>
-            <span><strong>交流中心</strong><small>学习组与好友，保持恰到好处的联系 →</small></span>
-          </a>
         </div>
       </section>
       <div class="access-guide" aria-label="全站访问等级说明">
@@ -841,13 +887,6 @@
         <br>
         <div class="grid">
           <article class="card">
-            <span class="access-level level-associated">关联</span>
-            <div class="icon">✦</div>
-            <h3>LLM 学习助手</h3>
-            <p>把学习问题交给 AI 搭子，后续将接入后端接口，提供知识点讲解、代码分析和学习路线建议。</p>
-            <a href="LLMindex.html">进入 AI 助手 →</a>
-          </article>
-          <article class="card">
             <span class="access-level level-internal">内部</span>
             <div class="icon">☁</div>
             <h3>存储云盘</h3>
@@ -894,6 +933,17 @@
       </div>
       <p class="foot">ProfilesSystem · 个人学习与资料空间</p>
     </main>
+    <nav class="quick-float" aria-label="快捷入口">
+      <a class="quick-notice" href="notification.html" aria-label="通知中心" title="通知中心">
+        <span class="quick-label">通知中心</span><span class="quick-icon">🔔</span>
+      </a>
+      <a class="quick-feedback" href="feedback.html" aria-label="问题反馈" title="问题反馈">
+        <span class="quick-label">问题反馈</span><span class="quick-icon">✉</span>
+      </a>
+      <a class="quick-join" href="joinUs.html" aria-label="加入我们" title="加入我们">
+        <span class="quick-label">加入我们</span><span class="quick-icon">＋</span>
+      </a>
+    </nav>
     <script>
       const userLabel = document.getElementById("user");
       const loginTip = document.getElementById("loginTip");

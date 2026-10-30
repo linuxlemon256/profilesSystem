@@ -52,8 +52,14 @@
       const required = params.get("required");
       const labels = { "1": "需要关联人员等级", "2": "需要内部人员等级" };
       if (required && labels[required]) document.getElementById("level").textContent = labels[required];
-      if (params.get("resource") === "llm") {
-        document.getElementById("message").textContent = "LLM 学习助手仅对具有关联关系的账户开放。";
+      const feature = params.get("feature");
+      const featureNames = { community: "反馈与加入申请", notifications: "管理员通知", storage: "云端学习进度" };
+      if (feature) {
+        document.getElementById("level").textContent = `${featureNames[feature] || "该功能"}暂未开放`;
+        fetch("/api/features").then(response => response.json()).then(result => {
+          const item = (result.data || []).find(entry => (entry.featureKey || entry.feature_key) === feature);
+          if (item && item.reason) document.getElementById("message").textContent = item.reason;
+        }).catch(() => {});
       }
     </script>
   </body>

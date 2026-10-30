@@ -363,6 +363,70 @@
         }
       }
 
+      .inline-form {
+        display: grid;
+        grid-template-columns: minmax(150px, 0.35fr) minmax(260px, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        margin-top: 16px;
+        padding: 14px;
+        border: 1px solid #dbe4ff;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #f8faff, #fff7fc);
+      }
+      .inline-form input {
+        width: 100%;
+        min-height: 44px;
+        padding: 0 14px;
+        border: 1px solid #cbd5f5;
+        border-radius: 11px;
+        outline: none;
+        background: #ffffffd9;
+        color: #172554;
+        font: inherit;
+        transition: border-color .22s ease, box-shadow .22s ease, transform .22s ease;
+      }
+      .inline-form input::placeholder { color: #94a3b8; }
+      .inline-form input:focus {
+        border-color: #8b5cf6;
+        box-shadow: 0 0 0 4px #8b5cf622;
+        transform: translateY(-1px);
+      }
+      .inline-form button.approve {
+        min-height: 44px;
+        padding: 0 18px;
+        border: 0;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #6366f1, #ec4899);
+        box-shadow: 0 9px 20px #6366f144;
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
+      }
+      .inline-form button.approve:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 13px 26px #db277755;
+        filter: brightness(1.07);
+      }
+      @media (max-width: 720px) {
+        .inline-form { grid-template-columns: 1fr; }
+        .inline-form button.approve { width: 100%; }
+      }
+      .feature-switches { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:16px; }
+      .feature-switch { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:15px; border:1px solid #dbe4ff; border-radius:14px; background:linear-gradient(135deg,#f8faff,#fff7fc); }
+      .feature-switch strong { display:block; color:#172554; font-size:13px; }
+      .feature-switch small { display:block; margin-top:4px; color:#94a3b8; font-size:11px; }
+      .feature-reason { display:block; width:100%; margin-top:9px; padding:7px 9px; border:1px solid #dbe4ff; border-radius:8px; color:#475569; background:#fff; font:inherit; font-size:11px; outline:none; }
+      .feature-reason:focus { border-color:#8b5cf6; box-shadow:0 0 0 3px #8b5cf622; }
+      .switch { position:relative; width:46px; height:26px; flex:none; }
+      .switch input { width:0; height:0; opacity:0; }
+      .slider { position:absolute; inset:0; border-radius:99px; background:#cbd5e1; cursor:pointer; transition:.25s; }
+      .slider:before { content:""; position:absolute; width:20px; height:20px; left:3px; top:3px; border-radius:50%; background:#fff; box-shadow:0 2px 6px #17255433; transition:.25s; }
+      .switch input:checked + .slider { background:linear-gradient(135deg,#6366f1,#ec4899); }
+      .switch input:checked + .slider:before { transform:translateX(20px); }
+      @media(max-width:800px){.feature-switches{grid-template-columns:repeat(2,minmax(0,1fr))}}
+      @media(max-width:520px){.feature-switches{grid-template-columns:1fr}}
     </style>
     <style id="profiles-motion">
     @keyframes profilesPageIn { from { opacity: 0; } to { opacity: 1; } }
@@ -435,7 +499,7 @@
                 <th>联系方式</th>
                 <th>提交时间</th>
                 <th>状态</th>
-                <th>邀请码</th>
+                <th>身份码</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -445,15 +509,11 @@
         </div>
       </section>
       <section class="panel" style="margin-top: 22px">
-        <div class="toolbar"><strong>邀请码重置申请</strong><span class="count" id="recoveryCount"></span><div class="actions"><button class="view history-toggle" data-history="recovery" data-mode="pending">待处理</button><button class="view history-toggle" data-history="recovery" data-mode="history">历史记录</button></div></div>
+        <div class="toolbar"><strong>身份码重置申请</strong><span class="count" id="recoveryCount"></span><div class="actions"><button class="view history-toggle" data-history="recovery" data-mode="pending">待处理</button><button class="view history-toggle" data-history="recovery" data-mode="history">历史记录</button></div></div>
         <div class="table-wrap">
           <table><thead><tr><th>账户</th><th>邮箱</th><th>申请说明</th><th>提交时间</th><th>操作</th></tr></thead><tbody id="recoveryRows"></tbody></table>
-          <div class="empty" id="recoveryEmpty">暂无邀请码重置申请</div>
+          <div class="empty" id="recoveryEmpty">暂无身份码重置申请</div>
         </div>
-      </section>
-      <section class="panel" style="margin-top: 22px">
-        <div class="toolbar"><strong>学习组创建申请</strong><span class="count" id="groupCount"></span></div>
-        <div class="table-wrap"><table><thead><tr><th>名称</th><th>创建者</th><th>简介</th><th>提交时间</th><th>操作</th></tr></thead><tbody id="groupRows"></tbody></table><div class="empty" id="groupEmpty">暂无待审批学习组</div></div>
       </section>
       <section class="panel" style="margin-top: 22px">
         <div class="toolbar"><strong>问题反馈与加入申请</strong><span class="count" id="communityCount"></span><div class="actions"><button class="view history-toggle" data-history="community" data-mode="pending">待处理</button><button class="view history-toggle" data-history="community" data-mode="history">历史记录</button></div></div>
@@ -466,12 +526,16 @@
         </div>
       </section>
       <section class="panel" style="margin-top:22px">
-        <div class="toolbar"><strong>主动发送用户通知</strong><span class="count">用户会在交流中心看到</span></div>
+        <div class="toolbar"><strong>主动发送用户通知</strong><span class="count">用户会在通知中心看到</span></div>
         <form id="notificationForm" class="inline-form">
           <input id="notificationUser" placeholder="账户名称" required>
           <input id="notificationContent" maxlength="2000" placeholder="通知内容" required>
           <button class="approve" type="submit">发送通知</button>
         </form>
+      </section>
+      <section class="panel feature-switch-panel" style="margin-top:22px">
+        <div class="toolbar"><strong>功能开放设置</strong><span class="count">关闭后端接口会同步拒绝访问</span></div>
+        <div id="featureSwitches" class="feature-switches"><div class="empty">正在读取功能状态…</div></div>
       </section>
     </main>
     <div class="toast" id="toast"></div>
@@ -481,7 +545,7 @@
         <div class="edit-field"><label for="editEmail">邮箱</label><input id="editEmail" type="email" /></div>
         <div class="edit-field"><label for="editReason">申请原因</label><textarea id="editReason"></textarea></div>
         <div class="edit-field"><label for="editLevel">用户等级</label><select id="editLevel"><option value="0">0 · 游客</option><option value="1">1 · 关联人员</option><option value="2">2 · 内部人员</option></select></div>
-        <div class="edit-field"><label for="editCode">邀请码</label><input id="editCode" type="text" /></div>
+        <div class="edit-field"><label for="editCode">身份码</label><input id="editCode" type="text" /></div>
         <div class="edit-field"><label for="editPassword">新密码（留空表示不修改）</label><input id="editPassword" type="password" minlength="6" /></div>
         <div class="edit-actions"><button class="edit-cancel" id="editCancel" type="button">取消</button><button class="edit-save" type="submit">保存修改</button></div>
       </form>
@@ -506,7 +570,17 @@
           showToast("通知已发送"); notificationForm.reset();
         } catch (error) { showToast("发送失败：" + error.message); }
       });
-      const groupRows = document.getElementById("groupRows");
+      const featureLabels = { community:["反馈与加入申请","控制用户反馈和申请"], notifications:["管理员通知","控制站内通知"], storage:["云端学习进度","控制进度同步和云端存储"] };
+      async function loadFeatureSwitches() {
+        try {
+          const features = await fetch("/api/features").then(r => r.json()).then(r => r.data || []);
+          const map = Object.fromEntries(features.map(x => [x.featureKey || x.feature_key, Number(x.enabled) === 1]));
+          const root = document.getElementById("featureSwitches");
+          root.innerHTML = Object.entries(featureLabels).map(([key, info]) => { const item = features.find(x => (x.featureKey || x.feature_key) === key) || {}; return `<div class="feature-switch"><div><strong>${info[0]}</strong><small>${info[1]}</small><input class="feature-reason" data-reason="${key}" maxlength="255" value="${escapeHtml(item.reason || "")}" placeholder="关闭时显示给用户的原因"></div><label class="switch"><input type="checkbox" data-feature="${key}" ${map[key] === true ? "checked" : ""}><span class="slider"></span></label></div>`; }).join("");
+          root.querySelectorAll("input[data-feature]").forEach(input => input.addEventListener("change", async () => { try { const reason = root.querySelector(`[data-reason="${input.dataset.feature}"]`).value; await request(`/api/features/${input.dataset.feature}`, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({enabled:input.checked,reason})}); showToast(`${featureLabels[input.dataset.feature][0]}已${input.checked ? "开放" : "关闭"}`); } catch(error) { input.checked = !input.checked; showToast("保存功能开关失败：" + error.message); } }));
+          root.querySelectorAll("input[data-reason]").forEach(input => input.addEventListener("change", async () => { const toggle = root.querySelector(`[data-feature="${input.dataset.reason}"]`); try { await request(`/api/features/${input.dataset.reason}`, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({enabled:toggle.checked,reason:input.value})}); showToast("关闭原因已保存"); } catch(error) { showToast("保存关闭原因失败：" + error.message); } }));
+        } catch (error) { document.getElementById("featureSwitches").innerHTML = `<div class="empty">读取功能开关失败：${escapeHtml(error.message)}</div>`; }
+      }
       const editModal = document.getElementById("editModal");
       const editForm = document.getElementById("editForm");
       let editingUsername = "";
@@ -609,21 +683,6 @@
         }
       }
 
-      async function loadGroupRequests() {
-        try {
-          const groups = await request("/api/groups/admin/pending");
-          groupRows.innerHTML = (groups || []).map(g => `<tr><td>${escapeHtml(g.name)}</td><td>${escapeHtml(g.ownerUsername)}</td><td>${escapeHtml(g.description || "—")}</td><td>${escapeHtml(formatTime(g.createdAt))}</td><td><div class="actions"><button class="approve" data-group="approve" data-id="${g.id}">通过</button><button class="reject" data-group="reject" data-id="${g.id}">拒绝</button></div></td></tr>`).join("");
-          document.getElementById("groupEmpty").style.display = groups && groups.length ? "none" : "block";
-          document.getElementById("groupCount").textContent = `${(groups || []).length} 条待处理`;
-        } catch (error) { showToast("加载学习组申请失败：" + error.message); }
-      }
-      groupRows.addEventListener("click", async event => {
-        const button = event.target.closest("button[data-group]"); if (!button) return;
-        const endpoint = `/api/groups/admin/${button.dataset.id}/${button.dataset.group}`;
-        try { await request(endpoint, { method: "POST" }); showToast("学习组申请已处理"); await loadGroupRequests(); }
-        catch (error) { showToast("处理失败：" + error.message); }
-      });
-
       communityRows.addEventListener("click", async (event) => {
         const button = event.target.closest("button[data-community]");
         if (!button) return;
@@ -660,7 +719,7 @@
         const action = button.dataset.recovery;
         try {
           const result = await request(`/api/recovery/admin/${button.dataset.id}/${action}`, { method: "POST" });
-          showToast(action === "approve" ? `已通过，新的邀请码：${result}` : "申请已拒绝");
+          showToast(action === "approve" ? `已通过，新的身份码：${result}` : "申请已拒绝");
           loadRecoveryRequests();
         } catch (error) { showToast("操作失败：" + error.message); }
       });
@@ -735,7 +794,7 @@
         try {
           const code = await request(url, { method: "POST" });
           if (status === "approved") {
-            showToast(code ? `申请已通过，邀请码：${code}` : "申请已通过");
+            showToast(code ? `申请已通过，身份码：${code}` : "申请已通过");
           } else {
             showToast("申请已拒绝");
           }
@@ -835,7 +894,7 @@
       loadApplications();
       loadRecoveryRequests();
       loadCommunityRequests();
-      loadGroupRequests();
+      loadFeatureSwitches();
 
     </script>
   </body>
