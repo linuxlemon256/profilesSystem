@@ -1,7 +1,10 @@
 package com.example.profilessystem.server;
 
 import com.example.profilessystem.entity.CommunityRequest;
+import com.example.profilessystem.entity.CommunityMessage;
 import com.example.profilessystem.mapper.CommunityRequestMapper;
+import com.example.profilessystem.mapper.CommunityMessageMapper;
+import com.example.profilessystem.mapper.UserMapper;
 import com.example.profilessystem.result.Result;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,9 +17,13 @@ public class CommunityRequestService {
     private static final Pattern EMAIL_PATTERN =
             Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,}$");
     private final CommunityRequestMapper mapper;
+    private final CommunityMessageMapper messageMapper;
+    private final UserMapper userMapper;
 
-    public CommunityRequestService(CommunityRequestMapper mapper) {
+    public CommunityRequestService(CommunityRequestMapper mapper, CommunityMessageMapper messageMapper, UserMapper userMapper) {
         this.mapper = mapper;
+        this.messageMapper = messageMapper;
+        this.userMapper = userMapper;
     }
 
     @Transactional
@@ -35,7 +42,14 @@ public class CommunityRequestService {
             return Result.fail(Result.CODE_BAD_REQUEST, "请输入有效的邮箱地址");
         }
         request.setMessage(request.getMessage().trim());
-        return mapper.insert(request) == 1 ? Result.ok(null) : Result.fail("提交失败");
+        if (mapper.insert(request) != 1) return Result.fail("提交失败");
+        CommunityMessage message = new CommunityMessage();
+        message.setRequestId(request.getId());
+        message.setSenderType("USER");
+        message.setSenderName(request.getName());
+        message.setContent(request.getMessage());
+        messageMapper.insert(message);
+        return Result.ok(null);
     }
 
     @Transactional(readOnly = true)
@@ -48,5 +62,44 @@ public class CommunityRequestService {
     public Result<String> updateStatus(long id, int status) {
         if (status < 1 || status > 2) return Result.fail(Result.CODE_BAD_REQUEST, "处理状态不正确");
         return mapper.updateStatus(id, status) == 1 ? Result.ok(null) : Result.fail("申请不存在或已处理");
+    }
+
+    @Transactional(readOnly = true)
+    public Result<List<CommunityMessage>> messagesForUser(String username) {
+        var user = userMapper.findByName(username);
+        String email = user == null || user.getEmail() == null ? "" : user.getEmail();
+        return Result.ok(messageMapper.findForUser(username, email));
+    }
+
+    @Transactional(readOnly = true)
+    public Result<List<CommunityMessage>> messagesForRequest(long requestId) {
+        return Result.ok(messageMapper.findByRequestId(requestId));
+    }
+
+    @Transactional
+    public Result<String> replyAsAdmin(long requestId, String content) {
+        if (content == null || content.isBlank()) return Result.fail(Result.CODE_BAD_REQUEST, "回复内容不能为空");
+        CommunityMessage message = new CommunityMessage();
+        message.setRequestId(requestId);
+        message.setSenderType("ADMIN");
+        message.setSenderName("管理员");
+        message.setContent(content.trim());
+        return messageMapper.insert(message) == 1 ? Result.ok(null) : Result.fail("回复失败");
+    }
+
+    @Transactional
+    public Result<String> replyAsUser(long requestId, String username, String content) {
+        if (content == null || content.isBlank()) return Result.fail(Result.CODE_BAD_REQUEST, "消息内容不能为空");
+        var user = userMapper.findByName(username);
+        if (user == null) return Result.fail(Result.CODE_UNAUTHORIZED, "账户不存在");
+        var messages = messageMapper.findForUser(username, user.getEmail() == null ? "" : user.getEmail());
+        boolean ownsRequest = messages.stream().anyMatch(m -> requestId == m.getRequestId());
+        if (!ownsRequest) return Result.fail(Result.CODE_UNAUTHORIZED, "无权访问该交流内容");
+        CommunityMessage message = new CommunityMessage();
+        message.setRequestId(requestId);
+        message.setSenderType("USER");
+        message.setSenderName(username);
+        message.setContent(content.trim());
+        return messageMapper.insert(message) == 1 ? Result.ok(null) : Result.fail("发送失败");
     }
 }

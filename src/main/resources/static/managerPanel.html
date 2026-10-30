@@ -576,7 +576,7 @@
           communityRows.innerHTML = (requests || []).map((item) => {
             const type = item.requestType === "join" ? "加入申请" : "问题反馈";
             const status = item.status === 1 ? "已处理" : item.status === 2 ? "已忽略" : "待处理";
-            const action = communityMode === "history" ? `<span class="badge ${item.status === 1 ? "approved" : item.status === 2 ? "rejected" : "pending"}">${status}</span>` : `<div class="actions"><button class="approve" data-community="approve" data-id="${item.id}">标记已处理</button><button class="reject" data-community="reject" data-id="${item.id}">忽略</button></div>`;
+            const action = communityMode === "history" ? `<span class="badge ${item.status === 1 ? "approved" : item.status === 2 ? "rejected" : "pending"}">${status}</span>` : `<div class="actions"><button class="view" data-community="reply" data-id="${item.id}">回复</button><button class="approve" data-community="approve" data-id="${item.id}">标记已处理</button><button class="reject" data-community="reject" data-id="${item.id}">忽略</button></div>`;
             return `<tr><td><span class="badge pending">${type}</span></td><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.contact || "未填写")}</td><td>${escapeHtml(item.category || "—")}</td><td><div class="reason" title="${escapeHtml(item.message)}">${escapeHtml(item.message)}</div></td><td>${escapeHtml(formatTime(item.createdAt))}</td><td>${action}</td></tr>`;
           }).join("");
           document.getElementById("communityEmpty").style.display = requests && requests.length ? "none" : "block";
@@ -591,6 +591,15 @@
       communityRows.addEventListener("click", async (event) => {
         const button = event.target.closest("button[data-community]");
         if (!button) return;
+        if (button.dataset.community === "reply") {
+          const content = window.prompt("回复这条申请/反馈：");
+          if (!content || !content.trim()) return;
+          try {
+            await request(`/api/community/admin/${button.dataset.id}/reply`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: content.trim() }) });
+            showToast("回复已发送");
+          } catch (error) { showToast("回复失败：" + error.message); }
+          return;
+        }
         const status = button.dataset.community === "approve" ? 1 : 2;
         try {
           await request(`/api/community/admin/${button.dataset.id}/status?status=${status}`, { method: "POST" });

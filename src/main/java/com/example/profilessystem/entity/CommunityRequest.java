@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 /** 学习空间的反馈与加入申请。 */
 public class CommunityRequest {
     private Long id;
+    private String username;
     private String requestType;
     private String name;
     private String contact;
@@ -16,6 +17,8 @@ public class CommunityRequest {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
     public String getRequestType() { return requestType; }
     public void setRequestType(String requestType) { this.requestType = requestType; }
     public String getName() { return name; }

@@ -7,8 +7,9 @@ import java.util.List;
 
 @Mapper
 public interface CommunityRequestMapper {
-    @Insert("INSERT INTO community_request(request_type, name, contact, category, message) "
-            + "VALUES(#{requestType}, #{name}, #{contact}, #{category}, #{message})")
+    @Insert("INSERT INTO community_request(username, request_type, name, contact, category, message) "
+            + "VALUES(#{username}, #{requestType}, #{name}, #{contact}, #{category}, #{message})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(CommunityRequest request);
 
     @Select("SELECT id, request_type, name, contact, category, message, status, created_at, reviewed_at "
