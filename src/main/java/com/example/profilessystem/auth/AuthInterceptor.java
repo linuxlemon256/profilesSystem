@@ -88,6 +88,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         return path.startsWith("/api/recovery/admin/")
                 || path.startsWith("/api/community/admin/")
+                || path.startsWith("/api/groups/admin/")
+                || path.equals("/api/notifications/admin/send")
                 || path.equals("/api/user/get/all")
                 || path.equals("/api/user/get/uncommit")
                 || path.equals("/api/user/get/commit")
@@ -104,7 +106,9 @@ public class AuthInterceptor implements HandlerInterceptor {
                 || path.startsWith("/api/progress")
                 || path.equals("/api/community/messages")
                 || path.matches("/api/community/[0-9]+/messages")
-                || path.startsWith("/api/groups");
+                || path.startsWith("/api/groups")
+                || path.startsWith("/api/social")
+                || path.startsWith("/api/notifications");
     }
 
     private boolean requiresAssociatedLevel(String path) {

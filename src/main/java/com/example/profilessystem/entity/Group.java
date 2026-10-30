@@ -11,6 +11,7 @@ public class Group {
     private String ownerUsername;
     private LocalDateTime createdAt;
     private int memberCount;
+    private int approvalStatus = 0;
     public Group() {
     }
     public Group(int id, String name, String description, ArrayList<User> users) {
@@ -49,4 +50,6 @@ public class Group {
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public int getMemberCount() { return memberCount; }
     public void setMemberCount(int memberCount) { this.memberCount = memberCount; }
+    public int getApprovalStatus() { return approvalStatus; }
+    public void setApprovalStatus(int approvalStatus) { this.approvalStatus = approvalStatus; }
 }

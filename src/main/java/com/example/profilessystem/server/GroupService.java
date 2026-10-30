@@ -18,6 +18,9 @@ public class GroupService {
     public Result<List<Group>> all() { return Result.ok(mapper.findAll()); }
 
     @Transactional(readOnly = true)
+    public Result<List<Group>> mine(String username) { return Result.ok(mapper.findMine(username)); }
+
+    @Transactional(readOnly = true)
     public Result<Group> get(long id) {
         Group group = mapper.findById(id);
         if (group == null) return Result.fail("学习组不存在");

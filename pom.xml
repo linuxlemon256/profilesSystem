@@ -15,7 +15,11 @@
     <description>ProfilesSystem</description>
     <url/>
     <licenses>
-        <license/>
+        <license>
+            <name>ProfilesSystem Non-Commercial License</name>
+            <url>LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
     </licenses>
     <developers>
         <developer/>
