@@ -284,6 +284,21 @@
         padding: 5px 8px;
         font-size: 10px;
       }
+      .access-guide {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: -8px 0 32px;
+        padding: 10px 13px;
+        border: 1px solid #dce5f5;
+        border-radius: 13px;
+        background: #ffffff8c;
+      }
+      .access-guide .level-legend { margin: 0; }
+      .access-guide-title { color: #64748b; font-size: 12px; font-weight: 800; white-space: nowrap; }
+      @media (max-width: 520px) {
+        .access-guide { align-items: flex-start; flex-direction: column; gap: 7px; }
+      }
       .icon {
         width: 46px;
         height: 46px;
@@ -345,10 +360,86 @@
         font-weight: 700;
       }
       .services-section { margin-top: 38px; }
+      .community-section { margin-top: 38px; }
+      .community-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .community-link {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: #ffffffb8;
+        color: #172554;
+        text-decoration: none;
+        transition: transform .2s, border-color .2s, box-shadow .2s;
+      }
+      .community-link:hover {
+        transform: translateY(-3px);
+        border-color: #a5b4fc;
+        box-shadow: 0 12px 28px #30458e18;
+      }
+      .community-icon {
+        display: grid;
+        flex: none;
+        width: 40px;
+        height: 40px;
+        place-items: center;
+        border-radius: 13px;
+        color: #4338ca;
+        background: #e0e7ff;
+        font-size: 19px;
+      }
+      .community-link strong { display: block; font-size: 14px; }
+      .community-link small { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+      .form-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        background: #0f173588;
+        backdrop-filter: blur(8px);
+      }
+      .form-modal[hidden] { display: none; }
+      .form-panel {
+        width: min(500px, 100%);
+        max-height: min(700px, 92vh);
+        overflow: auto;
+        padding: 28px;
+        border: 1px solid #ffffff;
+        border-radius: 22px;
+        background: #ffffff;
+        box-shadow: 0 25px 80px #17255444;
+      }
+      .form-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+      .form-head h3 { margin: 0; font-size: 22px; }
+      .form-head p { margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+      .close-form { border: 0; background: transparent; color: #64748b; font-size: 24px; cursor: pointer; }
+      .feedback-form { margin-top: 22px; }
+      .feedback-form label { display: block; margin: 14px 0 7px; color: #334155; font-size: 13px; font-weight: 700; }
+      .feedback-form input, .feedback-form textarea, .feedback-form select {
+        width: 100%; padding: 12px 13px; border: 1px solid #dbe3f2; border-radius: 10px;
+        outline: none; background: #f8fafc; color: #172554; font: inherit;
+      }
+      .feedback-form textarea { min-height: 112px; resize: vertical; }
+      .feedback-form input:focus, .feedback-form textarea:focus, .feedback-form select:focus { border-color: #818cf8; box-shadow: 0 0 0 3px #818cf822; }
+      .form-submit { width: 100%; margin-top: 20px; padding: 13px; border: 0; border-radius: 11px; background: #4f46e5; color: white; font-weight: 800; cursor: pointer; }
+      .form-submit:disabled { cursor: not-allowed; opacity: .6; }
+      .form-status { display: none; margin-top: 14px; padding: 11px 12px; border-radius: 10px; color: #166534; background: #dcfce7; font-size: 13px; line-height: 1.6; }
+      .form-status.show { display: block; }
       .foot {
         margin-top: 38px;
         color: #8a96b5;
         font-size: 12px;
+      }
+      @media (max-width: 680px) {
+        .community-links { grid-template-columns: 1fr; }
       }
       .location {
         position: relative;          /* 作为 .selectBox 的定位参照 */
@@ -543,16 +634,19 @@
           </a>
         </div>
       </section>
-      <section>
-        <div class="section-title">
-          <h2>专业方向</h2>
-          <span>选择一个方向开始</span>
-        </div>
-        <div class="level-legend" aria-label="专业访问等级">
+      <div class="access-guide" aria-label="全站访问等级说明">
+        <span class="access-guide-title">访问等级</span>
+        <div class="level-legend">
           <span class="access-level level-undetermined">未定</span>
           <span class="access-level level-public">公开</span>
           <span class="access-level level-associated">关联</span>
           <span class="access-level level-internal">内部</span>
+        </div>
+      </div>
+      <section>
+        <div class="section-title">
+          <h2>专业方向</h2>
+          <span>选择一个方向开始</span>
         </div>
         <div class="grid">
           <article class="card">
@@ -692,6 +786,42 @@
           </article>
         </div>
       </section>
+      <section class="community-section">
+        <div class="section-title">
+          <h2>一起让这里更好</h2>
+          <span>欢迎留下想法，也欢迎成为同行者</span>
+        </div>
+        <div class="community-links">
+          <a class="community-link" href="#feedback" data-open-form="feedback">
+            <span class="community-icon">✉</span>
+            <span><strong>问题反馈</strong><small>发现问题或有建议？发邮件告诉我</small></span>
+          </a>
+          <a class="community-link" href="#join" data-open-form="join">
+            <span class="community-icon">＋</span>
+            <span><strong>加入我们</strong><small>愿意一起维护、完善学习空间？欢迎联系</small></span>
+          </a>
+        </div>
+      </section>
+      <div class="form-modal" id="formModal" hidden>
+        <div class="form-panel" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+          <div class="form-head">
+            <div><h3 id="formTitle">问题反馈</h3><p id="formIntro">你的反馈会帮助我们持续改进学习空间。</p></div>
+            <button class="close-form" type="button" aria-label="关闭" data-close-form>×</button>
+          </div>
+          <form class="feedback-form" id="feedbackForm">
+            <label for="formName">称呼</label>
+            <input id="formName" name="name" maxlength="40" placeholder="怎么称呼你？" required />
+            <label for="formContact">联系方式（邮箱）</label>
+            <input id="formContact" name="contact" type="email" maxlength="120" placeholder="请输入常用邮箱" autocomplete="email" required />
+            <label for="formType" id="formTypeLabel">反馈类型</label>
+            <select id="formType" name="type"><option>页面问题</option><option>内容建议</option><option>功能建议</option><option>其他</option></select>
+            <label for="formMessage">具体内容</label>
+            <textarea id="formMessage" name="message" maxlength="1000" placeholder="请尽量描述清楚" required></textarea>
+            <div class="form-status" id="formStatus"></div>
+            <button class="form-submit" id="formSubmit" type="submit">提交反馈</button>
+          </form>
+        </div>
+      </div>
       <p class="foot">ProfilesSystem · 个人学习与资料空间</p>
     </main>
     <script>
@@ -852,6 +982,97 @@
       });
 
       showResource(document.getElementById('majorResource').value || 'computer');
+
+      const formModal = document.getElementById('formModal');
+      const feedbackForm = document.getElementById('feedbackForm');
+      const formTitle = document.getElementById('formTitle');
+      const formIntro = document.getElementById('formIntro');
+      const formType = document.getElementById('formType');
+      const formTypeLabel = document.getElementById('formTypeLabel');
+      const formStatus = document.getElementById('formStatus');
+      const formSubmit = document.getElementById('formSubmit');
+      let activeFormType = 'feedback';
+
+      function configureForm(type) {
+        activeFormType = type;
+        const joining = type === 'join';
+        formTitle.textContent = joining ? '加入我们' : '问题反馈';
+        formIntro.textContent = joining
+          ? '告诉我们你想参与的方向，提交后请留意你填写的联系方式。'
+          : '你的反馈会帮助我们持续改进学习空间。';
+        formTypeLabel.textContent = joining ? '希望参与的方向' : '反馈类型';
+        formType.innerHTML = joining
+          ? '<option>内容共建</option><option>技术协作</option><option>学习路线共创</option><option>其他</option>'
+          : '<option>页面问题</option><option>内容建议</option><option>功能建议</option><option>其他</option>';
+        formSubmit.textContent = joining ? '提交加入申请' : '提交反馈';
+        formStatus.classList.remove('show');
+        formStatus.textContent = '';
+        feedbackForm.reset();
+        const submitted = localStorage.getItem('profilesSystem:' + type + ':submitted') === '1';
+        formSubmit.disabled = submitted;
+        if (submitted) {
+          formStatus.textContent = joining
+            ? '你已经提交过加入申请，请关注联系方式中的回复，不要重复提交。'
+            : '你已经提交过反馈，请等待处理；如需补充，请在联系方式中说明。';
+          formStatus.classList.add('show');
+        }
+      }
+
+      function openForm(type) {
+        configureForm(type);
+        formModal.hidden = false;
+        document.getElementById('formName').focus();
+      }
+
+      function closeForm() {
+        formModal.hidden = true;
+      }
+
+      document.querySelectorAll('[data-open-form]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          openForm(link.dataset.openForm);
+        });
+      });
+      document.querySelector('[data-close-form]').addEventListener('click', closeForm);
+      formModal.addEventListener('click', (event) => {
+        if (event.target === formModal) closeForm();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !formModal.hidden) closeForm();
+      });
+
+      feedbackForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const key = 'profilesSystem:' + activeFormType + ':submitted';
+        if (localStorage.getItem(key) === '1') {
+          configureForm(activeFormType);
+          return;
+        }
+        const data = Object.fromEntries(new FormData(feedbackForm).entries());
+        data.requestType = activeFormType;
+        formSubmit.disabled = true;
+        try {
+          const response = await fetch('/api/community/request', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          const result = await response.json();
+          if (result.code !== 200) throw new Error(result.message || '提交失败');
+          localStorage.setItem(key, '1');
+          formStatus.textContent = activeFormType === 'join'
+            ? '加入申请已提交，请关注你填写的联系方式（尤其是邮箱）的回复。'
+            : '反馈已提交，感谢你的建议。请不要重复提交相同内容。';
+          formStatus.classList.add('show');
+        } catch (error) {
+          formStatus.textContent = error.message || '网络异常，请稍后重试';
+          formStatus.style.color = '#b91c1c';
+          formStatus.style.background = '#fee2e2';
+          formStatus.classList.add('show');
+          formSubmit.disabled = false;
+        }
+      });
 
     </script>
   </body>

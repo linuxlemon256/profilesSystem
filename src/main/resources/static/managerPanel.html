@@ -437,6 +437,16 @@
           <div class="empty" id="recoveryEmpty">暂无邀请码重置申请</div>
         </div>
       </section>
+      <section class="panel" style="margin-top: 22px">
+        <div class="toolbar"><strong>问题反馈与加入申请</strong><span class="count" id="communityCount"></span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>类型</th><th>称呼</th><th>联系方式</th><th>方向/类别</th><th>内容</th><th>提交时间</th><th>操作</th></tr></thead>
+            <tbody id="communityRows"></tbody>
+          </table>
+          <div class="empty" id="communityEmpty">暂无待处理反馈或加入申请</div>
+        </div>
+      </section>
     </main>
     <div class="toast" id="toast"></div>
     <div class="edit-modal" id="editModal" aria-hidden="true">
@@ -461,6 +471,7 @@
 
       const rows = document.getElementById("rows");
       const recoveryRows = document.getElementById("recoveryRows");
+      const communityRows = document.getElementById("communityRows");
       const editModal = document.getElementById("editModal");
       const editForm = document.getElementById("editForm");
       let editingUsername = "";
@@ -538,6 +549,33 @@
           document.getElementById("recoveryCount").textContent = `${(requests || []).length} 条待处理`;
         } catch (error) { showToast("加载找回申请失败：" + error.message); }
       }
+
+      async function loadCommunityRequests() {
+        try {
+          const requests = await request("/api/community/admin/pending");
+          communityRows.innerHTML = (requests || []).map((item) => {
+            const type = item.requestType === "join" ? "加入申请" : "问题反馈";
+            return `<tr><td><span class="badge pending">${type}</span></td><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.contact || "未填写")}</td><td>${escapeHtml(item.category || "—")}</td><td><div class="reason" title="${escapeHtml(item.message)}">${escapeHtml(item.message)}</div></td><td>${escapeHtml(formatTime(item.createdAt))}</td><td><div class="actions"><button class="approve" data-community="approve" data-id="${item.id}">标记已处理</button><button class="reject" data-community="reject" data-id="${item.id}">忽略</button></div></td></tr>`;
+          }).join("");
+          document.getElementById("communityEmpty").style.display = requests && requests.length ? "none" : "block";
+          document.getElementById("communityCount").textContent = `${(requests || []).length} 条待处理`;
+          return true;
+        } catch (error) {
+          showToast("加载反馈失败：" + error.message);
+          return false;
+        }
+      }
+
+      communityRows.addEventListener("click", async (event) => {
+        const button = event.target.closest("button[data-community]");
+        if (!button) return;
+        const status = button.dataset.community === "approve" ? 1 : 2;
+        try {
+          await request(`/api/community/admin/${button.dataset.id}/status?status=${status}`, { method: "POST" });
+          showToast(status === 1 ? "已标记为已处理" : "已忽略该申请");
+          await loadCommunityRequests();
+        } catch (error) { showToast("处理失败：" + error.message); }
+      });
 
       recoveryRows.addEventListener("click", async (event) => {
         const button = event.target.closest("button[data-recovery]");
@@ -712,12 +750,14 @@
       document.getElementById("refresh").addEventListener("click", async () => {
         if (await loadApplications()) {
           await loadRecoveryRequests();
+          await loadCommunityRequests();
           showToast("列表已刷新");
         }
       });
 
       loadApplications();
       loadRecoveryRequests();
+      loadCommunityRequests();
 
     </script>
   </body>

@@ -29,9 +29,9 @@
         if (response.status === 401) { location.replace("login.html?redirect=projectDemo.html"); return; }
         if (!response.ok) throw new Error("access denied");
         const result = await response.json();
-        if (Number(result.code) !== 200 || Number(result.data) < 2) { location.replace("learnServer.html?denied=level"); return; }
+        if (Number(result.code) !== 200 || Number(result.data) < 2) { location.replace("accessDenied.html?required=2"); return; }
         document.body.classList.remove("auth-pending");
-      }).catch(() => location.replace("learnServer.html?denied=level"));
+      }).catch(() => location.replace("accessDenied.html?required=2"));
     </script>
   </body>
 </html>

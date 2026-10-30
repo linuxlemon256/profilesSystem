@@ -66,7 +66,8 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
             var user = userMapper.findByName(username);
             if (user == null || user.getLevel() < requiredLevel(path)) {
-                return rejectForbidden(request, response, "/learnServer.html?denied=level");
+                return rejectForbidden(request, response,
+                        "/accessDenied.html?required=" + requiredLevel(path));
             }
         }
         return true;
@@ -86,6 +87,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
         return path.startsWith("/api/recovery/admin/")
+                || path.startsWith("/api/community/admin/")
                 || path.equals("/api/user/get/all")
                 || path.equals("/api/user/get/uncommit")
                 || path.equals("/api/user/get/commit")
