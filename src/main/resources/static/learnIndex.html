@@ -355,6 +355,7 @@
       /* 统一专业、资源与服务卡片的交互动效 */
       .card {
         transition: transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease, border-color .28s ease;
+        cursor: pointer;
       }
       .card:hover {
         transform: translateY(-7px) scale(1.012);
@@ -892,9 +893,6 @@
       const loginTip = document.getElementById("loginTip");
       const accountLink = document.getElementById("accountLink");
       const logoutLink = document.getElementById("logoutLink");
-      const fallbackName = new URLSearchParams(location.search).get("name");
-
-
       /** 未登录（或账户信息读取失败）时的导航状态。 */
       function showGuest() {
         userLabel.textContent = "未登录";
@@ -904,21 +902,11 @@
         logoutLink.hidden = true;
       }
 
-      function showFallbackUser(name) {
-        if (!name) return false;
-        userLabel.textContent = "你好，" + name;
-        loginTip.textContent = name + " · 欢迎回来";
-        accountLink.href = "account.html?name=" + encodeURIComponent(name);
-        accountLink.textContent = "我的账户";
-        logoutLink.hidden = false;
-        return true;
-      }
-
       async function loadCurrentUser() {
         try {
           const response = await fetch("/api/user/me");
           if (response.status === 401) {
-            if (!showFallbackUser(fallbackName)) showGuest();
+            showGuest();
             return;
           }
           const result = await response.json();
@@ -934,7 +922,7 @@
           logoutLink.hidden = false;
         } catch (error) {
           console.error(error);
-          if (!showFallbackUser(fallbackName)) showGuest();
+          showGuest();
         }
       }
 
@@ -1135,6 +1123,16 @@
           formStatus.classList.add('show');
           formSubmit.disabled = false;
         }
+      });
+
+      // 卡片空白区域也可进入对应页面；卡片内的链接和控件仍保持自身行为。
+      document.querySelectorAll('.card').forEach((card) => {
+        const link = card.querySelector('a[href]');
+        if (!link) return;
+        card.addEventListener('click', (event) => {
+          if (event.target.closest('a, button, input, select, textarea')) return;
+          link.click();
+        });
       });
 
     </script>

@@ -375,10 +375,9 @@
 
           const success = Number(result.code) === 200;
           if (success) {
-            const name = result.data || username;
             const destination = ["LLMindex.html", "projectDemo.html", "storageDemo.html"].includes(requestedRedirect)
               ? requestedRedirect
-              : "learnIndex.html?name=" + encodeURIComponent(name);
+              : "learnIndex.html";
             window.location.replace(destination);
           } else {
             showError(result.message || "登录失败，请稍后重试");
