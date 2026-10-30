@@ -352,6 +352,33 @@
       .card a:hover {
         color: #0891b2;
       }
+      /* 统一专业、资源与服务卡片的交互动效 */
+      .card {
+        transition: transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease, border-color .28s ease;
+      }
+      .card:hover {
+        transform: translateY(-7px) scale(1.012);
+        border-color: #a5b4fc;
+        box-shadow: 0 22px 46px #30458e25;
+      }
+      .card .icon {
+        transition: transform .35s cubic-bezier(.2,.8,.2,1), background .25s ease, box-shadow .25s ease;
+      }
+      .card:hover .icon {
+        transform: rotate(-7deg) scale(1.08);
+        background: #dbeafe;
+        box-shadow: 0 8px 18px #4f46e51c;
+      }
+      .card a {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: gap .2s ease, color .2s ease;
+      }
+      .card a:hover { gap: 10px; }
+      @media (prefers-reduced-motion: reduce) {
+        .card, .card .icon, .card a { transition: none; }
+      }
       .quick {
         display: grid;
         grid-template-columns: 1fr 1fr;
