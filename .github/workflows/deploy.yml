@@ -8,6 +8,31 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Aliyun CLI
+        uses: JCBLE/setup-aliyun-cli@v1.1.0
+        with:
+          access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+          region: ${{ secrets.ALIYUN_REGION }}
+
+      - name: Get runner public IP
+        id: runner-ip
+        run: |
+          IP=$(curl -s https://api.ipify.org)
+          echo "ip=$IP" >> "$GITHUB_OUTPUT"
+          echo "Runner IP: $IP"
+
+      - name: Authorize security group for this runner
+        run: |
+          aliyun ecs AuthorizeSecurityGroup \
+            --version 2014-05-26 --force \
+            --RegionId "${{ secrets.ALIYUN_REGION }}" \
+            --SecurityGroupId "${{ secrets.ALIYUN_SECURITY_GROUP_ID }}" \
+            --IpProtocol tcp \
+            --PortRange 22/22 \
+            --SourceCidrIp "${{ steps.runner-ip.outputs.ip }}/32" \
+            --Priority 1
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -25,4 +50,14 @@ jobs:
             systemctl restart profiles-system
             sleep 5
             systemctl is-active --quiet profiles-system
-            echo "Deploy finished at $(date)"
+
+      - name: Revoke security group rule (always)
+        if: always()
+        run: |
+          aliyun ecs RevokeSecurityGroup \
+            --version 2014-05-26 --force \
+            --RegionId "${{ secrets.ALIYUN_REGION }}" \
+            --SecurityGroupId "${{ secrets.ALIYUN_SECURITY_GROUP_ID }}" \
+            --IpProtocol tcp \
+            --PortRange 22/22 \
+            --SourceCidrIp "${{ steps.runner-ip.outputs.ip }}/32"
