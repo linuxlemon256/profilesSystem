@@ -607,7 +607,21 @@
       }
 
     </style>
-  </head>
+    <style id="profiles-motion">
+    @keyframes profilesPageIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes profilesRiseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    body { animation: profilesPageIn .45s ease-out both; }
+    body > main, body > .page, body > .shell { animation: profilesRiseIn .55s cubic-bezier(.2,.8,.2,1) both; }
+    a, button, input, textarea, select { transition: color .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease, opacity .2s ease; }
+    a:hover { filter: brightness(1.04); }
+    button:hover:not(:disabled) { transform: translateY(-2px); }
+    input:focus, textarea:focus, select:focus { box-shadow: 0 0 0 3px #6366f126; }
+    article, .card, .panel, .stat, .hero, .section, .box { animation: profilesRiseIn .55s cubic-bezier(.2,.8,.2,1) both; }
+    @media (prefers-reduced-motion: reduce) {
+      body, body > main, body > .page, body > .shell, article, .card, .panel, .stat, .hero, .section, .box { animation: none !important; }
+      a, button, input, textarea, select { transition: none !important; }
+    }
+  </style></head>
   <body>
     <!-- [ANCHOR:HEADER] 页头：总进度 + 全局操作 -->
     <header class="hero">

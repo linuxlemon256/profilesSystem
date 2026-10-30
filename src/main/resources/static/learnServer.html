@@ -48,7 +48,77 @@
       .foot { margin-top: 44px; color: #94a3b8; font-size: 12px; }
       @media (max-width: 760px) { .page { width: min(100% - 24px, 560px); padding-top: 18px; } .hero { grid-template-columns: 1fr; gap: 25px; padding: 64px 0 56px; } .orbit { min-height: 230px; } .cards { grid-template-columns: 1fr; } .card p { min-height: 0; } .top-actions a:first-child { display: none; } }
     </style>
-  </head>
+    <style id="learn-server-motion">
+      body { overflow-x: hidden; }
+      .page { position: relative; }
+      .page::before, .page::after {
+        content: "";
+        position: fixed;
+        z-index: -1;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        pointer-events: none;
+        filter: blur(10px);
+        opacity: .36;
+        animation: ambientDrift 12s ease-in-out infinite alternate;
+      }
+      .page::before { top: 17%; left: -150px; background: #818cf855; }
+      .page::after { right: -130px; bottom: 10%; background: #22d3ee44; animation-delay: -5s; }
+      .topbar { animation: topbarIn .7s .08s both; }
+      .hero > div:first-child { animation: heroTextIn .8s .18s cubic-bezier(.2,.8,.2,1) both; }
+      .hero-actions .button { animation: buttonIn .55s cubic-bezier(.2,.8,.2,1) both; }
+      .hero-actions .button:nth-child(2) { animation-delay: .12s; }
+      .orbit { perspective: 900px; }
+      .orbit::before { animation: orbitSpin 15s linear infinite; box-shadow: 0 0 30px #818cf82b; }
+      .orbit::after { animation: orbitSpinReverse 20s linear infinite; box-shadow: 0 0 36px #06b6d42b; }
+      .orbit::marker { display: none; }
+      .orb-card { animation: orbFloat 4.8s ease-in-out infinite; }
+      .orb-card::before, .orb-card::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+      .orb-card::before { inset: -9px; border: 1px solid #818cf84c; animation: orbPulse 2.8s ease-in-out infinite; }
+      .orb-card::after { width: 7px; height: 7px; top: 17px; right: 20px; background: #22d3ee; box-shadow: 0 0 14px #22d3ee; animation: dotBlink 1.8s ease-in-out infinite; }
+      .orb-icon { animation: iconGlow 2.6s ease-in-out infinite; }
+      .cards .card { opacity: 0; animation: cardIn .65s cubic-bezier(.2,.8,.2,1) forwards; }
+      .cards .card:nth-child(1) { animation-delay: .22s; }
+      .cards .card:nth-child(2) { animation-delay: .34s; }
+      .cards .card:nth-child(3) { animation-delay: .46s; }
+      .card { transition: transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease, border-color .28s ease; }
+      .card:hover { transform: translateY(-8px) scale(1.015); border-color: #a5b4fc; box-shadow: 0 22px 46px #30458e26; }
+      .card-icon { transition: transform .3s ease, color .3s ease, background .3s ease; }
+      .card:hover .card-icon { transform: rotate(-8deg) scale(1.1); color: #fff; background: linear-gradient(135deg, #4f46e5, #0891b2); }
+      .card a { transition: gap .2s ease, color .2s ease; }
+      .card a:hover { gap: 7px; }
+      @keyframes ambientDrift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(35px, -22px, 0) scale(1.16); } }
+      @keyframes topbarIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes heroTextIn { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: translateX(0); } }
+      @keyframes buttonIn { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+      @keyframes orbitSpin { to { transform: rotate(342deg); } }
+      @keyframes orbitSpinReverse { to { transform: rotate(-335deg); } }
+      @keyframes orbFloat { 0%, 100% { transform: translateY(0) rotateX(0); } 50% { transform: translateY(-12px) rotateX(3deg); } }
+      @keyframes orbPulse { 0%, 100% { opacity: .35; transform: scale(.98); } 50% { opacity: .9; transform: scale(1.04); } }
+      @keyframes dotBlink { 0%, 100% { opacity: .35; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.25); } }
+      @keyframes iconGlow { 0%, 100% { box-shadow: 0 0 0 #4f46e500; } 50% { box-shadow: 0 0 24px #4f46e566; } }
+      @keyframes cardIn { from { opacity: 0; transform: translateY(24px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+      @media (prefers-reduced-motion: reduce) {
+        .page::before, .page::after, .topbar, .hero > div:first-child, .hero-actions .button, .orbit::before, .orbit::after, .orb-card, .orb-card::before, .orb-card::after, .orb-icon, .cards .card { animation: none !important; opacity: 1; }
+        .card, .card-icon, .card a { transition: none !important; }
+      }
+    </style>
+    <style id="profiles-motion">
+    @keyframes profilesPageIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes profilesRiseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    body { animation: profilesPageIn .45s ease-out both; }
+    body > main, body > .page, body > .shell { animation: profilesRiseIn .55s cubic-bezier(.2,.8,.2,1) both; }
+    a, button, input, textarea, select { transition: color .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease, opacity .2s ease; }
+    a:hover { filter: brightness(1.04); }
+    button:hover:not(:disabled) { transform: translateY(-2px); }
+    input:focus, textarea:focus, select:focus { box-shadow: 0 0 0 3px #6366f126; }
+    article, .card, .panel, .stat, .hero, .section, .box { animation: profilesRiseIn .55s cubic-bezier(.2,.8,.2,1) both; }
+    @media (prefers-reduced-motion: reduce) {
+      body, body > main, body > .page, body > .shell, article, .card, .panel, .stat, .hero, .section, .box { animation: none !important; }
+      a, button, input, textarea, select { transition: none !important; }
+    }
+  </style></head>
   <body>
     <main class="page">
       <header class="topbar">
