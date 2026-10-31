@@ -123,7 +123,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (path.startsWith("/api/community")) return "community";
         if (path.equals("/notification.html")) return "notifications";
         if (path.equals("/feedback.html") || path.equals("/joinUs.html")) return "community";
-        if (path.startsWith("/api/progress") || path.equals("/storageDemo.html")) return "storage";
+        if (path.startsWith("/api/progress") || path.equals("/storage.html")) return "storage";
         return null;
     }
 
@@ -146,11 +146,11 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private boolean requiresAssociatedLevel(String path) {
-        return path.equals("/projectDemo.html") || path.equals("/storageDemo.html");
+        return path.equals("/projectDemo.html") || path.equals("/storage.html");
     }
 
     private int requiredLevel(String path) {
-        return path.equals("/projectDemo.html") || path.equals("/storageDemo.html") ? 2 : 1;
+        return path.equals("/projectDemo.html") || path.equals("/storage.html") ? 2 : 1;
     }
 
     private boolean reject(HttpServletRequest request, HttpServletResponse response, String redirect)
