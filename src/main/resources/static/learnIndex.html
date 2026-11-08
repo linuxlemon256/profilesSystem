@@ -113,6 +113,37 @@
         gap: 12px;
         min-width: 218px;
       }
+      .assistant-entry {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 13px 16px;
+        border: 1px solid #c4b5fd;
+        border-radius: 15px;
+        color: #312e81;
+        background: linear-gradient(135deg, #ede9fe, #cffafe);
+        text-decoration: none;
+        box-shadow: 0 10px 24px #6366f11c;
+        transition: transform .2s, box-shadow .2s, border-color .2s;
+      }
+      .assistant-entry:hover {
+        transform: translateY(-3px);
+        border-color: #818cf8;
+        box-shadow: 0 15px 30px #6366f12c;
+      }
+      .assistant-entry-icon {
+        display: grid;
+        flex: none;
+        width: 36px;
+        height: 36px;
+        place-items: center;
+        border-radius: 12px;
+        color: #fff;
+        background: #4f46e5;
+        font-size: 18px;
+      }
+      .assistant-entry strong { display: block; font-size: 14px; }
+      .assistant-entry small { display: block; margin-top: 3px; color: #6366f1; font-size: 11px; }
       /* 右下角常驻快捷入口：和返回顶部按钮一样，不占用主内容空间 */
       .quick-float {
         position: fixed !important;
@@ -755,6 +786,8 @@
       </div>
       <nav class="topnav">
         <a href="learnServer.html">学习首页</a
+        ><a href="communication.html">交流中心</a
+        ><a href="groups.html">学习组</a
         ><a href="account.html" id="accountLink">我的账户</a
         ><a href="login.html" id="logoutLink" hidden>退出登录</a
         ><span class="user" id="user">学习成员</span>
@@ -772,6 +805,11 @@
         </div>
         <div class="hero-actions">
           <div class="tip" id="loginTip"><a href="login.html">登录</a></div>
+            
+          <a class="assistant-entry communication-entry" href="communication.html">
+            <span class="assistant-entry-icon">☏</span>
+            <span><strong>交流中心</strong><small>学习组与好友，保持恰到好处的联系 →</small></span>
+          </a>
         </div>
       </section>
       <div class="access-guide" aria-label="全站访问等级说明">
@@ -842,6 +880,7 @@
         </div>
         <br>
         <div class="grid">
+          
           <article class="card">
             <span class="access-level level-internal">内部</span>
             <div class="icon">☁</div>

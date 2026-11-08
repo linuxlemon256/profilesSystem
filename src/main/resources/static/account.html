@@ -224,6 +224,10 @@
         <p><span>申请原因</span><strong id="accountReason">读取中…</strong></p>
         <p><span>加入时间</span><strong id="accountCreatedAt">读取中…</strong></p>
       </section>
+      <section class="account-detail social-summary">
+        <p><span>我的学习组</span><strong id="accountGroups">加载中…</strong></p>
+        <p><span>我的好友</span><strong id="accountFriends">加载中…</strong></p>
+      </section>
       <div class="actions">
         <a class="btn primary" href="learnIndex.html">选择专业方向</a
         ><a class="btn secondary" id="logoutLink" href="login.html">退出登录</a>
@@ -286,6 +290,18 @@
                           ? new Date(user.createdAt).toLocaleDateString("zh-CN")
                           : "—"
           );
+        try {
+          const [groupsResponse, friendsResponse] = await Promise.all([
+            fetch("/api/groups/mine"), fetch("/api/social/friends")
+          ]);
+          const groups = await groupsResponse.json();
+          const friends = await friendsResponse.json();
+          setText("accountGroups", groups.code === 200 && groups.data && groups.data.length ? groups.data.map(g => g.name).join("、") : "暂未加入");
+          setText("accountFriends", friends.code === 200 && friends.data && friends.data.length ? friends.data.map(f => f.username).join("、") : "暂未添加");
+        } catch (socialError) {
+          setText("accountGroups", "暂不可用");
+          setText("accountFriends", "暂不可用");
+        }
         } catch (error) {
           console.error(error);
           setText("accountStatus", "读取失败");

@@ -96,6 +96,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         return path.startsWith("/api/recovery/admin/")
                 || path.startsWith("/api/community/admin/")
+                || path.startsWith("/api/groups/admin/")
                 || path.equals("/api/notifications/admin/send")
                 || path.startsWith("/api/features/")
                 || path.equals("/api/user/get/all")
@@ -114,11 +115,15 @@ public class AuthInterceptor implements HandlerInterceptor {
                 || path.startsWith("/api/progress")
                 || path.equals("/api/community/messages")
                 || path.matches("/api/community/[0-9]+/messages")
+                || path.startsWith("/api/groups")
+                || path.startsWith("/api/social")
                 || path.startsWith("/api/notifications")
                 ;
     }
 
     private String featureFor(String path) {
+        if (path.startsWith("/api/groups") || path.equals("/groups.html")) return "groups";
+        if (path.startsWith("/api/social") || path.equals("/communication.html")) return "friends";
         if (path.startsWith("/api/notifications")) return "notifications";
         if (path.startsWith("/api/community")) return "community";
         if (path.equals("/notification.html")) return "notifications";
@@ -146,7 +151,9 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private boolean requiresAssociatedLevel(String path) {
-        return path.equals("/projectDemo.html") || path.equals("/storage.html");
+        return path.equals("/communication.html") || path.equals("/groups.html")
+                || path.startsWith("/api/social") || path.startsWith("/api/groups")
+                || path.equals("/projectDemo.html") || path.equals("/storage.html");
     }
 
     private int requiredLevel(String path) {

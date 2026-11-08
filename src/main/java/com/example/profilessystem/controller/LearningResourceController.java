@@ -35,4 +35,3 @@ public class LearningResourceController {
         return value == null ? null : value.toString();
     }
 }
-

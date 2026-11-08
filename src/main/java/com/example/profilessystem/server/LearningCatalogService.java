@@ -30,4 +30,3 @@ public class LearningCatalogService {
                 mapper.findRoutes(category.getId(), accessService.level(username)));
     }
 }
-

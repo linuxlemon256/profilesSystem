@@ -52,8 +52,9 @@
       const required = params.get("required");
       const labels = { "1": "需要关联人员等级", "2": "需要内部人员等级" };
       if (required && labels[required]) document.getElementById("level").textContent = labels[required];
+
       const feature = params.get("feature");
-      const featureNames = { community: "反馈与加入申请", notifications: "管理员通知", storage: "云端学习进度" };
+      const featureNames = { community: "反馈与加入申请", notifications: "管理员通知", groups: "学习组", friends: "好友与私聊", storage: "云端学习进度" };
       if (feature) {
         document.getElementById("level").textContent = `${featureNames[feature] || "该功能"}暂未开放`;
         fetch("/api/features").then(response => response.json()).then(result => {

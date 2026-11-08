@@ -56,4 +56,3 @@ public class LearningResourceService {
         resource.setRequiredLevel(Math.max(0, Math.min(2, resource.getRequiredLevel())));
     }
 }
-

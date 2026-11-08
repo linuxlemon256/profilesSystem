@@ -32,4 +32,3 @@ public class LearningAdminController {
         return resourceService.delete(id) ? Result.ok() : Result.fail(404, "资源不存在");
     }
 }
-

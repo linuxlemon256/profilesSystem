@@ -16,12 +16,12 @@
     <p class="message">管理员暂时关闭了这个功能。你可以先探索其他学习空间，开放后再回来。</p>
     <div class="feature" id="featureName">功能加载中…</div>
     <div class="reason" id="reason"></div>
-    <div class="actions"><a class="primary" href="learnIndex.html">返回学习空间</a></div>
+    <div class="actions"><a class="primary" href="learnIndex.html">返回学习空间</a><a class="secondary" href="communication.html">进入交流中心</a></div>
   </main>
   <script>
     const params = new URLSearchParams(location.search);
     const feature = params.get("feature");
-    const names = { community:"反馈与加入申请", notifications:"管理员通知", storage:"云端学习进度" };
+    const names = { community:"反馈与加入申请", notifications:"管理员通知", groups:"学习组", friends:"好友与私聊", storage:"云端学习进度" };
     document.getElementById("featureName").textContent = names[feature] || "当前功能";
     if (feature) fetch("/api/features").then(r => r.json()).then(result => {
       const item = (result.data || []).find(x => (x.featureKey || x.feature_key) === feature);

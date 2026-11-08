@@ -27,4 +27,3 @@ public class Major {
     public int getSortOrder() { return sortOrder; }
     public void setSortOrder(int sortOrder) { this.sortOrder = sortOrder; }
 }
-

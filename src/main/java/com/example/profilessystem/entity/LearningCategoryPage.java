@@ -20,4 +20,3 @@ public class LearningCategoryPage {
     public List<LearningRoute> getRoutes() { return routes; }
     public void setRoutes(List<LearningRoute> routes) { this.routes = routes; }
 }
-

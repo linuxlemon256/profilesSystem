@@ -570,6 +570,10 @@
         </div>
       </section>
       <section class="panel" style="margin-top: 22px">
+        <div class="toolbar"><strong>学习组创建申请</strong><span class="count" id="groupCount"></span></div>
+        <div class="table-wrap"><table><thead><tr><th>名称</th><th>创建者</th><th>简介</th><th>提交时间</th><th>操作</th></tr></thead><tbody id="groupRows"></tbody></table><div class="empty" id="groupEmpty">暂无待审批学习组</div></div>
+      </section>
+      <section class="panel" style="margin-top: 22px">
         <div class="toolbar"><strong>问题反馈与加入申请</strong><span class="count" id="communityCount"></span><div class="actions"><button class="view history-toggle" data-history="community" data-mode="pending">待处理</button><button class="view history-toggle" data-history="community" data-mode="history">历史记录</button></div></div>
         <div class="table-wrap">
           <table>
@@ -580,13 +584,14 @@
         </div>
       </section>
       <section class="panel" style="margin-top:22px">
-        <div class="toolbar"><strong>主动发送用户通知</strong><span class="count">用户会在通知中心看到</span></div>
+        <div class="toolbar"><strong>主动发送用户通知</strong><span class="count">用户会在通知页面看到</span></div>
         <form id="notificationForm" class="inline-form">
           <input id="notificationUser" placeholder="账户名称" required>
           <input id="notificationContent" maxlength="2000" placeholder="通知内容" required>
           <button class="approve" type="submit">发送通知</button>
         </form>
       </section>
+      
       <section class="panel feature-switch-panel" style="margin-top:22px">
         <div class="toolbar"><strong>功能开放设置</strong><span class="count">关闭后端接口会同步拒绝访问</span></div>
         <div id="featureSwitches" class="feature-switches"><div class="empty">正在读取功能状态…</div></div>
@@ -653,7 +658,8 @@
           showToast("通知已发送"); notificationForm.reset();
         } catch (error) { showToast("发送失败：" + error.message); }
       });
-      const featureLabels = { community:["反馈与加入申请","控制用户反馈和申请"], notifications:["管理员通知","控制站内通知"], storage:["云端学习进度","控制进度同步和云端存储"] };
+      const groupRows = document.getElementById("groupRows");
+      const featureLabels = { community:["反馈与加入申请","控制用户反馈和申请"], notifications:["管理员通知","控制站内通知"], groups:["学习组","控制学习组和群聊"], friends:["好友与私聊","控制好友申请和单聊"], storage:["云端学习进度","控制进度同步和云端存储"] };
       async function loadFeatureSwitches() {
         try {
           const features = await fetch("/api/features").then(r => r.json()).then(r => r.data || []);
@@ -946,6 +952,21 @@
         }
       }
 
+      async function loadGroupRequests() {
+        try {
+          const groups = await request("/api/groups/admin/pending");
+          groupRows.innerHTML = (groups || []).map(g => `<tr><td>${escapeHtml(g.name)}</td><td>${escapeHtml(g.ownerUsername)}</td><td>${escapeHtml(g.description || "—")}</td><td>${escapeHtml(formatTime(g.createdAt))}</td><td><div class="actions"><button class="approve" data-group="approve" data-id="${g.id}">通过</button><button class="reject" data-group="reject" data-id="${g.id}">拒绝</button></div></td></tr>`).join("");
+          document.getElementById("groupEmpty").style.display = groups && groups.length ? "none" : "block";
+          document.getElementById("groupCount").textContent = `${(groups || []).length} 条待处理`;
+        } catch (error) { showToast("加载学习组申请失败：" + error.message); }
+      }
+      groupRows.addEventListener("click", async event => {
+        const button = event.target.closest("button[data-group]"); if (!button) return;
+        const endpoint = `/api/groups/admin/${button.dataset.id}/${button.dataset.group}`;
+        try { await request(endpoint, { method: "POST" }); showToast("学习组申请已处理"); await loadGroupRequests(); }
+        catch (error) { showToast("处理失败：" + error.message); }
+      });
+
       communityRows.addEventListener("click", async (event) => {
         const button = event.target.closest("button[data-community]");
         if (!button) return;
@@ -1157,6 +1178,8 @@
       loadApplications();
       loadRecoveryRequests();
       loadCommunityRequests();
+      loadGroupRequests();
+
       loadFeatureSwitches();
       loadLearningAccessTree();
       loadContentTransferOverview();

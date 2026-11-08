@@ -31,4 +31,3 @@ public class LearningCatalogController {
         return value == null ? null : value.toString();
     }
 }
-
