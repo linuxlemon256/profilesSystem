@@ -26,7 +26,7 @@ jobs:
         run: |
           aliyun ecs AuthorizeSecurityGroup \
             --version 2014-05-26 --force \
-            --RegionId "${{ secrets.ALIYUN_REGION }}" \
+            --region "${{ secrets.ALIYUN_REGION }}" \
             --SecurityGroupId "${{ secrets.ALIYUN_SECURITY_GROUP_ID }}" \
             --IpProtocol tcp \
             --PortRange 22/22 \
