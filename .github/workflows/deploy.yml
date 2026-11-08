@@ -8,17 +8,21 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # ── 改动 1：给 JCBLE 包一层重试，with 参数原样迁移 ──
-      - name: Setup Aliyun CLI (retry on 504)
-        uses: Wandalen/wretry.action@v3
+      # ── 改动 1：换成官方 Action（只负责安装，不配凭证） ──
+      - name: Setup Aliyun CLI
+        uses: aliyun/setup-aliyun-cli-action@v1
         with:
-          action: JCBLE/setup-aliyun-cli@v1.1.0
-          attempt_limit: 5
-          attempt_delay: 15000
-          with: |
-            access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-            access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-            region: ${{ secrets.ALIYUN_REGION }}
+          version: latest
+
+      # ── 改动 2：官方 Action 不会自动配置，必须手动写 default profile ──
+      - name: Configure Aliyun CLI
+        run: |
+          aliyun configure set \
+            --profile default \
+            --mode AK \
+            --access-key-id "${{ secrets.ALIYUN_ACCESS_KEY_ID }}" \
+            --access-key-secret "${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}" \
+            --region "${{ secrets.ALIYUN_REGION }}"
 
       - name: Get runner public IP
         id: runner-ip
@@ -60,7 +64,8 @@ jobs:
             sleep 5
             systemctl is-active --quiet profiles-system
 
-      # ── 改动 2：setup 失败时优雅跳过，不报 127；改动 3：SourceCidrIp 对齐 /32 ──
+      # ── 改动 3：setup 失败时优雅跳过，不再报 command not found ──
+      # ── 改动 4：SourceCidrIp 补 /32，与授权规则对齐，确保能撤销 ──
       - name: Revoke security group rule (always)
         if: always()
         run: |
