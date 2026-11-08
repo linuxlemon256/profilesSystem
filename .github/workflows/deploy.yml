@@ -8,19 +8,29 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Aliyun CLI
-        uses: JCBLE/setup-aliyun-cli@v1.1.0
+      # ── 改动 1：给 JCBLE 包一层重试，with 参数原样迁移 ──
+      - name: Setup Aliyun CLI (retry on 504)
+        uses: Wandalen/wretry.action@v3
         with:
-          access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-          access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-          region: ${{ secrets.ALIYUN_REGION }}
+          action: JCBLE/setup-aliyun-cli@v1.1.0
+          attempt_limit: 5
+          attempt_delay: 15000
+          with: |
+            access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+            access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+            region: ${{ secrets.ALIYUN_REGION }}
 
       - name: Get runner public IP
         id: runner-ip
         run: |
-          IP=$(curl -s https://api.ipify.org)
+          IP=$(curl -fsS https://api.ipify.org)
+          if [ -z "$IP" ]; then
+            echo "::error::Failed to get runner public IP"
+            exit 1
+          fi
           echo "ip=$IP" >> "$GITHUB_OUTPUT"
           echo "Runner IP: $IP"
+
       - name: Authorize security group for this runner
         run: |
           aliyun ecs AuthorizeSecurityGroup \
@@ -31,6 +41,7 @@ jobs:
             --PortRange 22/22 \
             --SourceCidrIp "${{ steps.runner-ip.outputs.ip }}/32" \
             --Priority 1
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -48,9 +59,15 @@ jobs:
             systemctl restart profiles-system
             sleep 5
             systemctl is-active --quiet profiles-system
+
+      # ── 改动 2：setup 失败时优雅跳过，不报 127；改动 3：SourceCidrIp 对齐 /32 ──
       - name: Revoke security group rule (always)
         if: always()
         run: |
+          if ! command -v aliyun >/dev/null 2>&1; then
+            echo "aliyun not installed (setup step failed), skip revoke"
+            exit 0
+          fi
           aliyun ecs RevokeSecurityGroup \
             --version 2014-05-26 --force \
             --RegionId "${{ secrets.ALIYUN_REGION }}" \
