@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080808">
   <meta name="description" content="linuxlemon256 的第六版个人主页，记录 AI 全栈开发、系统构建与持续学习。">
-  <title>linuxlemon256 — Think, make, refine</title>
+  <title>个人项目实验</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><path d=%22M32 7 58 55H6Z%22 fill=%22none%22 stroke=%22%23f3f3ef%22 stroke-width=%224%22/></svg>">
   <style>
     :root {
@@ -540,6 +540,47 @@
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
       .reveal { opacity: 1; transform: none; }
     }
+  
+    /* Keep the filing links readable and clickable throughout the intro. */
+    .intro-meta.intro-filing {
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      max-width: calc(100% - 64px);
+      bottom: max(20px, env(safe-area-inset-bottom));
+      color: #c5c5c0;
+      font: 12px/1.6 Arial, "Microsoft YaHei", sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+      pointer-events: auto;
+    }
+    .intro-filing a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 22px;
+      color: inherit;
+      text-decoration: none;
+    }
+    .intro-filing img { width: 16px; height: 16px; object-fit: contain; flex: 0 0 auto; }
+    .intro-filing a:hover { color: #fff; text-decoration: underline; }
+    .intro-filing a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+    .intro-screen.is-launching .intro-filing { animation: none; }
+    @media (max-width: 640px) {
+      .intro-meta.intro-filing {
+        left: max(18px, env(safe-area-inset-left));
+        bottom: max(14px, env(safe-area-inset-bottom));
+        max-width: calc(100% - 36px);
+        font-size: 11px;
+      }
+      .intro-meta.bottom-right { bottom: 82px; }
+      .intro-status { bottom: max(112px, 15%); }
+    }
+    @media (max-height: 560px) and (min-width: 641px) {
+      .intro-status { bottom: 88px; }
+    }
   </style>
 </head>
 <body>
@@ -569,7 +610,10 @@
   <div class="intro-scan" aria-hidden="true"></div>
   <span class="intro-meta top-left">LINUXLEMON256&nbsp; / &nbsp;PERSONAL SITE</span>
   <span class="intro-meta top-right">SYSTEM&nbsp; 06<br>STRUCTURE / HEX-CORE</span>
-  <span class="intro-meta bottom-left">HEX CORE INITIALIZATION&nbsp; / &nbsp;ONLINE</span>
+  <nav class="intro-meta bottom-left intro-filing" aria-label="网站备案信息">
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">浙ICP备2026071752号</a>
+      <a href="https://beian.mps.gov.cn/#/query/webSearch?code=33032702001199" target="_blank" rel="noopener noreferrer"><img src="img.png" alt="公安备案">浙公网安备33032702001199号</a>
+  </nav>
   <span class="intro-meta bottom-right">CLICK CORE TO ENTER&nbsp; ↗</span>
   <div class="intro-console left" aria-hidden="true">
     <div class="console-head"><span>SYS / BOOT LOG</span><span>TTY 0:1</span></div>

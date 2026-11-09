@@ -592,6 +592,16 @@
         </form>
       </section>
       
+      <section class="panel" style="margin-top:22px" aria-labelledby="moderationTitle">
+        <div class="toolbar"><strong id="moderationTitle">内容审核 · 敏感词库</strong><span class="count" id="moderationCount">加载中</span></div>
+        <p class="tip">匹配后直接拒绝文本提交。忽略大小写、全角差异、空格、标点和零宽字符；请维护符合本站规则的词库。词库为空或读取失败时暂停文本提交。</p>
+        <form id="moderationForm" class="inline-form" style="align-items:start">
+          <textarea id="moderationWords" rows="4" maxlength="20000" required aria-label="敏感词，每行一个" placeholder="每行一个词，单次最多200行；2至64个有效文字或数字" style="flex:1;min-width:0;width:100%;box-sizing:border-box;padding:14px;border:1px solid #c7d2fe;border-radius:14px;background:#f8faff;color:#172554;font:inherit;resize:vertical"></textarea>
+          <button class="approve" id="moderationAdd" type="submit">添加词语</button>
+        </form>
+        <div class="inline-form"><input id="moderationSearch" placeholder="搜索词库" aria-label="搜索敏感词"><button class="view" id="moderationReload" type="button">刷新词库</button></div>
+        <div id="moderationRows" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;max-height:340px;overflow:auto" aria-live="polite"></div>
+      </section>
       <section class="panel feature-switch-panel" style="margin-top:22px">
         <div class="toolbar"><strong>功能开放设置</strong><span class="count">关闭后端接口会同步拒绝访问</span></div>
         <div id="featureSwitches" class="feature-switches"><div class="empty">正在读取功能状态…</div></div>
@@ -639,6 +649,42 @@
       </form>
     </div>
     <script>
+
+      let moderationWords = [];
+      const moderationRows = document.getElementById("moderationRows");
+      function renderModeration() {
+        const query = document.getElementById("moderationSearch").value.trim().toLocaleLowerCase();
+        const matches = moderationWords.filter(item => String(item.word).toLocaleLowerCase().includes(query));
+        document.getElementById("moderationCount").textContent = `${moderationWords.length} 条 · 显示 ${Math.min(matches.length, 300)} 条`;
+        moderationRows.replaceChildren();
+        matches.slice(0, 300).forEach(item => {
+          const row = document.createElement("span"); row.style.cssText = "display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:12px;background:#eef2ff;color:#312e81";
+          const text = document.createElement("span"); text.textContent = item.word;
+          const remove = document.createElement("button"); remove.type = "button"; remove.className = "reject"; remove.textContent = "删除";
+          remove.setAttribute("aria-label", `删除词语 ${item.word}`);
+          remove.addEventListener("click", async () => {
+            if (!confirm(`删除词语“${item.word}”？删除后不再拦截该词。`)) return;
+            remove.disabled = true;
+            try { await request(`/api/moderation/admin/words/${encodeURIComponent(item.id)}`, {method:"DELETE"}); await loadModeration(); showToast("词语已删除"); }
+            catch(error) {showToast("删除失败：" + error.message); remove.disabled = false;}
+          });
+          row.append(text, remove); moderationRows.append(row);
+        });
+        if (!matches.length) moderationRows.textContent = moderationWords.length ? "没有匹配词语" : "词库为空，请先添加词语以启用文本提交。";
+      }
+      async function loadModeration() {
+        try { moderationWords = await request("/api/moderation/admin/words"); renderModeration(); }
+        catch(error) { document.getElementById("moderationCount").textContent = "读取失败"; moderationRows.textContent = "审核词库不可用，请检查数据库结构与连接。"; showToast("读取词库失败：" + error.message); }
+      }
+      document.getElementById("moderationForm").addEventListener("submit", async event => {
+        event.preventDefault(); const button = document.getElementById("moderationAdd"); button.disabled = true;
+        try { const count = await request("/api/moderation/admin/words", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({words:document.getElementById("moderationWords").value})}); document.getElementById("moderationWords").value = ""; await loadModeration(); showToast(`已添加 ${count} 条，重复词已跳过`); }
+        catch(error) { showToast("添加失败：" + error.message); } finally {button.disabled = false;}
+      });
+      document.getElementById("moderationSearch").addEventListener("input", renderModeration);
+      document.getElementById("moderationReload").addEventListener("click", loadModeration);
+      window.addEventListener("DOMContentLoaded", loadModeration);
+
       const labels = {
         pending: "待审核",
         approved: "已通过",

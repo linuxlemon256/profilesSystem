@@ -94,7 +94,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (path.startsWith("/api/manager/") || path.equals("/managerPanel.html")) {
             return true;
         }
-        return path.startsWith("/api/recovery/admin/")
+        return path.startsWith("/api/moderation/admin/")
+                || path.startsWith("/api/recovery/admin/")
                 || path.startsWith("/api/community/admin/")
                 || path.startsWith("/api/groups/admin/")
                 || path.equals("/api/notifications/admin/send")
