@@ -763,6 +763,14 @@
         .quick-float a:focus-visible .quick-icon { position: static; }
       }
 
+
+      .content-badges{position:absolute;top:16px;right:16px;display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:calc(100% - 90px)}
+      .content-badges .access-level,.content-badges .tag,.content-badges .level{position:static;margin:0}
+      .readiness{display:inline-flex;align-items:center;padding:5px 9px;border:1px solid transparent;border-radius:999px;font-size:11px;font-weight:700;line-height:1.4;white-space:nowrap}
+      .readiness.ready{background:#ecfdf5;border-color:#a7f3d0;color:#047857}
+      .readiness.unconfirmed{background:#f8fafc;border-color:#e2e8f0;color:#64748b}
+      .readiness.pending{background:#fffbeb;border-color:#fde68a;color:#b45309}
+      .completion-ratio{display:inline-flex;align-items:center;padding:5px 9px;border:1px solid #c7d2fe;border-radius:999px;background:#eef2ff;color:#4338ca;font-size:10px;font-weight:800;line-height:1.5;white-space:nowrap;font-variant-numeric:tabular-nums}
     </style>
     <style id="profiles-motion">
     @keyframes profilesPageIn { from { opacity: 0; } to { opacity: 1; } }
@@ -825,7 +833,7 @@
         <div class="section-title">
           <div class="section-title-heading">
             <h2>专业方向</h2>
-            <a class="more-majors" href="moreMajors.html">更多专业 <span aria-hidden="true">→</span></a>
+            <a class="more-majors" href="major-knowledge.html">专业知识点 <span aria-hidden="true">↗</span></a>
           </div>
           <span class="section-title-hint">选择一个方向开始</span>
         </div>
@@ -1078,18 +1086,46 @@
           .replaceAll('"', '&quot;').replaceAll("'", '&#39;');
       }
 
+      function contentReady(target) {
+        try {
+          const url = new URL(target || "", location.href);
+          const file = url.pathname.split("/").pop();
+          const ready = new Set([
+            "route-computer-employment.html", "learncomputer.html",
+            "route-mechanical-mechatronics.html", "learnmechanical.html",
+            "major-electronic-information.html", "major-mechanical-manufacturing.html",
+            "major-artificial-intelligence.html", "major-industrial-design.html", "major-knowledge.html", "major-categories.html"
+          ]).has(file) && url.origin === location.origin;
+          if (ready) return true;
+          const placeholders = new Set(["major-detail.html","majorDemo.html","route-detail.html","routeDemo.html","resource-placeholder.html","resourceDemo.html","projectDemo.html","route-template.html","learnXXX.html"]);
+          if (!target || (url.origin === location.origin && placeholders.has(file))) return false;
+          return null;
+        } catch (_) { return false; }
+      }
+      function readinessBadge(ready) {
+        return '<span class="readiness ' + (ready === true ? 'ready' : ready === false ? 'pending' : 'unconfirmed') + '">' +
+          (ready === true ? '已完善' : ready === false ? '待完善' : '待确认') + '</span>';
+      }
+
+      function completionRatio(category) {
+        const completed = category.completedMajorCount, total = category.totalMajorCount;
+        if (!Number.isInteger(completed) || !Number.isInteger(total) || total < 0 || completed < 0 || completed > total) return "--/--";
+        return completed + "/" + total;
+      }
+
       function renderFeaturedCategories(categories) {
-        const featured = categories.filter(category => Number(category.featured) === 1).slice(0, 3);
+        const featured = ['computer', 'mechanical']
+          .map(slug => categories.find(category => category.slug === slug))
+          .filter(Boolean);
         featuredMajorGrid.innerHTML = featured.map(category =>
-          '<article class="card"><span class="access-level level-public">公开</span><div class="icon">' +
+          '<article class="card"><div class="content-badges"><span class="access-level level-public">公开</span><span class="readiness ready">已完善</span><span class="completion-ratio" title="已完善专业数 / 启用专业总数">完成比 ' + completionRatio(category) + '</span></div><div class="icon">' +
           escapeLearningHtml(category.icon || '✦') + '</div><h3>' + escapeLearningHtml(category.name) +
           '专业</h3><p>' + escapeLearningHtml(category.summary) +
-          '</p><a href="learnMajorCategory.html?category=' + encodeURIComponent(category.slug) +
-          '">进入专业学习 →</a></article>'
-        ).join('');
-        if (!featured.length) {
-          featuredMajorGrid.innerHTML = '<article class="card"><div class="icon">!</div><h3>暂无专业方向</h3><p>数据库中还没有启用的精选专业。</p></article>';
-        }
+          '</p><a href="category-detail.html?category=' + encodeURIComponent(category.slug) +
+          '&mode=major">进入专业学习 →</a></article>'
+        ).join('') + '<article class="card"><div class="content-badges"><span class="access-level level-public">公开</span><span class="readiness ready">已完善</span></div>' +
+          '<div class="icon">✦</div><h3>更多专业</h3><p>探索更多专业类别，搜索感兴趣的方向，找到适合自己的学习内容。</p>' +
+          '<a href="major-categories.html">浏览全部专业 →</a></article>';
       }
 
       function populateResourceOptions(categories) {
@@ -1129,19 +1165,19 @@
           const resources = result.data;
           if (!resources.length) {
             const label = box.querySelector('.selectBox-value').textContent.replace(/专业资源$/, '');
-            resourceGrid.innerHTML = '<article class="card"><span class="access-level level-undetermined">未定</span>' +
+            resourceGrid.innerHTML = '<article class="card"><div class="content-badges"><span class="access-level level-undetermined">未定</span><span class="readiness pending">待完善</span></div>' +
               '<div class="icon">✦</div><h3>' + escapeLearningHtml(label) + '资源正在整理</h3>' +
               '<p>当前没有符合访问等级的已发布资源，后续会逐步补充。</p>' +
-              '<a href="resourceDemo.html?title=' + encodeURIComponent(label + '专业资源') +
+              '<a href="resource-placeholder.html?title=' + encodeURIComponent(label + '专业资源') +
               '&return=learnIndex.html">查看资源说明 →</a></article>';
             return;
           }
           resourceGrid.innerHTML = resources.map(resource =>
-            '<article class="card"><span class="access-level ' + accessClass(resource.requiredLevel) + '">' +
-            accessText(resource.requiredLevel) + '</span><div class="icon">' +
+            '<article class="card"><div class="content-badges"><span class="access-level ' + accessClass(resource.requiredLevel) + '">' +
+            accessText(resource.requiredLevel) + '</span>' + readinessBadge(contentReady(resource.targetUrl)) + '</div><div class="icon">' +
             escapeLearningHtml(resource.icon || '✦') + '</div><h3>' + escapeLearningHtml(resource.title) +
             '</h3><p>' + escapeLearningHtml(resource.description) +
-            '</p><a href="resourceDetail.html?id=' + encodeURIComponent(resource.id) +
+            '</p><a href="resource-detail.html?id=' + encodeURIComponent(resource.id) +
             '">查看资源 →</a></article>'
           ).join('');
           resourceGrid.querySelectorAll('.card').forEach((card, index) => {

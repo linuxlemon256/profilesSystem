@@ -87,6 +87,31 @@ public class LearningContentTransferService {
         return new LearningContentTransfer.ImportSummary(categories.size(), majors.size(), routes.size(), resources.size());
     }
 
+    /** Only content rows are replaced; use transactional DELETE, never TRUNCATE/DDL. */
+    @Transactional(rollbackFor = Exception.class)
+    public LearningContentTransfer.ImportSummary replaceContent(LearningContentTransfer content) {
+        validatePackage(content);
+        if (content.professionalCategories() == null || content.professionalCategories().isEmpty() ||
+                content.specificMajors() == null || content.learningRoutes() == null || content.learningResources() == null)
+            throw new IllegalArgumentException("重载需要完整内容包，且至少包含一个专业类别");
+        for (List<?> items : List.of(content.professionalCategories(), content.specificMajors(),
+                content.learningRoutes(), content.learningResources())) {
+            if (items.stream().anyMatch(java.util.Objects::isNull))
+                throw new IllegalArgumentException("内容包包含空记录，不能重载");
+        }
+        Integer transactionalTables = jdbc.queryForObject(
+                "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() " +
+                "AND table_name IN ('major_category','major','learning_route','learning_resource') AND engine='InnoDB'",
+                Integer.class);
+        if (transactionalTables == null || transactionalTables != 4)
+            throw new IllegalArgumentException("重载要求四张学习内容表均使用 InnoDB 事务引擎，请先检查数据库");
+        jdbc.update("DELETE FROM learning_resource");
+        jdbc.update("DELETE FROM learning_route");
+        jdbc.update("DELETE FROM major");
+        jdbc.update("DELETE FROM major_category");
+        return importContent(content);
+    }
+
     private void upsertCategory(LearningContentTransfer.CategoryItem item) {
         required(item.slug(), "专业类别标识");
         required(item.name(), "专业类别名称");

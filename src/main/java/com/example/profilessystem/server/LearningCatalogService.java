@@ -18,7 +18,20 @@ public class LearningCatalogService {
     }
 
     public List<MajorCategory> categories() {
-        return mapper.findCategories();
+        List<MajorCategory> categories = mapper.findCategories();
+        // Match the actual knowledge pages registered in category-detail.html.
+        var completedCodes = java.util.Set.of("080701", "080202", "080205", "080717T", "080717");
+        var total = new java.util.HashMap<Long, Integer>();
+        var completed = new java.util.HashMap<Long, Integer>();
+        for (var major : mapper.findMajorCoverage()) {
+            total.merge(major.categoryId(), 1, Integer::sum);
+            if (completedCodes.contains(major.code())) completed.merge(major.categoryId(), 1, Integer::sum);
+        }
+        for (var category : categories) {
+            category.setTotalMajorCount(total.getOrDefault(category.getId(), 0));
+            category.setCompletedMajorCount(completed.getOrDefault(category.getId(), 0));
+        }
+        return categories;
     }
 
     public LearningCategoryPage category(String slug, String username) {

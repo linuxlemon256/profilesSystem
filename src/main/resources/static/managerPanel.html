@@ -481,6 +481,42 @@
       .access-toggle input:checked + span::before { transform: translateX(18px); }
       .access-toggle input:focus-visible + span { outline: 3px solid #818cf866; outline-offset: 2px; }
       @media(max-width:760px){.access-items{grid-template-columns:1fr}.access-category > summary{padding:11px}.access-manager{padding:14px}}
+
+      .access-delete{border:1px solid #fecdd3;border-radius:9px;padding:7px 10px;background:#fff1f2;color:#be123c;font:inherit;font-size:11px;cursor:pointer;transition:transform .2s,background .2s;flex-shrink:0}
+      .access-delete:hover{background:#ffe4e6;transform:translateY(-1px)}
+      .access-delete:disabled{opacity:.5;cursor:wait}
+      .access-category-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;color:#94a3b8;font-size:11px}
+      .moderation-panel{margin-top:22px;overflow:hidden}
+      .moderation-eyebrow{display:block;margin-bottom:7px;font-size:9px;letter-spacing:.16em;color:#7c3aed}
+      .moderation-layout{display:grid;grid-template-columns:minmax(240px,.8fr) minmax(0,1.6fr);gap:24px;padding:24px}
+      .moderation-compose{padding:22px;border:1px solid #e0e7ff;border-radius:20px;background:linear-gradient(145deg,#eef2ff,#faf5ff 70%,#fff)}
+      .moderation-icon{display:grid;width:42px;height:42px;place-items:center;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:14px;color:white;font-size:24px;box-shadow:0 7px 18px #7c3aed25}
+      .moderation-compose h3{margin:18px 0 8px;color:#312e81;font-size:18px}
+      .moderation-compose p,.moderation-hint{color:#64748b;font-size:12px;line-height:1.8}
+      .moderation-compose label{display:block;margin:20px 0 8px;color:#475569;font-size:12px;font-weight:700}
+      .moderation-compose textarea{display:block;box-sizing:border-box;width:100%;padding:14px;border:1px solid #c7d2fe;border-radius:13px;resize:vertical;background:#ffffffdc;color:#312e81;font:inherit;font-size:13px;line-height:1.8;transition:box-shadow .2s}
+      .moderation-compose textarea:focus,.moderation-search:focus-within{outline:none;border-color:#818cf8;box-shadow:0 0 0 4px #6366f11a}
+      .moderation-compose-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;font-size:11px;color:#818cf8}
+      .moderation-compose .moderation-notice{margin-bottom:0;font-size:11px;color:#92400e}
+      .moderation-library{min-width:0;display:flex;flex-direction:column}
+      .moderation-tools{display:flex;gap:10px;align-items:center}
+      .moderation-search{display:flex;align-items:center;gap:10px;flex:1;min-width:0;border:1px solid #e2e8f0;border-radius:13px;padding:0 13px;color:#818cf8;transition:box-shadow .2s}
+      .moderation-search input{width:100%;min-width:0;border:0;background:transparent;padding:12px 0;outline:none;color:#334155;font:inherit;font-size:13px}
+      .moderation-rows{display:flex;align-content:flex-start;flex-wrap:wrap;gap:10px;min-height:250px;max-height:390px;overflow:auto;padding:14px 2px;color:#94a3b8;font-size:13px}
+      .moderation-word{display:flex;max-width:100%;align-items:center;gap:12px;padding:9px 11px 9px 14px;border:1px solid #e0e7ff;border-radius:12px;background:#f8faff;color:#4338ca;animation:wordIn .2s ease both}
+      .moderation-word>span{overflow-wrap:anywhere;min-width:0}
+      .moderation-remove{flex:none;border:0;border-radius:7px;background:#ffe4e6;color:#be123c;padding:5px 7px;font-size:10px;cursor:pointer;transition:background .2s,transform .2s}
+      .moderation-remove:hover{background:#fecdd3;transform:scale(1.04)}
+      .moderation-remove:focus-visible,.access-delete:focus-visible{outline:3px solid #a5b4fc;outline-offset:3px}
+      .moderation-pagination{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid #eef2ff;padding-top:15px;margin-top:auto;font-size:11px;color:#94a3b8}
+      .moderation-panel button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+      @keyframes wordIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+      @media(max-width:800px){.moderation-layout{grid-template-columns:1fr;padding:15px;gap:18px}.moderation-compose{padding:17px}.access-item{flex-wrap:wrap}}
+      @media(prefers-reduced-motion:reduce){.moderation-word{animation:none}.moderation-remove,.access-delete{transition:none}}
+
+      .transfer-button.replace{color:#be123c;border:1px solid #fecdd3;background:linear-gradient(135deg,#fff1f2,#fff7ed)}
+      .transfer-button.replace:hover:not(:disabled){background:#ffe4e6;box-shadow:0 6px 18px #e11d481a}
+      .transfer-replace-warning{flex-basis:100%;margin:4px 0;color:#9f1239;font-size:12px;line-height:1.8}
     </style>
     <style id="profiles-motion">
     @keyframes profilesPageIn { from { opacity: 0; } to { opacity: 1; } }
@@ -592,22 +628,28 @@
         </form>
       </section>
       
-      <section class="panel" style="margin-top:22px" aria-labelledby="moderationTitle">
-        <div class="toolbar"><strong id="moderationTitle">内容审核 · 敏感词库</strong><span class="count" id="moderationCount">加载中</span></div>
-        <p class="tip">匹配后直接拒绝文本提交。忽略大小写、全角差异、空格、标点和零宽字符；请维护符合本站规则的词库。词库为空或读取失败时暂停文本提交。</p>
-        <form id="moderationForm" class="inline-form" style="align-items:start">
-          <textarea id="moderationWords" rows="4" maxlength="20000" required aria-label="敏感词，每行一个" placeholder="每行一个词，单次最多200行；2至64个有效文字或数字" style="flex:1;min-width:0;width:100%;box-sizing:border-box;padding:14px;border:1px solid #c7d2fe;border-radius:14px;background:#f8faff;color:#172554;font:inherit;resize:vertical"></textarea>
-          <button class="approve" id="moderationAdd" type="submit">添加词语</button>
-        </form>
-        <div class="inline-form"><input id="moderationSearch" placeholder="搜索词库" aria-label="搜索敏感词"><button class="view" id="moderationReload" type="button">刷新词库</button></div>
-        <div id="moderationRows" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;max-height:340px;overflow:auto" aria-live="polite"></div>
+      <section class="panel moderation-panel" aria-labelledby="moderationTitle">
+        <div class="toolbar"><div><span class="moderation-eyebrow">CONTENT SAFETY</span><strong id="moderationTitle">敏感词管理</strong></div><span class="count" id="moderationCount">加载中</span></div>
+        <div class="moderation-layout">
+          <form id="moderationForm" class="moderation-compose">
+            <span class="moderation-icon" aria-hidden="true">✦</span><h3>扩充审核词库</h3><p>每行一个词，重复词自动跳过。单次最多 200 行，每词 2–64 个有效文字或数字。</p>
+            <label for="moderationWords">待添加词语</label><textarea id="moderationWords" rows="7" maxlength="20000" required placeholder="输入需要拦截的词语，每行一个"></textarea>
+            <div class="moderation-compose-foot"><span id="moderationDraftCount">0 / 200 行</span><button class="approve" id="moderationAdd" type="submit">＋ 添加到词库</button></div>
+            <p class="moderation-notice">词库为空或读取失败时，受审核的文本提交会暂停。</p>
+          </form>
+          <div class="moderation-library"><div class="moderation-tools"><label class="moderation-search"><span aria-hidden="true">⌕</span><input id="moderationSearch" type="search" placeholder="搜索已添加词语" aria-label="搜索敏感词"></label><button class="view" id="moderationReload" type="button">刷新</button></div>
+            <p class="moderation-hint">匹配会忽略大小写、全角差异、空格、标点和零宽字符。</p>
+            <div id="moderationRows" class="moderation-rows" aria-live="polite"></div>
+            <div class="moderation-pagination"><button class="view" id="moderationPrev" type="button">← 上一页</button><span id="moderationPage">第 1 页</span><button class="view" id="moderationNext" type="button">下一页 →</button></div>
+          </div>
+        </div>
       </section>
       <section class="panel feature-switch-panel" style="margin-top:22px">
         <div class="toolbar"><strong>功能开放设置</strong><span class="count">关闭后端接口会同步拒绝访问</span></div>
         <div id="featureSwitches" class="feature-switches"><div class="empty">正在读取功能状态…</div></div>
       </section>
       <section class="panel" style="margin-top:22px">
-        <div class="toolbar"><strong>学习内容开放设置</strong><span class="count" id="learningAccessState">正在读取层级…</span></div>
+        <div class="toolbar"><strong>学习内容管理</strong><span class="count" id="learningAccessState">正在读取层级…</span></div>
         <div class="access-manager">
           <div class="access-manager-tools">
             <input class="access-search" id="learningAccessSearch" type="search" placeholder="搜索专业类别、具体专业、路线或学习资源" />
@@ -631,6 +673,8 @@
             <button class="transfer-button secondary" id="contentChoose" type="button"><span aria-hidden="true">⌁</span>选择内容包</button>
             <input class="transfer-file" id="contentImportFile" type="file" accept="application/json,.json" />
             <button class="transfer-button import" id="contentImport" type="button" disabled>确认导入并合并</button>
+            <button class="transfer-button replace" id="contentReplace" type="button" disabled>重载替换全部内容</button>
+            <p class="transfer-replace-warning">重载将删除现有专业类别、具体专业、路线和资源记录，再写入所选数据包；包中没有的内容也会删除。用户、聊天记录及实际 HTML／存储文件不在替换范围内。</p>
             <div class="transfer-preview" id="contentImportPreview">尚未选择内容包。仅接受由本系统导出的 JSON 文件。</div>
           </div>
         </div>
@@ -651,16 +695,23 @@
     <script>
 
       let moderationWords = [];
+      let moderationPage = 1;
+      const moderationPageSize = 60;
       const moderationRows = document.getElementById("moderationRows");
       function renderModeration() {
         const query = document.getElementById("moderationSearch").value.trim().toLocaleLowerCase();
         const matches = moderationWords.filter(item => String(item.word).toLocaleLowerCase().includes(query));
-        document.getElementById("moderationCount").textContent = `${moderationWords.length} 条 · 显示 ${Math.min(matches.length, 300)} 条`;
+        document.getElementById("moderationCount").textContent = `${moderationWords.length} 条词语 · 匹配 ${matches.length} 条`;
         moderationRows.replaceChildren();
-        matches.slice(0, 300).forEach(item => {
-          const row = document.createElement("span"); row.style.cssText = "display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:12px;background:#eef2ff;color:#312e81";
+        const pages = Math.max(1, Math.ceil(matches.length / moderationPageSize));
+        moderationPage = Math.min(moderationPage, pages);
+        document.getElementById("moderationPage").textContent = `第 ${moderationPage} / ${pages} 页`;
+        document.getElementById("moderationPrev").disabled = moderationPage === 1;
+        document.getElementById("moderationNext").disabled = moderationPage === pages;
+        matches.slice((moderationPage - 1) * moderationPageSize, moderationPage * moderationPageSize).forEach(item => {
+          const row = document.createElement("span"); row.className = "moderation-word";
           const text = document.createElement("span"); text.textContent = item.word;
-          const remove = document.createElement("button"); remove.type = "button"; remove.className = "reject"; remove.textContent = "删除";
+          const remove = document.createElement("button"); remove.type = "button"; remove.className = "moderation-remove"; remove.textContent = "删除";
           remove.setAttribute("aria-label", `删除词语 ${item.word}`);
           remove.addEventListener("click", async () => {
             if (!confirm(`删除词语“${item.word}”？删除后不再拦截该词。`)) return;
@@ -678,10 +729,18 @@
       }
       document.getElementById("moderationForm").addEventListener("submit", async event => {
         event.preventDefault(); const button = document.getElementById("moderationAdd"); button.disabled = true;
-        try { const count = await request("/api/moderation/admin/words", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({words:document.getElementById("moderationWords").value})}); document.getElementById("moderationWords").value = ""; await loadModeration(); showToast(`已添加 ${count} 条，重复词已跳过`); }
+        try { const count = await request("/api/moderation/admin/words", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({words:document.getElementById("moderationWords").value})}); document.getElementById("moderationWords").value = ""; updateModerationDraft(); await loadModeration(); showToast(`已添加 ${count} 条，重复词已跳过`); }
         catch(error) { showToast("添加失败：" + error.message); } finally {button.disabled = false;}
       });
-      document.getElementById("moderationSearch").addEventListener("input", renderModeration);
+      document.getElementById("moderationSearch").addEventListener("input", () => { moderationPage = 1; renderModeration(); });
+      document.getElementById("moderationPrev").addEventListener("click", () => { moderationPage--; renderModeration(); });
+      document.getElementById("moderationNext").addEventListener("click", () => { moderationPage++; renderModeration(); });
+      function updateModerationDraft() {
+        const count = document.getElementById("moderationWords").value.split(/\r?\n/).filter(line => line.trim()).length;
+        document.getElementById("moderationDraftCount").textContent = `${count} / 200 行`;
+        document.getElementById("moderationWords").setCustomValidity(count > 200 ? "单次最多200行" : "");
+      }
+      document.getElementById("moderationWords").addEventListener("input", updateModerationDraft);
       document.getElementById("moderationReload").addEventListener("click", loadModeration);
       window.addEventListener("DOMContentLoaded", loadModeration);
 
@@ -729,6 +788,7 @@
             <input type="checkbox" data-access-type="${type}" data-access-id="${item.id}" ${item.enabled ? "checked" : ""} />
             <span></span>
           </label>
+          <button class="access-delete" type="button" data-delete-type="${type}" data-delete-id="${item.id}" data-delete-name="${escapeHtml(item.name)}">删除</button>
         </div>`;
       }
 
@@ -759,7 +819,7 @@
                 <span></span>
               </label>
             </summary>
-            <div class="access-sections">
+            <div class="access-sections"><div class="access-category-actions"><span>有下级内容时不能删除类别</span><button class="access-delete" type="button" data-delete-type="category" data-delete-id="${category.id}" data-delete-name="${escapeHtml(category.name)}">删除类别</button></div>
               ${accessGroupHtml("具体专业", majors, "major", category.enabled)}
               ${accessGroupHtml("学习路线", routes, "route", category.enabled)}
               ${accessGroupHtml("学习资源", resources, "resource", category.enabled)}
@@ -781,6 +841,18 @@
         }
       }
 
+      learningAccessTree.addEventListener("click", async event => {
+        const button = event.target.closest("button[data-delete-type]");
+        if (!button || button.disabled) return;
+        event.preventDefault();
+        if (!confirm(`确定永久删除“${button.dataset.deleteName}”？此操作删除目录记录，不能撤销；已有下级或关联内容时会拒绝删除。`)) return;
+        button.disabled = true;
+        try {
+          await request(`/api/manager/learning-access/${encodeURIComponent(button.dataset.deleteType)}/${encodeURIComponent(button.dataset.deleteId)}`, {method:"DELETE"});
+          await loadLearningAccessTree();
+          showToast("内容已删除");
+        } catch (error) { showToast("删除失败：" + error.message); button.disabled = false; }
+      });
       learningAccessSearch.addEventListener("input", renderLearningAccessTree);
       learningAccessTree.addEventListener("change", async event => {
         const input = event.target.closest("input[data-access-type]");
@@ -808,7 +880,18 @@
       const contentImportFile = document.getElementById("contentImportFile");
       const contentImportButton = document.getElementById("contentImport");
       const contentImportPreview = document.getElementById("contentImportPreview");
+      const contentReplaceButton = document.getElementById("contentReplace");
+      let contentTransferBusy = false;
+      let contentFileGeneration = 0;
       let pendingContentImport = null;
+      function setTransferBusy(busy) {
+        contentTransferBusy = busy;
+        contentImportButton.disabled = busy || !pendingContentImport;
+        contentReplaceButton.disabled = busy || !pendingContentImport;
+        contentImportFile.disabled = busy;
+        document.getElementById("contentChoose").disabled = busy;
+        document.getElementById("contentExport").disabled = busy;
+      }
       document.getElementById("contentChoose").addEventListener("click", () => contentImportFile.click());
 
       function contentSize(data) {
@@ -851,8 +934,9 @@
       });
 
       contentImportFile.addEventListener("change", async () => {
+        const generation = ++contentFileGeneration;
         pendingContentImport = null;
-        contentImportButton.disabled = true;
+        setTransferBusy(false);
         const file = contentImportFile.files[0];
         if (!file) {
           contentImportPreview.textContent = "尚未选择内容包。仅接受由本系统导出的 JSON 文件。";
@@ -864,38 +948,46 @@
         }
         try {
           const data = JSON.parse(await file.text());
+          if (generation !== contentFileGeneration) return;
           if (data.format !== "profiles-learning-content" || data.formatVersion !== 1) {
             throw new Error("不是受支持的 ProfilesSystem 学习内容包");
           }
           const size = contentSize(data);
           pendingContentImport = data;
-          contentImportButton.disabled = false;
+          setTransferBusy(false);
           contentImportPreview.textContent = `${file.name} · ${size.categories} 个专业类别、${size.majors} 个具体专业、${size.routes} 条学习路线、${size.resources} 项学习资源`;
         } catch (error) {
           contentImportPreview.textContent = "读取失败：" + error.message;
         }
       });
 
-      contentImportButton.addEventListener("click", async () => {
-        if (!pendingContentImport) return;
-        if (!confirm("确认导入这个学习内容包吗？同名内容会更新，其他现有内容会保留。")) return;
-        contentImportButton.disabled = true;
+      async function importLearningContent(replace) {
+        if (!pendingContentImport || contentTransferBusy) return;
+        const data = pendingContentImport;
+        if (replace) {
+          const size = contentSize(data);
+          if (!Array.isArray(data.professionalCategories) || size.categories === 0 ||
+              !Array.isArray(data.specificMajors) || !Array.isArray(data.learningRoutes) || !Array.isArray(data.learningResources)) {
+            showToast("重载需要完整内容包，且至少包含一个专业类别"); return;
+          }
+          if (!confirm(`将用所选数据包中的 ${size.categories} 个类别、${size.majors} 个专业、${size.routes} 条路线、${size.resources} 项资源替换全部现有学习内容。包中没有的记录会删除，无法在界面撤销。建议先导出当前内容。是否继续？`)) return;
+          if (prompt("最终确认：请输入“替换全部学习内容”") !== "替换全部学习内容") return;
+        } else if (!confirm("确认合并导入？同名内容会更新，其他现有内容会保留。")) return;
+        setTransferBusy(true);
         try {
-          const result = await request("/api/manager/content-transfer/import", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(pendingContentImport),
+          const result = await request(replace ? "/api/manager/content-transfer/replace?confirmed=true" : "/api/manager/content-transfer/import", {
+            method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data)
           });
-          contentImportPreview.textContent = `导入完成：${result.professionalCategories} 个专业类别、${result.specificMajors} 个具体专业、${result.learningRoutes} 条学习路线、${result.learningResources} 项学习资源`;
-          pendingContentImport = null;
-          contentImportFile.value = "";
-          showToast("学习内容已合并");
-          await loadContentTransferOverview();
+          contentImportPreview.textContent = `${replace ? "重载替换" : "合并导入"}完成：${result.professionalCategories} 个专业类别、${result.specificMajors} 个具体专业、${result.learningRoutes} 条学习路线、${result.learningResources} 项学习资源`;
+          pendingContentImport = null; contentImportFile.value = "";
+          showToast(replace ? "学习内容已完整替换" : "学习内容已合并");
+          await Promise.all([loadContentTransferOverview(), loadLearningAccessTree()]);
         } catch (error) {
-          contentImportButton.disabled = false;
-          showToast("导入失败：" + error.message);
-        }
-      });
+          showToast(`${replace ? "重载替换" : "合并导入"}失败：${error.message}。网络中断时请刷新核对结果后再操作。`);
+        } finally { setTransferBusy(false); }
+      }
+      contentImportButton.addEventListener("click", () => importLearningContent(false));
+      contentReplaceButton.addEventListener("click", () => importLearningContent(true));
       const editModal = document.getElementById("editModal");
       const editForm = document.getElementById("editForm");
       let editingUsername = "";

@@ -11,6 +11,11 @@ import java.util.List;
 
 @Mapper
 public interface LearningCatalogMapper {
+    record MajorCoverage(long categoryId, String code) {}
+
+    @Select("SELECT m.category_id,m.code FROM major m JOIN major_category c ON c.id=m.category_id WHERE m.enabled=1 AND c.enabled=1")
+    List<MajorCoverage> findMajorCoverage();
+
     @Select("SELECT id,slug,name,field_name,summary,icon,featured,enabled,sort_order FROM major_category WHERE enabled=1 ORDER BY sort_order,id")
     List<MajorCategory> findCategories();
 

@@ -2,160 +2,20 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="搜索并浏览 ProfilesSystem 中的更多专业方向" />
-    <title>更多专业 · ProfilesSystem</title>
-    <style>
-      :root {
-        font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
-        color: #172554;
-        background: #eef3ff;
-      }
-      * { box-sizing: border-box; }
-      body {
-        min-height: 100vh;
-        margin: 0;
-        background:
-          radial-gradient(circle at 8% 5%, #c7d2fe 0, transparent 28%),
-          radial-gradient(circle at 94% 86%, #a5f3fc 0, transparent 25%),
-          linear-gradient(135deg, #eef3ff, #f8fafc 58%, #f1edff);
-      }
-      button, input { font: inherit; }
-      .page { width: min(1120px, calc(100% - 40px)); margin: auto; padding: 26px 0 68px; }
-      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-      .brand { display: flex; align-items: center; gap: 10px; color: inherit; font-weight: 800; text-decoration: none; }
-      .mark { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 11px; color: #111a3b; background: linear-gradient(135deg, #9ca9ff, #62e4d5); }
-      .back { color: #4f46e5; font-size: 13px; font-weight: 800; text-decoration: none; }
-      .back:hover { color: #0891b2; }
-      .hero { padding: 76px 0 38px; }
-      .eyebrow { margin: 0 0 12px; color: #4f46e5; font-size: 12px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
-      h1 { margin: 0; font-size: clamp(40px, 6vw, 68px); line-height: 1.04; letter-spacing: -.06em; }
-      .lead { max-width: 690px; margin: 18px 0 0; color: #64748b; font-size: 15px; line-height: 1.8; }
-      .search-panel { position: sticky; z-index: 10; top: 14px; display: flex; align-items: center; gap: 12px; margin: 8px 0 28px; padding: 12px; border: 1px solid #dce5f5; border-radius: 18px; background: #ffffffeb; box-shadow: 0 15px 38px #30458e18; backdrop-filter: blur(14px); }
-      .search-icon { display: grid; width: 42px; height: 42px; flex: none; place-items: center; border-radius: 13px; color: #4338ca; background: #e0e7ff; font-size: 18px; }
-      .search-input { min-width: 0; width: 100%; padding: 11px 4px; border: 0; outline: 0; color: #172554; background: transparent; font-size: 15px; }
-      .search-input::placeholder { color: #94a3b8; }
-      .clear { display: none; flex: none; padding: 8px 11px; border: 0; border-radius: 10px; color: #475569; background: #f1f5f9; cursor: pointer; font-size: 12px; font-weight: 800; }
-      .clear.visible { display: block; }
-      .result-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 15px; }
-      .result-bar h2 { margin: 0; font-size: 19px; }
-      .result-count { color: #64748b; font-size: 12px; font-weight: 700; }
-      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 17px; }
-      .card { position: relative; display: flex; min-height: 225px; flex-direction: column; padding: 23px; border: 1px solid #dce5f5; border-radius: 20px; background: #ffffffd9; box-shadow: 0 12px 34px #30458e12; transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
-      .card:hover { transform: translateY(-6px); border-color: #a5b4fc; box-shadow: 0 20px 42px #30458e22; }
-      .card[hidden] { display: none; }
-      .icon { display: grid; width: 44px; height: 44px; place-items: center; border-radius: 14px; color: #4338ca; background: #e0e7ff; font-size: 21px; }
-      .category { position: absolute; top: 20px; right: 20px; padding: 5px 9px; border-radius: 999px; color: #0f766e; background: #ccfbf1; font-size: 10px; font-weight: 900; }
-      .card h3 { margin: 21px 0 8px; font-size: 19px; }
-      .card p { margin: 0; color: #64748b; font-size: 13px; line-height: 1.7; }
-      .card a { margin-top: auto; padding-top: 18px; color: #4f46e5; font-size: 13px; font-weight: 900; text-decoration: none; }
-      .card a:hover { color: #0891b2; }
-      .empty { display: none; padding: 56px 24px; border: 1px dashed #c7d2fe; border-radius: 20px; color: #64748b; text-align: center; background: #ffffff96; }
-      .empty.visible { display: block; }
-      .empty strong { display: block; margin-bottom: 8px; color: #334155; font-size: 17px; }
-      .foot { margin-top: 42px; color: #94a3b8; font-size: 12px; }
-      @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-      @media (max-width: 840px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-      @media (max-width: 560px) {
-        .page { width: min(100% - 24px, 500px); padding-top: 18px; }
-        .hero { padding: 58px 0 32px; }
-        .grid { grid-template-columns: 1fr; }
-        .search-panel { top: 8px; }
-      }
-      @media (prefers-reduced-motion: reduce) { .card { animation: none; transition: none; } }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>页面地址已更新 · ProfilesSystem</title>
+    <link rel="canonical" href="major-categories.html" />
   </head>
   <body>
-    <main class="page">
-      <header class="topbar">
-        <a class="brand" href="learnServer.html"><span class="mark">P</span><span>ProfilesSystem</span></a>
-        <a class="back" href="learnIndex.html">← 返回学习空间</a>
-      </header>
-
-      <section class="hero" aria-labelledby="page-title">
-        <p class="eyebrow">Explore majors</p>
-        <h1 id="page-title">发现更多专业</h1>
-        <p class="lead">不必在长列表里迷路。输入专业名称、学科类别或感兴趣的关键词，就能快速找到方向。</p>
-      </section>
-
-      <div class="search-panel" role="search">
-        <span class="search-icon" aria-hidden="true">⌕</span>
-        <input class="search-input" id="majorSearch" type="search" placeholder="搜索专业，例如：电子、建筑、设计、能源……" autocomplete="off" aria-label="搜索专业" />
-        <button class="clear" id="clearSearch" type="button">清除</button>
-      </div>
-
-      <div class="result-bar">
-        <h2>专业列表</h2>
-        <span class="result-count" id="resultCount" aria-live="polite"></span>
-      </div>
-
-      <section class="grid" id="majorGrid" aria-label="专业搜索结果">
-        <article class="card"><div class="icon">…</div><h3>正在加载专业目录</h3><p>正在从后端读取专业类别。</p></article>
-      </section>
-
-      <div class="empty" id="emptyState" role="status"><strong>暂时没有找到这个专业</strong>换个名称或关键词试试，也许它只是换了个称呼。</div>
-      <p class="foot">ProfilesSystem · 更多专业会随着内容完善继续加入</p>
-    </main>
-
+    <p>正在进入页面……<a id="destination" href="major-categories.html">点击继续</a></p>
     <script>
-      const searchInput = document.getElementById("majorSearch");
-      const clearButton = document.getElementById("clearSearch");
-      const majorGrid = document.getElementById("majorGrid");
-      const resultCount = document.getElementById("resultCount");
-      const emptyState = document.getElementById("emptyState");
-      let categories = [];
-
-      function escapeHtml(value) {
-        return String(value == null ? "" : value)
-          .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;").replaceAll("'", "&#39;");
-      }
-
-      function renderCategories() {
-        const keyword = searchInput.value.trim().toLocaleLowerCase("zh-CN");
-        const visible = categories.filter(function (category) {
-          return !keyword || [category.name, category.fieldName, category.summary, category.slug]
-            .join(" ").toLocaleLowerCase("zh-CN").includes(keyword);
-        });
-        majorGrid.innerHTML = visible.map(function (category, index) {
-          const field = (category.fieldName || "").split(" · ")[0] || "专业";
-          return '<article class="card" style="animation-delay:' + Math.min(index * 35, 350) + 'ms">' +
-            '<span class="category">' + escapeHtml(field) + '</span><div class="icon">' +
-            escapeHtml(category.icon || "✦") + '</div><h3>' + escapeHtml(category.name) + '</h3><p>' +
-            escapeHtml(category.summary) + '</p><a href="learnMajorCategory.html?category=' +
-            encodeURIComponent(category.slug) + '">进入专业学习 →</a></article>';
-        }).join("");
-        resultCount.textContent = keyword ? "找到 " + visible.length + " 个专业类别" : "共 " + categories.length + " 个专业类别";
-        clearButton.classList.toggle("visible", Boolean(keyword));
-        emptyState.classList.toggle("visible", visible.length === 0);
-      }
-
-      async function loadCategories() {
-        try {
-          const response = await fetch("/api/learning/categories");
-          const result = await response.json();
-          if (!response.ok || result.code !== 200 || !Array.isArray(result.data)) throw new Error(result.message || "专业目录加载失败");
-          categories = result.data;
-          renderCategories();
-        } catch (error) {
-          majorGrid.innerHTML = '<article class="card"><div class="icon">!</div><h3>目录加载失败</h3><p>' +
-            escapeHtml(error.message || "请检查网络或数据库配置") + '</p></article>';
-          resultCount.textContent = "暂时无法读取专业目录";
-        }
-      }
-
-      searchInput.addEventListener("input", renderCategories);
-      clearButton.addEventListener("click", function () {
-        searchInput.value = "";
-        renderCategories();
-        searchInput.focus();
+      const target = new URL("major-categories.html", location.href);
+      new URLSearchParams(location.search).forEach((value, key) => {
+        if (!target.searchParams.has(key)) target.searchParams.set(key, value);
       });
-      majorGrid.addEventListener("click", function (event) {
-        if (event.target.closest("a")) return;
-        const link = event.target.closest(".card")?.querySelector("a[href]");
-        if (link) link.click();
-      });
-      loadCategories();
+      target.hash = location.hash;
+      location.replace(target.href);
+      document.getElementById("destination").href = target.href;
     </script>
   </body>
 </html>

@@ -10,6 +10,13 @@ public class MajorCategory {
     private int featured;
     private int enabled;
     private int sortOrder;
+    private int completedMajorCount;
+    private int totalMajorCount;
+
+    public int getCompletedMajorCount() { return completedMajorCount; }
+    public void setCompletedMajorCount(int count) { completedMajorCount = count; }
+    public int getTotalMajorCount() { return totalMajorCount; }
+    public void setTotalMajorCount(int count) { totalMajorCount = count; }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

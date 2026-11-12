@@ -102,6 +102,16 @@
       </section>
 
       <section class="timeline" aria-label="版本记录">
+        <article class="release"><div class="release-head"><div><h2>v0.4.12</h2><p class="release-note">人工智能专业接入补全</p></div><time datetime="2026-11-13">2026 · 11 · 13</time></div><div class="changes"><div class="change"><span class="tag fix">修复</span><p>人工智能专业卡片进入实际知识点页面，补齐完善状态和类别完成比统计。</p></div></div></article>
+        <article class="release"><div class="release-head"><div><h2>v0.4.11</h2><p class="release-note">专业完成比</p></div><time datetime="2026-11-13">2026 · 11 · 13</time></div><div class="changes"><div class="change"><span class="tag improve">优化</span><p>专业类别卡片展示已完善专业数与专业总数，数量从目录接口读取。</p></div></div></article>
+        <article class="release"><div class="release-head"><div><h2>v0.4.10</h2><p class="release-note">内容完成状态标签</p></div><time datetime="2026-11-13">2026 · 11 · 13</time></div><div class="changes"><div class="change"><span class="tag improve">优化</span><p>专业与资源卡片在等级旁标明内容完善状态。</p></div></div></article>
+        <article class="release"><div class="release-head"><div><h2>v0.4.9</h2><p class="release-note">首页专业入口优化</p></div><time datetime="2026-11-13">2026 · 11 · 13</time></div><div class="changes"><div class="change"><span class="tag improve">优化</span><p>首页新增更多专业入口卡片，进入类别默认展示具体专业。</p></div></div></article>
+        <article class="release"><div class="release-head"><div><h2>v0.4.8</h2><p class="release-note">知识点卡片交互修正</p></div><time datetime="2026-11-13">2026 · 11 · 13</time></div><div class="changes"><div class="change"><span class="tag fix">修复</span><p>修正卡片展开拉高相邻内容的问题，优化进度勾选并移除 Markdown 下载入口。</p></div></div></article>
+        <article class="release"><div class="release-head"><div><h2>v0.4.7</h2><p class="release-note">专业知识库上线</p></div><time datetime="2026-11-13">2026 · 11 · 13</time></div><div class="changes"><div class="change"><span class="tag new">新增</span><p>接入电子信息、机械与工业设计知识点，提供搜索、分层筛选及本地进度记录。</p></div></div></article>
+        <article class="release"><div class="release-head"><div><h2>v0.4.6</h2><p class="release-note">学习内容重载替换</p></div><time datetime="2026-11-13">2026 · 11 · 13</time></div><div class="changes"><div class="change"><span class="tag new">新增</span><p>新增完整替换导入，明确删除范围、二次确认及失败事务回滚。</p></div></div></article>
+        <article class="release"><div class="release-head"><div><h2>v0.4.5</h2><p class="release-note">内容管理与词库体验优化</p></div><time datetime="2026-11-13">2026 · 11 · 13</time></div><div class="changes"><div class="change"><span class="tag new">新增</span><p>管理员可删除无下级关联的学习内容，敏感词库支持分页与更清晰的录入管理。</p></div></div></article>
+        <article class="release"><div class="release-head"><div><h2>v0.4.4</h2><p class="release-note">专业页面命名整理</p></div><time datetime="2026-11-13">2026 · 11 · 13</time></div><div class="changes"><div class="change"><span class="tag improve">优化</span><p>统一专业类别、路线和资源页面名称，保留旧地址及参数兼容跳转。</p></div></div></article>
+        <article class="release"><div class="release-head"><div><h2>v0.4.3</h2><p class="release-note">专业浏览默认选项调整</p></div><time datetime="2026-11-13">2026 · 11 · 13</time></div><div class="changes"><div class="change"><span class="tag improve">优化</span><p>从更多专业进入类别后，默认选中具体专业并展示专业卡片。</p></div></div></article>
         <article class="release"><div class="release-head"><div><h2>v0.4.2</h2><p class="release-note">内容审核与敏感词管理</p></div><time datetime="2026-11-08">2026 · 11 · 08</time></div><div class="changes"><div class="change"><span class="tag new">新增</span><p>聊天及用户提交文本增加后端敏感词检查，管理员可批量添加、搜索和删除词语。</p></div></div></article>
         <article class="release"><div class="release-head"><div><h2>v0.4.1</h2><p class="release-note">交流中心与学习组上线</p></div><time datetime="2026-11-08">2026 · 11 · 08</time></div><div class="changes"><div class="change"><span class="tag new">新增</span><p>加入好友申请、私聊、学习组申请审批、组内聊天和成员管理，并同步账户展示及专业资源管理改进。</p></div></div></article>
         <article class="release">
@@ -121,7 +131,7 @@
             <time datetime="2026-10-31">2026 · 10 · 31</time>
           </div>
           <div class="changes">
-            <div class="change"><span class="tag new">新增</span><p>新增 learnXXX.html，以 X 作为待填写占位，并集中提供可复制的 ROADMAP 专业内容结构。</p></div>
+            <div class="change"><span class="tag new">新增</span><p>新增 route-template.html，以 X 作为待填写占位，并集中提供可复制的 ROADMAP 专业内容结构。</p></div>
             <div class="change"><span class="tag new">新增</span><p>模板内置阶段导航、模块卡片、知识点进度、备注、搜索、展开收起及进度 JSON 导入导出。</p></div>
             <div class="change"><span class="tag improve">优化</span><p>通过独立 routeKey 隔离各路线的浏览器进度，并加入稳定 ID 和内容分层编写约定。</p></div>
           </div>

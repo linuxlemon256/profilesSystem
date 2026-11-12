@@ -2,13 +2,20 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="refresh" content="0; url=learnMajorCategory.html?category=automation" />
-    <title>自动化类专业 · ProfilesSystem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>页面地址已更新 · ProfilesSystem</title>
+    <link rel="canonical" href="category-automation.html" />
   </head>
   <body>
-    <p>正在进入自动化类专业学习页面……</p>
-    <a href="learnMajorCategory.html?category=automation">如果没有自动跳转，请点击这里</a>
-    <script>location.replace("learnMajorCategory.html?category=automation");</script>
+    <p>正在进入页面……<a id="destination" href="category-automation.html">点击继续</a></p>
+    <script>
+      const target = new URL("category-automation.html", location.href);
+      new URLSearchParams(location.search).forEach((value, key) => {
+        if (!target.searchParams.has(key)) target.searchParams.set(key, value);
+      });
+      target.hash = location.hash;
+      location.replace(target.href);
+      document.getElementById("destination").href = target.href;
+    </script>
   </body>
 </html>

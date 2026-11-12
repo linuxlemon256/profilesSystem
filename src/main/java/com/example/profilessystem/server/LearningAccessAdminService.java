@@ -56,6 +56,37 @@ public class LearningAccessAdminService {
         return new LearningAccessTree.UpdateResult(contentType, id, enabled);
     }
 
+    /** Delete only leaf records; never cascade through learning content. */
+    @Transactional
+    public void delete(String type, long id) {
+        if (id <= 0) throw new IllegalArgumentException("无效的内容编号");
+        String table = switch (type) {
+            case "category" -> "major_category";
+            case "major" -> "major";
+            case "route" -> "learning_route";
+            case "resource" -> "learning_resource";
+            default -> throw new IllegalArgumentException("不支持的学习内容类型");
+        };
+        if (jdbc.queryForList("SELECT id FROM " + table + " WHERE id=? FOR UPDATE", Long.class, id).isEmpty())
+            throw new IllegalArgumentException("学习内容不存在或已删除");
+        String dependencies = switch (type) {
+            case "category" -> "SELECT (SELECT COUNT(*) FROM major WHERE category_id=?) + " +
+                    "(SELECT COUNT(*) FROM learning_route WHERE category_id=?) + (SELECT COUNT(*) FROM learning_resource WHERE category_id=?)";
+            case "major" -> "SELECT (SELECT COUNT(*) FROM learning_route WHERE major_id=?) + (SELECT COUNT(*) FROM learning_resource WHERE major_id=?)";
+            case "route" -> "SELECT COUNT(*) FROM learning_resource WHERE route_id=?";
+            default -> null;
+        };
+        Object[] args = switch (type) {
+            case "category" -> new Object[]{id,id,id};
+            case "major" -> new Object[]{id,id};
+            default -> new Object[]{id};
+        };
+        if (dependencies != null && jdbc.queryForObject(dependencies, Long.class, args) > 0)
+            throw new IllegalArgumentException("该内容仍有下级专业、路线或关联资源，请先处理关联内容");
+        if (jdbc.update("DELETE FROM " + table + " WHERE id=?", id) != 1)
+            throw new IllegalArgumentException("学习内容不存在或已删除");
+    }
+
     private Map<Long, List<LearningAccessTree.ContentNode>> children(String sql) {
         Map<Long, List<LearningAccessTree.ContentNode>> result = new LinkedHashMap<>();
         jdbc.query(sql, rs -> {
