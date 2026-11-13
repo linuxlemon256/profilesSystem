@@ -1094,13 +1094,37 @@
             "route-computer-employment.html", "learncomputer.html",
             "route-mechanical-mechatronics.html", "learnmechanical.html",
             "major-electronic-information.html", "major-mechanical-manufacturing.html",
-            "major-artificial-intelligence.html", "major-industrial-design.html", "major-knowledge.html", "major-categories.html"
+            "major-artificial-intelligence.html", "major-industrial-design.html", "major-knowledge.html", "major-categories.html",
+            "major-blockchain-engineering.html",
+            "major-computer-science.html",
+            "major-confidentiality.html",
+            "major-cryptographic-science.html",
+            "major-cyberspace-security.html",
+            "major-data-science.html",
+            "major-digital-media.html",
+            "major-electronic-computer.html",
+            "major-film-production.html",
+            "major-industrial-software.html",
+            "major-information-security.html",
+            "major-intelligent-science.html",
+            "major-iot-engineering.html",
+            "major-network-engineering.html",
+            "major-new-media.html",
+            "major-service-science.html",
+            "major-software-engineering.html",
+            "major-spatial-information.html",
+            "major-virtual-reality.html"
           ]).has(file) && url.origin === location.origin;
           if (ready) return true;
           const placeholders = new Set(["major-detail.html","majorDemo.html","route-detail.html","routeDemo.html","resource-placeholder.html","resourceDemo.html","projectDemo.html","route-template.html","learnXXX.html"]);
           if (!target || (url.origin === location.origin && placeholders.has(file))) return false;
           return null;
         } catch (_) { return false; }
+      }
+      function linkSafetyBadge(state) {
+        const labels={UNVERIFIED:"待核验",VERIFIED:"已核验",RISK:"存在风险"};
+        const css=state==="VERIFIED"?"ready":state==="RISK"?"pending":"unconfirmed";
+        return '<span class="readiness '+css+'">'+(labels[state]||"待核验")+'</span>';
       }
       function readinessBadge(ready) {
         return '<span class="readiness ' + (ready === true ? 'ready' : ready === false ? 'pending' : 'unconfirmed') + '">' +
@@ -1174,7 +1198,7 @@
           }
           resourceGrid.innerHTML = resources.map(resource =>
             '<article class="card"><div class="content-badges"><span class="access-level ' + accessClass(resource.requiredLevel) + '">' +
-            accessText(resource.requiredLevel) + '</span>' + readinessBadge(contentReady(resource.targetUrl)) + '</div><div class="icon">' +
+            accessText(resource.requiredLevel) + '</span>' + (resource.resourceType === "LINK" ? linkSafetyBadge(resource.safetyStatus) : readinessBadge(contentReady(resource.targetUrl))) + '</div><div class="icon">' +
             escapeLearningHtml(resource.icon || '✦') + '</div><h3>' + escapeLearningHtml(resource.title) +
             '</h3><p>' + escapeLearningHtml(resource.description) +
             '</p><a href="resource-detail.html?id=' + encodeURIComponent(resource.id) +

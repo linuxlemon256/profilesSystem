@@ -114,7 +114,7 @@
             <div>
               <div class="meta">
                 <span class="badge category" id="categoryBadge">学习资源</span>
-                <span class="badge level-public" id="levelBadge">公开</span>
+                <span class="badge level-public" id="levelBadge">公开</span><span class="badge" id="safetyBadge" hidden></span>
               </div>
               <h1 id="resourceTitle">学习资源</h1>
             </div>
@@ -183,6 +183,12 @@
         text("categoryBadge", (resource.categoryName || "通用") + "专业资源");
         text("levelBadge", access.text);
         document.getElementById("levelBadge").className = "badge " + access.className;
+        const safetyBadge = document.getElementById("safetyBadge");
+        safetyBadge.hidden = resource.resourceType !== "LINK";
+        safetyBadge.textContent = ({UNVERIFIED:"待核验",VERIFIED:"已核验",RISK:"存在风险"})[resource.safetyStatus] || "待核验";
+        safetyBadge.style.background = resource.safetyStatus === "VERIFIED" ? "#ecfdf5" : "#f1f5f9";
+        safetyBadge.style.color = resource.safetyStatus === "VERIFIED" ? "#047857" : "#64748b";
+        safetyBadge.title = resource.reviewedAt ? "管理员核验时间：" + resource.reviewedAt : "尚未经过管理员核验";
         text("resourceTitle", resource.title);
         text("resourceDescription", resource.description || "该资源暂时没有补充说明。");
         text("resourceType", typeName(resource.resourceType));

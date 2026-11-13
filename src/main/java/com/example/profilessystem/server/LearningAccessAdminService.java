@@ -43,6 +43,8 @@ public class LearningAccessAdminService {
 
     @Transactional
     public LearningAccessTree.UpdateResult setEnabled(String contentType, long id, boolean enabled) {
+        if (enabled && "resource".equals(contentType) && jdbc.queryForObject("SELECT COUNT(*) FROM learning_resource WHERE id=? AND safety_status='RISK'",Integer.class,id)>0)
+            throw new IllegalArgumentException("风险资源不能开放，请先在链接管理中重新核验");
         String sql = switch (contentType) {
             case "category" -> "UPDATE major_category SET enabled=? WHERE id=?";
             case "major" -> "UPDATE major SET enabled=? WHERE id=?";

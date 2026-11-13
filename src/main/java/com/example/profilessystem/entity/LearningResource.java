@@ -19,6 +19,16 @@ public class LearningResource {
     private String status;
     private boolean enabled = true;
     private String targetUrl;
+    private String safetyStatus = "UNVERIFIED";
+    private String reviewNote;
+    private LocalDateTime reviewedAt;
+    public String getSafetyStatus() { return safetyStatus; }
+    public void setSafetyStatus(String value) { safetyStatus = value; }
+    public String getReviewNote() { return reviewNote; }
+    public void setReviewNote(String value) { reviewNote = value; }
+    public LocalDateTime getReviewedAt() { return reviewedAt; }
+    public void setReviewedAt(LocalDateTime value) { reviewedAt = value; }
+
     private String originalName;
     private String storageKey;
     private int sortOrder;

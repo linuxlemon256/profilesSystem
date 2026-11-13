@@ -517,6 +517,40 @@
       .transfer-button.replace{color:#be123c;border:1px solid #fecdd3;background:linear-gradient(135deg,#fff1f2,#fff7ed)}
       .transfer-button.replace:hover:not(:disabled){background:#ffe4e6;box-shadow:0 6px 18px #e11d481a}
       .transfer-replace-warning{flex-basis:100%;margin:4px 0;color:#9f1239;font-size:12px;line-height:1.8}
+
+.link-panel{margin-top:22px}.link-eyebrow{display:block;color:#7c3aed;font-size:9px;font-weight:800;letter-spacing:.15em;margin-bottom:6px}.link-intro{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 22px 4px}.link-intro p{color:#64748b;font-size:13px;margin:0}.link-intro span{color:#6366f1;font-size:12px;font-weight:700}.link-filters{display:flex;flex-wrap:wrap;gap:9px;padding:17px 22px}.link-filters input{flex:1;min-width:180px}.link-filters input,.link-filters select{padding:10px 12px;border:1px solid #dce5f5;border-radius:12px;background:#f8faff;color:#475569;font:inherit;font-size:12px;min-width:0}.link-rows{display:grid;gap:12px;padding:0 22px 20px}.link-row{padding:18px;border:1px solid #e0e7ff;border-radius:18px;background:linear-gradient(120deg,#fff,#fafaff);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;animation:wordIn .25s ease}.link-row h3{margin:0 0 8px;color:#172554;font-size:15px}.link-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.link-pill{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:4px 9px;background:#eef2ff;color:#4338ca;font-size:10px;font-weight:700}.link-pill.verified{background:#ecfdf5;color:#047857}.link-pill.unverified{background:#f1f5f9;color:#64748b}.link-pill.risk{background:#fff1f2;color:#be123c}.link-row p{margin:5px 0;color:#64748b;font-size:12px;line-height:1.8}.link-address{display:block;max-width:100%;overflow-wrap:anywhere;color:#4f46e5;font-size:12px;text-decoration:none}.link-row-actions{display:flex;align-items:center;align-content:center;flex-wrap:wrap;justify-content:flex-end;gap:7px;max-width:240px}.link-row-actions button{margin:0}.link-pager{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-top:1px solid #eef2ff;font-size:12px;color:#94a3b8}.link-panel button:disabled{opacity:.5;cursor:wait}.link-dialog{width:min(700px,calc(100% - 28px));max-height:90vh;overflow:auto;border:1px solid #dce5f5;border-radius:25px;padding:0;box-shadow:0 30px 100px #17255440;color:#172554;background:#fff}.link-dialog::backdrop{background:#17255466;backdrop-filter:blur(5px)}.link-dialog header{display:flex;justify-content:space-between;align-items:center;padding:23px 26px;background:linear-gradient(120deg,#eef2ff,#faf5ff)}.link-dialog h2{margin:0;font-size:23px}.link-dialog header button{border:0;background:#fff;padding:9px 12px;border-radius:12px;color:#64748b;cursor:pointer}.link-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px;padding:24px 26px}.link-form-grid label{display:flex;flex-direction:column;gap:8px;min-width:0;font-size:12px;font-weight:700;color:#475569}.link-form-grid .wide{grid-column:1/-1}.link-form-grid input,.link-form-grid select,.link-form-grid textarea{box-sizing:border-box;width:100%;padding:11px 13px;border:1px solid #dce5f5;border-radius:12px;color:#334155;background:#f8faff;font:inherit;font-size:13px}.link-form-grid textarea{resize:vertical}.link-form-grid small{font-size:11px;line-height:1.6;color:#94a3b8;font-weight:400}.link-form-grid .link-check{flex-direction:row;align-items:center}.link-check input{width:auto;accent-color:#6366f1}.link-editor-tip{margin:0;padding:0 26px 20px;font-size:11px;color:#94a3b8;line-height:1.8}.link-dialog footer{display:flex;justify-content:flex-end;gap:10px;padding:18px 26px;border-top:1px solid #eef2ff;position:sticky;bottom:0;background:#ffffffed}.link-form-grid input:focus,.link-form-grid select:focus,.link-form-grid textarea:focus{outline:3px solid #6366f11a;border-color:#818cf8}.link-empty{padding:32px;border:1px dashed #c7d2fe;border-radius:18px;color:#94a3b8;text-align:center;font-size:13px}@media(max-width:720px){.link-row{grid-template-columns:1fr}.link-row-actions{justify-content:flex-start;max-width:none}.link-form-grid{grid-template-columns:1fr;padding:18px}.link-form-grid .wide{grid-column:auto}.link-filters,.link-rows{padding-left:15px;padding-right:15px}.link-intro{align-items:flex-start;flex-direction:column}}
+
+.link-panel .toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.link-panel button,.link-dialog button{border:1px solid transparent;border-radius:11px;padding:10px 14px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:transform .18s,box-shadow .18s,background .18s}
+.link-panel .approve,.link-dialog .approve{color:#fff;background:linear-gradient(120deg,#4f46e5,#8b5cf6);box-shadow:0 5px 14px #6366f122}
+.link-panel .view,.link-dialog .view{color:#4338ca;background:#eef2ff;border-color:#dbe4ff}
+.link-panel .reject,.link-dialog .reject{color:#be123c;background:#fff1f2;border-color:#fecdd3}
+.link-panel button:hover:not(:disabled),.link-dialog button:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 5px 13px #3730a315}
+.link-panel button:focus-visible,.link-dialog button:focus-visible{outline:3px solid #a5b4fc;outline-offset:3px}
+.link-dialog button:disabled{opacity:.5;cursor:wait}
+
+      /* Administrator workspace navigation */
+      [data-admin-module][hidden],.heading #refresh[hidden]{display:none!important}
+      .topbar{position:sticky;top:0;z-index:90;padding:0 28px}
+      .admin-sidebar{position:fixed;left:0;top:72px;bottom:0;width:232px;padding:27px 16px;background:#ffffffed;border-right:1px solid #dce5f5;z-index:85;overflow-y:auto;display:flex;flex-direction:column;gap:24px;backdrop-filter:blur(16px)}
+      .admin-sidebar-title{padding:0 12px;color:#94a3b8;font-size:10px;font-weight:800;letter-spacing:.15em}
+      .admin-nav{display:flex;flex-direction:column;gap:8px}
+      .admin-nav button{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;background:transparent;color:#64748b;border:1px solid transparent;border-radius:13px;text-align:left;cursor:pointer;font:inherit;font-size:13px;font-weight:700;transition:background .2s,color .2s,transform .2s}
+      .admin-nav button:hover{background:#f5f3ff;color:#4338ca;transform:translateX(2px)}
+      .admin-nav button[aria-current="page"]{background:linear-gradient(115deg,#e0e7ff,#f3e8ff);color:#4338ca;border-color:#ddd6fe;box-shadow:0 5px 18px #6366f10a}
+      .admin-nav-icon{width:22px;text-align:center;font-size:18px;color:#818cf8}
+      .admin-nav-count{margin-left:auto;min-width:22px;padding:2px 6px;border-radius:20px;background:#e11d48;color:white;font-size:10px;text-align:center}
+      .admin-nav-count[hidden]{display:none}
+      .admin-sidebar-foot{margin-top:auto;padding:16px 12px 0;border-top:1px solid #eef2ff;color:#94a3b8;font-size:11px;line-height:1.9}
+      .layout{max-width:1560px;margin-left:232px;margin-right:auto;padding:32px clamp(18px,3vw,44px) 56px;min-width:0}
+      .layout>.panel[data-admin-module]{margin-top:18px!important}
+      .heading{align-items:center;margin-bottom:24px}.heading h1{font-size:clamp(25px,3vw,36px)}.heading h1:focus{outline:none}
+      .admin-menu-toggle{display:none;border:1px solid #ffffff30;background:#ffffff12;border-radius:9px;color:#fff;padding:8px 10px;font:inherit;cursor:pointer}
+      .admin-scrim{position:fixed;inset:72px 0 0;z-index:95;background:#17255466;backdrop-filter:blur(3px);border:0;width:100%;cursor:pointer}
+      .admin-scrim[hidden]{display:none}
+      .admin-nav button:focus-visible,.admin-menu-toggle:focus-visible{outline:3px solid #a5b4fc;outline-offset:3px}
+      @media(max-width:900px){.admin-menu-toggle{display:block}.topbar{padding:0 16px}.brand{gap:8px;font-size:12px}.admin-sidebar{width:260px;z-index:100;transform:translateX(-105%);transition:transform .22s ease}.admin-sidebar.is-open{transform:translateX(0)}.layout{margin-left:0;padding:24px 16px 45px}.heading{align-items:flex-start;gap:12px}.heading h1{font-size:27px}.heading .refresh{white-space:nowrap}.admin .avatar{display:none}.admin{gap:8px;font-size:11px}body.admin-menu-open{overflow:hidden}}
+      @media(prefers-reduced-motion:reduce){.admin-sidebar,.admin-nav button{transition:none}}
     </style>
     <style id="profiles-motion">
     @keyframes profilesPageIn { from { opacity: 0; } to { opacity: 1; } }
@@ -535,7 +569,7 @@
   </style></head>
   <body>
     <header class="topbar">
-      <div class="brand">
+      <div class="brand"><button type="button" class="admin-menu-toggle" id="adminMenuToggle" aria-label="打开管理模块菜单" aria-controls="adminSidebar" aria-expanded="false">☰</button>
         <span class="mark">P</span><span>ProfilesSystem · 管理面板</span>
       </div>
       <div class="admin">
@@ -543,6 +577,7 @@
         <button class="logout" id="logout">退出</button>
       </div>
     </header>
+<aside class="admin-sidebar" id="adminSidebar" aria-label="管理模块"><div class="admin-sidebar-title">WORKSPACE / 管理工作台</div><nav class="admin-nav"><button type="button" data-admin-target="accounts"><span class="admin-nav-icon" aria-hidden="true">◈</span>账户管理<span class="admin-nav-count" id="adminCount-accounts" hidden>0</span></button><button type="button" data-admin-target="requests"><span class="admin-nav-icon" aria-hidden="true">▤</span>申请处理<span class="admin-nav-count" id="adminCount-requests" hidden>0</span></button><button type="button" data-admin-target="learning"><span class="admin-nav-icon" aria-hidden="true">⌘</span>学习内容</button><button type="button" data-admin-target="links"><span class="admin-nav-icon" aria-hidden="true">↗</span>链接资源</button><button type="button" data-admin-target="moderation"><span class="admin-nav-icon" aria-hidden="true">◇</span>内容审核</button><button type="button" data-admin-target="notifications"><span class="admin-nav-icon" aria-hidden="true">✉</span>通知管理</button><button type="button" data-admin-target="settings"><span class="admin-nav-icon" aria-hidden="true">⚙</span>系统设置</button></nav><div class="admin-sidebar-foot">按模块管理，专注当前任务。<br>切换模块会保留当前页面的表单内容。</div></aside><button type="button" class="admin-scrim" id="adminScrim" aria-label="关闭模块菜单" hidden></button>
     <main class="layout">
       <section class="heading">
         <div>
@@ -552,7 +587,7 @@
         </div>
         <button class="refresh" id="refresh">↻ 刷新列表</button>
       </section>
-      <section class="stats">
+      <section data-admin-module="accounts" class="stats">
         <div class="stat">
           <span>待处理申请</span><b id="pendingCount">0</b><em>需要及时审核</em>
         </div>
@@ -567,7 +602,7 @@
           <span>已拒绝</span><b id="rejectedCount">0</b><em>累计</em>
         </div>
       </section>
-      <section class="panel">
+      <section data-admin-module="accounts" class="panel">
         <div class="toolbar">
           <input
             id="search"
@@ -598,18 +633,18 @@
           <div class="empty" id="empty">没有找到符合条件的申请</div>
         </div>
       </section>
-      <section class="panel" style="margin-top: 22px">
+      <section data-admin-module="requests" hidden class="panel" style="margin-top: 22px">
         <div class="toolbar"><strong>身份码重置申请</strong><span class="count" id="recoveryCount"></span><div class="actions"><button class="view history-toggle" data-history="recovery" data-mode="pending">待处理</button><button class="view history-toggle" data-history="recovery" data-mode="history">历史记录</button></div></div>
         <div class="table-wrap">
           <table><thead><tr><th>账户</th><th>邮箱</th><th>申请说明</th><th>提交时间</th><th>操作</th></tr></thead><tbody id="recoveryRows"></tbody></table>
           <div class="empty" id="recoveryEmpty">暂无身份码重置申请</div>
         </div>
       </section>
-      <section class="panel" style="margin-top: 22px">
+      <section data-admin-module="requests" hidden class="panel" style="margin-top: 22px">
         <div class="toolbar"><strong>学习组创建申请</strong><span class="count" id="groupCount"></span></div>
         <div class="table-wrap"><table><thead><tr><th>名称</th><th>创建者</th><th>简介</th><th>提交时间</th><th>操作</th></tr></thead><tbody id="groupRows"></tbody></table><div class="empty" id="groupEmpty">暂无待审批学习组</div></div>
       </section>
-      <section class="panel" style="margin-top: 22px">
+      <section data-admin-module="requests" hidden class="panel" style="margin-top: 22px">
         <div class="toolbar"><strong>问题反馈与加入申请</strong><span class="count" id="communityCount"></span><div class="actions"><button class="view history-toggle" data-history="community" data-mode="pending">待处理</button><button class="view history-toggle" data-history="community" data-mode="history">历史记录</button></div></div>
         <div class="table-wrap">
           <table>
@@ -619,7 +654,7 @@
           <div class="empty" id="communityEmpty">暂无待处理反馈或加入申请</div>
         </div>
       </section>
-      <section class="panel" style="margin-top:22px">
+      <section data-admin-module="notifications" hidden class="panel" style="margin-top:22px">
         <div class="toolbar"><strong>主动发送用户通知</strong><span class="count">用户会在通知页面看到</span></div>
         <form id="notificationForm" class="inline-form">
           <input id="notificationUser" placeholder="账户名称" required>
@@ -628,7 +663,31 @@
         </form>
       </section>
       
-      <section class="panel moderation-panel" aria-labelledby="moderationTitle">
+
+      <section data-admin-module="links" hidden class="panel link-panel" id="linkResourcePanel" aria-labelledby="linkTitle">
+        <div class="toolbar"><div><span class="link-eyebrow">RESOURCE DIRECTORY</span><strong id="linkTitle">链接资源管理</strong></div><button type="button" class="approve" id="linkNew">＋ 新增链接</button></div>
+        <div class="link-intro"><p>把值得学习的内容，整理到合适的专业里。</p><span id="linkCount">正在读取…</span></div>
+        <div class="link-filters"><input type="search" id="linkSearch" placeholder="搜索标题或网址" aria-label="搜索链接"><select id="linkCategoryFilter" aria-label="筛选专业类别"><option value="">全部类别</option></select><select id="linkLevelFilter" aria-label="筛选等级"><option value="">全部等级</option><option value="0">公开</option><option value="1">关联</option><option value="2">内部</option></select><select id="linkStatusFilter" aria-label="筛选发布状态"><option value="">全部发布状态</option><option value="DRAFT">草稿</option><option value="PUBLISHED">已发布</option></select><select id="linkSafetyFilter" aria-label="筛选安全状态"><option value="">全部核验状态</option><option value="UNVERIFIED">待核验</option><option value="VERIFIED">已核验</option><option value="RISK">存在风险</option></select><button type="button" class="view" id="linkRefresh">刷新</button></div>
+        <div id="linkRows" class="link-rows" aria-live="polite"></div><div class="link-pager"><button class="view" type="button" id="linkPrev">← 上一页</button><span id="linkPageInfo">第 1 页</span><button class="view" type="button" id="linkNext">下一页 →</button></div>
+      </section>
+      <dialog id="linkDialog" class="link-dialog" aria-labelledby="linkEditorTitle">
+        <form id="linkForm"><header><div><span class="link-eyebrow">EDIT RESOURCE</span><h2 id="linkEditorTitle">新增链接</h2></div><button type="button" id="linkClose" aria-label="关闭编辑器">✕</button></header>
+          <div class="link-form-grid">
+            <label class="wide">资源标题<input id="lrTitle" maxlength="200" required placeholder="例如：数字信号处理公开课"></label>
+            <label class="wide">链接地址<input id="lrUrl" maxlength="2048" required placeholder="https://… 或本站页面.html"><small>外部仅支持 HTTPS；修改已有地址后自动恢复待核验。</small></label>
+            <label class="wide">资源说明<textarea id="lrDescription" rows="3" maxlength="2000" placeholder="介绍适合谁学、主要内容和使用方式"></textarea></label>
+            <label>专业类别<select id="lrCategory" required></select></label><label>具体专业<select id="lrMajor"><option value="">类别通用</option></select></label>
+            <label>关联路线<select id="lrRoute"><option value="">不关联路线</option></select></label><label>访问等级<select id="lrLevel"><option value="0">公开</option><option value="1">关联</option><option value="2">内部</option></select></label>
+            <label>发布状态<select id="lrStatus"><option value="DRAFT">草稿</option><option value="PUBLISHED">已发布</option></select></label><label>安全状态<select id="lrSafety"><option value="UNVERIFIED">待核验</option><option value="VERIFIED">已核验</option><option value="RISK">存在风险</option></select></label>
+            <label>图标<input id="lrIcon" maxlength="16" value="↗"></label><label>排序<input id="lrOrder" type="number" min="-999999" max="999999" value="0"></label>
+            <label class="wide">核验备注<textarea id="lrNote" rows="2" maxlength="1000" placeholder="记录检查结果；标记风险时必填"></textarea></label>
+            <label class="wide link-check"><input id="lrEnabled" type="checkbox" checked>开放此资源</label>
+          </div>
+          <p class="link-editor-tip" id="linkReviewTime">尚未核验。核验状态是管理员检查记录，不保证外部网站永久安全。</p>
+          <footer><button type="button" class="view" id="linkCancel">取消</button><button type="submit" class="approve" id="linkSave">保存资源</button></footer>
+        </form>
+      </dialog>
+      <section data-admin-module="moderation" hidden class="panel moderation-panel" aria-labelledby="moderationTitle">
         <div class="toolbar"><div><span class="moderation-eyebrow">CONTENT SAFETY</span><strong id="moderationTitle">敏感词管理</strong></div><span class="count" id="moderationCount">加载中</span></div>
         <div class="moderation-layout">
           <form id="moderationForm" class="moderation-compose">
@@ -644,11 +703,11 @@
           </div>
         </div>
       </section>
-      <section class="panel feature-switch-panel" style="margin-top:22px">
+      <section data-admin-module="settings" hidden class="panel feature-switch-panel" style="margin-top:22px">
         <div class="toolbar"><strong>功能开放设置</strong><span class="count">关闭后端接口会同步拒绝访问</span></div>
         <div id="featureSwitches" class="feature-switches"><div class="empty">正在读取功能状态…</div></div>
       </section>
-      <section class="panel" style="margin-top:22px">
+      <section data-admin-module="learning" hidden class="panel" style="margin-top:22px">
         <div class="toolbar"><strong>学习内容管理</strong><span class="count" id="learningAccessState">正在读取层级…</span></div>
         <div class="access-manager">
           <div class="access-manager-tools">
@@ -658,7 +717,7 @@
           <div class="access-tree" id="learningAccessTree"><div class="access-empty">正在读取学习内容…</div></div>
         </div>
       </section>
-      <section class="panel" style="margin-top:22px">
+      <section data-admin-module="learning" hidden class="panel" style="margin-top:22px">
         <div class="toolbar"><strong>数据内容迁移</strong><span class="count" id="contentTransferState">正在读取内容概览…</span></div>
         <div class="transfer-body">
           <p class="transfer-notice">这里只迁移专业学习相关内容。导入采用“按内容标识合并”的方式，不会创建、删除或重命名任何数据结构，也不会接收 SQL 文件。</p>
@@ -1306,11 +1365,18 @@
       });
 
       document.getElementById("refresh").addEventListener("click", async () => {
-        if (await loadApplications()) {
-          await loadRecoveryRequests();
-          await loadCommunityRequests();
-          showToast("列表已刷新");
-        }
+        const button=document.getElementById("refresh");button.disabled=true;
+        try {
+          switch(activeAdminModule){
+            case "accounts": await loadApplications();break;
+            case "requests":await Promise.all([loadRecoveryRequests(),loadCommunityRequests(),loadGroupRequests()]);break;
+            case "learning":await Promise.all([loadLearningAccessTree(),loadContentTransferOverview()]);break;
+            case "links":await loadLinkResources();break;
+            case "moderation":await loadModeration();break;
+            case "settings":await loadFeatureSwitches();if(typeof loadLlmSettings==="function")await loadLlmSettings();break;
+          }
+          showToast("当前模块已刷新");
+        } finally {button.disabled=false;}
       });
 
       loadApplications();
@@ -1322,6 +1388,81 @@
       loadLearningAccessTree();
       loadContentTransferOverview();
 
+
+      const safetyLabels={UNVERIFIED:"待核验",VERIFIED:"已核验",RISK:"存在风险"};
+      let linkResources=[],linkCategories=[],editingLink=null,linkPage=1;
+      const linkDialog=document.getElementById("linkDialog"),linkForm=document.getElementById("linkForm");
+      const lr=id=>document.getElementById(id);
+      const numberOrNull=value=>value?Number(value):null;
+      function linkOptions(items,empty){return '<option value="">'+empty+'</option>'+items.map(x=>`<option value="${Number(x.id)}">${escapeHtml(x.name)}</option>`).join("");}
+      function updateLinkChildren(){const category=linkCategories.find(x=>Number(x.id)===Number(lr("lrCategory").value));lr("lrMajor").innerHTML=linkOptions(category?.specificMajors||[],"类别通用");lr("lrRoute").innerHTML=linkOptions(category?.learningRoutes||[],"不关联路线");}
+      function linkHref(value){try{const u=new URL(value,location.href);if(u.username||u.password)return null;if(u.origin===location.origin&&/^\/?[a-zA-Z0-9_-]+\.html$/.test(u.pathname))return u.href;if(u.protocol==="https:")return u.href;}catch(_){}return null;}
+      function renderLinks(){
+        const q=lr("linkSearch").value.trim().toLowerCase();
+        const items=linkResources.filter(x=>(!q||(x.title+" "+(x.targetUrl||"")).toLowerCase().includes(q))&&(!lr("linkCategoryFilter").value||String(x.categoryId)===lr("linkCategoryFilter").value)&&(!lr("linkLevelFilter").value||String(x.requiredLevel)===lr("linkLevelFilter").value)&&(!lr("linkStatusFilter").value||x.status===lr("linkStatusFilter").value)&&(!lr("linkSafetyFilter").value||(x.safetyStatus||"UNVERIFIED")===lr("linkSafetyFilter").value));
+        const pages=Math.max(1,Math.ceil(items.length/12));linkPage=Math.min(Math.max(1,linkPage),pages);
+        lr("linkCount").textContent=`${linkResources.length} 项链接 · 匹配 ${items.length} 项`;
+        lr("linkPageInfo").textContent=`第 ${linkPage} / ${pages} 页`;lr("linkPrev").disabled=linkPage===1;lr("linkNext").disabled=linkPage===pages;
+        lr("linkRows").innerHTML=items.slice((linkPage-1)*12,linkPage*12).map(x=>{
+          const state=x.safetyStatus||"UNVERIFIED",href=linkHref(x.targetUrl),category=linkCategories.find(c=>Number(c.id)===Number(x.categoryId)),route=category?.learningRoutes.find(r=>Number(r.id)===Number(x.routeId));
+          return `<article class="link-row"><div><h3>${escapeHtml(x.icon||"↗")} ${escapeHtml(x.title)}</h3><div class="link-tags"><span class="link-pill">${["公开","关联","内部"][x.requiredLevel]||"未定"}</span><span class="link-pill ${state==="VERIFIED"?"verified":state==="RISK"?"risk":"unverified"}">${safetyLabels[state]||"待核验"}</span><span class="link-pill">${x.status==="PUBLISHED"?"已发布":"草稿"} · ${x.enabled?"开放":"关闭"}</span></div><p>${escapeHtml(x.description||"暂无说明")}</p><p>${escapeHtml(x.categoryName||category?.name||"未关联类别")} / ${escapeHtml(x.majorName||"类别通用")}${route?" / "+escapeHtml(route.name):""}</p>${href?`<a class="link-address" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(x.targetUrl)} ↗</a>`:`<span class="link-address">${escapeHtml(x.targetUrl||"未填写地址")}</span>`}<p>核验时间：${escapeHtml(x.reviewedAt?formatTime(x.reviewedAt):"尚未核验")}</p></div><div class="link-row-actions"><button class="view" data-link="edit" data-id="${Number(x.id)}">编辑</button><button class="view" data-link="copy" data-id="${Number(x.id)}">复制链接</button><button class="view" data-link="toggle" data-id="${Number(x.id)}" ${state==="RISK"?"disabled":""}>${x.enabled?"关闭":"开放"}</button><button class="reject" data-link="delete" data-id="${Number(x.id)}">删除</button></div></article>`;
+        }).join("")||'<div class="link-empty">没有匹配的链接，试试调整筛选或新增链接。</div>';
+      }
+      async function loadLinkResources(){try{const [resources,tree]=await Promise.all([request("/api/manager/learning/resources"),request("/api/manager/learning-access")]);linkResources=(resources||[]).filter(x=>x.resourceType==="LINK");linkCategories=tree.categories||[];const selected=lr("linkCategoryFilter").value;lr("linkCategoryFilter").innerHTML=linkOptions(linkCategories,"全部类别");lr("linkCategoryFilter").value=selected;renderLinks();}catch(error){lr("linkRows").innerHTML='<div class="link-empty">链接管理读取失败，请检查数据库迁移和服务状态。</div>';showToast("读取链接资源失败："+error.message);}}
+      function editLink(item){editingLink=item;linkForm.reset();lr("linkEditorTitle").textContent=item?"编辑链接资源":"新增链接资源";lr("lrCategory").innerHTML=linkOptions(linkCategories,"请选择类别");lr("lrCategory").value=item?.categoryId||"";updateLinkChildren();const values={lrTitle:item?.title||"",lrUrl:item?.targetUrl||"",lrDescription:item?.description||"",lrMajor:item?.majorId||"",lrRoute:item?.routeId||"",lrLevel:item?.requiredLevel??0,lrStatus:item?.status||"DRAFT",lrSafety:item?.safetyStatus||"UNVERIFIED",lrIcon:item?.icon||"↗",lrOrder:item?.sortOrder||0,lrNote:item?.reviewNote||""};Object.entries(values).forEach(([id,value])=>lr(id).value=value);lr("lrEnabled").checked=item?.enabled??true;lr("lrEnabled").disabled=lr("lrSafety").value==="RISK";lr("lrNote").required=lr("lrSafety").value==="RISK";lr("linkReviewTime").textContent=item?.reviewedAt?"上次核验："+formatTime(item.reviewedAt):"尚未核验。核验记录不保证外部网站永久安全。";linkDialog.showModal();}
+      lr("linkNew").addEventListener("click",()=>editLink(null));lr("linkClose").addEventListener("click",()=>linkDialog.close());lr("linkCancel").addEventListener("click",()=>linkDialog.close());lr("lrCategory").addEventListener("change",updateLinkChildren);
+      lr("lrSafety").addEventListener("change",()=>{const risk=lr("lrSafety").value==="RISK";lr("lrEnabled").disabled=risk;if(risk)lr("lrEnabled").checked=false;lr("lrNote").required=risk;});
+      ["linkSearch","linkCategoryFilter","linkLevelFilter","linkStatusFilter","linkSafetyFilter"].forEach(id=>lr(id).addEventListener("input",()=>{linkPage=1;renderLinks();}));lr("linkRefresh").addEventListener("click",loadLinkResources);lr("linkPrev").addEventListener("click",()=>{linkPage--;renderLinks();});lr("linkNext").addEventListener("click",()=>{linkPage++;renderLinks();});
+      linkForm.addEventListener("submit",async event=>{event.preventDefault();const payload={title:lr("lrTitle").value.trim(),targetUrl:lr("lrUrl").value.trim(),description:lr("lrDescription").value,categoryId:Number(lr("lrCategory").value),majorId:numberOrNull(lr("lrMajor").value),routeId:numberOrNull(lr("lrRoute").value),requiredLevel:Number(lr("lrLevel").value),status:lr("lrStatus").value,safetyStatus:lr("lrSafety").value,icon:lr("lrIcon").value,sortOrder:Number(lr("lrOrder").value),reviewNote:lr("lrNote").value,enabled:lr("lrEnabled").checked,resourceType:"LINK"};if(!linkHref(payload.targetUrl)){showToast("请输入 HTTPS 链接或本站 HTML 页面地址");return;}if(linkResources.some(x=>x.id!==editingLink?.id&&x.targetUrl===payload.targetUrl&&x.categoryId===payload.categoryId&&x.majorId===payload.majorId&&x.routeId===payload.routeId)&&!confirm("相同归属位置已有此链接，仍要保存吗？"))return;lr("linkSave").disabled=true;try{const changed=editingLink&&editingLink.targetUrl!==payload.targetUrl;await request("/api/manager/learning/resources"+(editingLink?"/"+editingLink.id:""),{method:editingLink?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});linkDialog.close();showToast(changed?"地址已更新，安全状态恢复待核验":"链接资源已保存");await Promise.all([loadLinkResources(),loadLearningAccessTree()]);}catch(error){showToast("保存失败："+error.message);}finally{lr("linkSave").disabled=false;}});
+      lr("linkRows").addEventListener("click",async event=>{const b=event.target.closest("button[data-link]");if(!b)return;const item=linkResources.find(x=>String(x.id)===b.dataset.id);if(!item)return;if(b.dataset.link==="edit"){editLink(item);return;}b.disabled=true;try{if(b.dataset.link==="copy"){await navigator.clipboard.writeText(item.targetUrl);showToast("链接已复制");}else if(b.dataset.link==="delete"){if(!confirm(`删除“${item.title}”的本站资源记录？外部内容不会删除。此操作不能撤销。`))return;await request("/api/manager/learning/resources/"+item.id,{method:"DELETE"});showToast("资源已删除");await Promise.all([loadLinkResources(),loadLearningAccessTree()]);}else{await request("/api/manager/learning-access/resource/"+item.id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({enabled:!item.enabled})});await Promise.all([loadLinkResources(),loadLearningAccessTree()]);}}catch(error){showToast("操作失败："+error.message);}finally{b.disabled=false;}});
+      loadLinkResources();
+
+      const adminModules = {"accounts": {"title": "账户管理", "description": "用户列表、账户状态与申请审批"}, "requests": {"title": "申请处理", "description": "身份码重置、反馈、加入与学习组申请"}, "learning": {"title": "学习内容", "description": "专业类别、内容开放及数据导入导出"}, "links": {"title": "链接资源", "description": "维护学习链接、访问等级与安全核验"}, "moderation": {"title": "内容审核", "description": "管理敏感词与文本审核词库"}, "notifications": {"title": "通知管理", "description": "向指定账户发送站内通知"}, "settings": {"title": "系统设置", "description": "管理功能开放与服务配置"}};
+      const adminSidebar = document.getElementById("adminSidebar");
+      const adminMenuToggle = document.getElementById("adminMenuToggle");
+      const adminScrim = document.getElementById("adminScrim");
+      const adminNavButtons = [...adminSidebar.querySelectorAll("button[data-admin-target]")];
+      let activeAdminModule = "accounts";
+      function closeAdminMenu(restoreFocus = false) {
+        adminSidebar.classList.remove("is-open"); adminScrim.hidden = true;
+        document.body.classList.remove("admin-menu-open"); adminMenuToggle.setAttribute("aria-expanded","false");
+        adminSidebar.inert = window.matchMedia("(max-width:900px)").matches;
+        if (restoreFocus) adminMenuToggle.focus();
+      }
+      function selectAdminModule(key, focusHeading = true) {
+        if (!Object.hasOwn(adminModules,key)) key = "accounts";
+        activeAdminModule = key;
+        document.querySelectorAll("[data-admin-module]").forEach(section => { section.hidden = section.dataset.adminModule !== key; });
+        adminNavButtons.forEach(button => { if (button.dataset.adminTarget === key) button.setAttribute("aria-current","page"); else button.removeAttribute("aria-current"); });
+        const heading = document.querySelector(".heading h1"); heading.textContent = adminModules[key].title; heading.tabIndex = -1;
+        if (heading.nextElementSibling?.tagName === "P") heading.nextElementSibling.textContent = adminModules[key].description;
+        document.getElementById("refresh").hidden = key === "notifications";
+        document.title = adminModules[key].title + " · 管理面板 · ProfilesSystem";
+        try { localStorage.setItem("profiles-admin-module",key); } catch (_) {}
+        history.replaceState(null,"","#" + key);
+        closeAdminMenu();
+        if (focusHeading) { heading.focus({preventScroll:true}); window.scrollTo({top:0,behavior:"instant"}); }
+      }
+      adminNavButtons.forEach(button => button.addEventListener("click",()=>selectAdminModule(button.dataset.adminTarget)));
+      adminMenuToggle.addEventListener("click",()=>{if(adminSidebar.classList.contains("is-open")){closeAdminMenu(true);return;}adminSidebar.inert=false;adminSidebar.classList.add("is-open");adminScrim.hidden=false;document.body.classList.add("admin-menu-open");adminMenuToggle.setAttribute("aria-expanded","true");adminSidebar.querySelector('[aria-current="page"]')?.focus();});
+      adminScrim.addEventListener("click",()=>closeAdminMenu(true));
+      document.addEventListener("keydown",event=>{
+        if (!adminSidebar.classList.contains("is-open")) return;
+        if (event.key === "Escape") { closeAdminMenu(true); event.preventDefault(); }
+        if (event.key === "Tab") { const first=adminNavButtons[0], last=adminNavButtons[adminNavButtons.length-1];if(event.shiftKey&&document.activeElement===first){last.focus();event.preventDefault();}else if(!event.shiftKey&&document.activeElement===last){first.focus();event.preventDefault();} }
+      });
+      window.matchMedia("(max-width:900px)").addEventListener("change",()=>closeAdminMenu());
+      window.addEventListener("hashchange",()=>selectAdminModule(location.hash.slice(1)));
+      let savedAdminModule = "accounts";try{savedAdminModule=localStorage.getItem("profiles-admin-module")||"accounts";}catch(_){}
+      selectAdminModule(Object.hasOwn(adminModules,location.hash.slice(1))?location.hash.slice(1):savedAdminModule,false);
+      const pendingAdminCounts = {recoveryCount:0,communityCount:0,groupCount:0};
+      function refreshAdminBadges() {
+        for (const id of Object.keys(pendingAdminCounts)) { const text=document.getElementById(id)?.textContent||"";if(!text.includes("历史"))pendingAdminCounts[id]=parseInt(text,10)||0; }
+        const counts={accounts:parseInt(document.getElementById("pendingCount").textContent,10)||0,requests:Object.values(pendingAdminCounts).reduce((a,b)=>a+b,0)};
+        for(const [key,count] of Object.entries(counts)){const badge=document.getElementById("adminCount-"+key);badge.textContent=count>99?"99+":String(count);badge.hidden=count===0;}
+      }
+      const adminCountObserver = new MutationObserver(refreshAdminBadges);
+      ["pendingCount","recoveryCount","communityCount","groupCount"].forEach(id=>{const node=document.getElementById(id);if(node)adminCountObserver.observe(node,{childList:true,characterData:true,subtree:true});});refreshAdminBadges();
     </script>
   </body>
 </html>

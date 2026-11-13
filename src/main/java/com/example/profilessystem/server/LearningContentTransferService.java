@@ -157,7 +157,7 @@ public class LearningContentTransferService {
                         "required_level,status,enabled,target_url,original_name,storage_key,sort_order) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) " +
                         "ON DUPLICATE KEY UPDATE major_id=VALUES(major_id),route_id=VALUES(route_id),description=VALUES(description)," +
                         "icon=VALUES(icon),resource_type=VALUES(resource_type),required_level=VALUES(required_level),status=VALUES(status)," +
-                        "enabled=VALUES(enabled),target_url=VALUES(target_url),original_name=VALUES(original_name),storage_key=VALUES(storage_key),sort_order=VALUES(sort_order)",
+                        "enabled=VALUES(enabled),safety_status='UNVERIFIED',review_note=NULL,reviewed_at=NULL,target_url=VALUES(target_url),original_name=VALUES(original_name),storage_key=VALUES(storage_key),sort_order=VALUES(sort_order)",
                 categoryId, majorId, routeId, item.title().trim(), text(item.description()), defaultText(item.icon(), "✦"),
                 defaultText(item.resourceType(), "LINK").toUpperCase(), level(item.requiredLevel()),
                 defaultText(item.status(), "DRAFT").toUpperCase(), bool(item.enabled(), true), nullable(item.targetUrl()), nullable(item.originalName()),
